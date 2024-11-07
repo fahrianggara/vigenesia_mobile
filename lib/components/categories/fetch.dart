@@ -75,7 +75,7 @@ Widget getCategories(List<Category> categories) {
             ),
           ),
           child: Text(
-            categories[index].name ?? 'Unknown',
+            '${categories[index].name} (${categories[index].postsCount})',
             style: TextStyle(
               color: AppColors.white,
               fontSize: 15,

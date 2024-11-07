@@ -5,6 +5,7 @@ const logoutURL = "$baseURL/logout";
 const meURL = "$baseURL/me";
 
 // Post URLs
+const postsCarouselURL = "$baseURL/posts/carousel";
 const postsURL = "$baseURL/posts";
 const storePostURL = "$postsURL/store";
 const updatePostURL = "$postsURL/update";
