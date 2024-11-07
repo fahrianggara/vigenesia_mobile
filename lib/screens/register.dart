@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/models/api_response.dart';
 import 'package:vigenesia/models/user.dart';
-import 'package:vigenesia/screens/home.dart';
 import 'package:vigenesia/screens/login.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vigenesia/utils/colors.dart';
-import 'package:vigenesia/utils/constant.dart';
 import 'package:vigenesia/models/api_response.dart';
 import 'package:vigenesia/screens/home.dart';
 import 'package:vigenesia/screens/login.dart';
@@ -47,7 +46,16 @@ class _LoadingState extends State<Loading>
 
   @override
   void initState() {
-    _loadUser();
+    // _loadUser();
+
+    // navigate to home screen
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const Home()),
+        (route) => false,
+      );
+    });
+
     super.initState();
   }
 

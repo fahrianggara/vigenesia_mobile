@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:vigenesia/screens/loading.dart';
+import 'package:vigenesia/utils/colors.dart';
 
 void main() {
   runApp(const MainApp());
@@ -14,7 +16,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const Loading(),
       theme: ThemeData(
-        fontFamily: 'Inter',
+        fontFamily: GoogleFonts.inter().fontFamily,
+        scaffoldBackgroundColor: AppColors.background,
       ),
     );
   }
