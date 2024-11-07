@@ -34,8 +34,8 @@ class User {
       role: json['role'],
       lastLogin: json['last_login'],
       createdAt: json['created_at'],
-      token: json['access_token'],
-      tokenType: json['token_type'],
+      token: json['access_token'] ?? '',
+      tokenType: json['token_type'] ?? '',
     );
   }
 }

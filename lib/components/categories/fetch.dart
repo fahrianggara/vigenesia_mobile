@@ -1,39 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:get/get.dart';
 import 'package:vigenesia/controller/category_controller.dart';
 import 'package:vigenesia/models/category.dart';
 import 'package:vigenesia/utils/colors.dart';
 
-class FetchCategories extends StatefulWidget {
-  const FetchCategories({super.key});
+class FetchCategories extends StatelessWidget {
+  FetchCategories({super.key});
 
-  @override
-  State<FetchCategories> createState() => _FetchCategoriesState();
-}
-
-class _FetchCategoriesState extends State<FetchCategories> {
-  List<Category> categories = [];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fetch().then((res) => {
-      setState(() {
-        categories = res.data as List<Category>;
-        isLoading = false;
-      })
-    }).catchError((err) => {
-      setState(() {
-        isLoading = false;
-      }),
-      print(err)
-    });
-  }
+  final CategoryController categoryController = Get.put(CategoryController());
 
   @override
   Widget build(BuildContext context) {
+    // Panggil fetchCategories() saat widget diinisialisasi
+    categoryController.fetchCategories();
+
     return Stack(
       children: [
         Container(
@@ -45,9 +26,10 @@ class _FetchCategoriesState extends State<FetchCategories> {
             children: [
               SizedBox(
                 height: 37,
-                child: isLoading
-                    ? Center(child: CircularProgressIndicator())
-                    : getCategories(categories),
+                // Gunakan Obx untuk memantau perubahan `isLoading` di controller
+                child: Obx(() {
+                  return getCategories(categoryController.categories);
+                }),
               )
             ],
           ),
@@ -86,4 +68,3 @@ Widget getCategories(List<Category> categories) {
     },
   );
 }
-
