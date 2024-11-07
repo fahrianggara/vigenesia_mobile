@@ -25,9 +25,13 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter_icons:
-  image_path: "assets/icon/icon.png"
-  android: true
+  android: "launcher_icon"
   ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 24
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icon/icon.png"
 
 flutter:
   fonts:
