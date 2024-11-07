@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:vigenesia/components/categories/fetch.dart';
 import 'package:vigenesia/components/posts/carousel.dart';
 import 'package:vigenesia/components/posts/fetch.dart';
-import 'package:vigenesia/components/posts/filter.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
 
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              filter(),
+              FetchCategories(),
               carousel(),
               fetch(),
               SizedBox(height: 20),
