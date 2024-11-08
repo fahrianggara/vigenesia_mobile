@@ -1,34 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:vigenesia/controller/post_controller.dart';
-import 'package:vigenesia/models/post.dart';
+import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:get/get.dart';
 
 class Posts extends StatelessWidget {
   Posts({super.key});
 
-  final PostController postController = Get.put(PostController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
-    postController.getPosts();
+    homeController.getPosts();
 
     return Container(
       child: Obx(() {
-        if (postController.posts.isEmpty) {
+        if (homeController.posts.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
 
         return ListView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          itemCount: postController.posts.length,
+          itemCount: homeController.posts.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
                 // Tambahkan aksi yang diinginkan di sini.
-                print("Item ${postController.posts[index].title} di klik");
+                print("Item ${homeController.posts[index].title} di klik");
               },
               child: Container(
                 margin: EdgeInsets.only(left: 20, right: 20, top: index == 0 ? 10 : 20),
@@ -41,7 +40,7 @@ class Posts extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          postController.posts[index].thumbnailUrl!,
+                          homeController.posts[index].thumbnailUrl!,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -52,7 +51,7 @@ class Posts extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            postController.posts[index].title!,
+                            homeController.posts[index].title!,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -64,7 +63,7 @@ class Posts extends StatelessWidget {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            postController.posts[index].description!,
+                            homeController.posts[index].description!,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w100,
@@ -79,7 +78,7 @@ class Posts extends StatelessWidget {
                               Expanded(
                                 flex: 1,
                                 child: Text(
-                                  postController.posts[index].category!.name!,
+                                  homeController.posts[index].category!.name!,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: AppColors.primary,
@@ -98,7 +97,7 @@ class Posts extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Text(
-                                  postController.posts[index].createdAtDiff!,
+                                  homeController.posts[index].createdAtDiff!,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: AppColors.primary,

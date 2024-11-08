@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/utils/colors.dart';
-import 'package:vigenesia/controller/post_controller.dart';
+import 'package:vigenesia/controller/home_controller.dart';
 
 class PostsCarousel extends StatelessWidget {
   PostsCarousel({super.key});
 
-  final PostController postController = Get.put(PostController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     // Memanggil getPostsCarousel() saat widget diinisialisasi
-    postController.getPostsCarousel();
+    homeController.getPostsCarousel();
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Obx(() {
         return CarouselSlider(
-          items: postController.carouselPosts.map((post) {
+          items: homeController.carouselPosts.map((post) {
             return Builder(
               builder: (BuildContext context) {
                 return InkWell(

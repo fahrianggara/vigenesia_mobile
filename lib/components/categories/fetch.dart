@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
-import 'package:vigenesia/controller/category_controller.dart';
+import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/models/category.dart';
 import 'package:vigenesia/utils/colors.dart';
 
 class FetchCategories extends StatelessWidget {
   FetchCategories({super.key});
 
-  final CategoryController categoryController = Get.put(CategoryController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     // Panggil fetchCategories() saat widget diinisialisasi
-    categoryController.fetchCategories();
+    homeController.fetchCategories();
 
     return Stack(
       children: [
@@ -28,7 +28,7 @@ class FetchCategories extends StatelessWidget {
                 height: 37,
                 // Gunakan Obx untuk memantau perubahan `isLoading` di controller
                 child: Obx(() {
-                  return getCategories(categoryController.categories);
+                  return getCategories(homeController.categories);
                 }),
               )
             ],

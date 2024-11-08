@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:vigenesia/components/categories/fetch.dart';
 import 'package:vigenesia/components/posts/carousel.dart';
 import 'package:vigenesia/components/posts/fetch.dart';
-import 'package:vigenesia/controller/category_controller.dart';
-import 'package:vigenesia/controller/post_controller.dart';
+import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,12 +17,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final HomeController homeController = Get.put(HomeController());
   int _selectedIndex = 0;
-
-  // Fungsi untuk memuat ulang data
-  Future<void> _refreshData() async {
-    
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,16 +35,21 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        body: RefreshIndicator(
-          onRefresh: _refreshData, // Fungsi yang dipanggil saat melakukan pull-to-refresh
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                FetchCategories(),
-                PostsCarousel(),
-                Posts(),
-                SizedBox(height: 20),
-              ],
+        body: GetBuilder<HomeController>(
+          init: homeController,
+          builder: (controller) => SmartRefresher(
+            controller: controller.refreshController,
+            onRefresh: controller.onRefresh,
+            onLoading: controller.onLoading,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  FetchCategories(),
+                  PostsCarousel(),
+                  Posts(),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
