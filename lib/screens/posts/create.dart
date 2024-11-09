@@ -2,56 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/models/category.dart';
+import 'package:vigenesia/screens/login.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/controller/post_controller.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PostCreate extends StatefulWidget {
-  const PostCreate({Key? key}) : super(key: key);
-
-  @override
-  _PostCreateState createState() => _PostCreateState();
-}
-
-class _PostCreateState extends State<PostCreate> {
+class PostCreate extends StatelessWidget {
   final _contentController = TextEditingController();
   final _titleController = TextEditingController();
   final postController = Get.put(PostController());
+  final userController = Get.put(UserController());
 
-  bool _isLoggedIn = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
-
-  // Check if the user is logged in
-  Future<void> _checkLoginStatus() async {
-    final token = await getToken();
-
-    // If token is null or empty, redirect to login screen
-    if (token.isEmpty) {
-      final arguments = {
-        'currentRoute': '/post/create',
-      };
-      Navigator.of(context).pushReplacementNamed('/login', arguments: arguments);
-
-      setState(() {
-        _isLoggedIn = false; // Logged in, show post create screen
-      });
-    } else {
-      setState(() {
-        _isLoggedIn = true; // Logged in, show post create screen
-      });
-    }
-  }
+  PostCreate({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return _isLoggedIn
-        ? _buildPostCreate()
-        : Center(child: CircularProgressIndicator());
+    // Cek status login, jika tidak login, arahkan ke layar login
+    return Obx(() {
+      return userController.isLoggedIn.value
+          ? _buildPostCreate()
+          : Login();
+    });
   }
 
   Widget _buildPostCreate() {
@@ -80,7 +50,7 @@ class _PostCreateState extends State<PostCreate> {
                   _buildInputField('Judul Postingan', _titleController),
                   _buildInputField('Tulis Postingan', _contentController,
                       maxLines: 6),
-                  _buildPostButton(context),
+                  _buildPostButton(),
                 ],
               ),
             ),
@@ -239,7 +209,7 @@ class _PostCreateState extends State<PostCreate> {
     );
   }
 
-  Widget _buildPostButton(BuildContext context) {
+  Widget _buildPostButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: SizedBox(
@@ -248,7 +218,7 @@ class _PostCreateState extends State<PostCreate> {
         child: ElevatedButton(
           onPressed: () {
             // Add logic to save the post here
-            Navigator.pop(context);
+            Get.back();
           },
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 15),

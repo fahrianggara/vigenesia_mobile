@@ -63,7 +63,7 @@ class PostsCarousel extends StatelessWidget {
                                 Text(
                                   post.title!,
                                   style: TextStyle(
-                                    color: AppColors.primary300,
+                                    color: AppColors.primary200,
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),

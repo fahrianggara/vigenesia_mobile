@@ -6,6 +6,8 @@ import 'package:vigenesia/screens/login.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
 import 'package:vigenesia/utils/helpers.dart';
+import 'package:vigenesia/controller/user_controller.dart';
+import 'package:get/get.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -23,10 +25,11 @@ class _RegisterState extends State<Register> {
       _emailController = TextEditingController(),
       _passwordController = TextEditingController(),
       _passwordConfirmController = TextEditingController();
+  final UserController userController = Get.put(UserController());
 
   void _register() async 
   {
-    ApiResponse response = await register(
+    ApiResponse response = await userController.register(
       _nameController.text,
       _usernameController.text,
       _emailController.text,

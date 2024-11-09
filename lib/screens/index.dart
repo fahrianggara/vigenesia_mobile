@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:vigenesia/controller/profile_controller.dart';
+import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/screens/home.dart';
 import 'package:vigenesia/screens/profile.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
 
 class Index extends StatefulWidget {
-  const Index({super.key});
+  Index({super.key});
 
   @override
   State<Index> createState() => _IndexState();

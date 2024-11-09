@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart'; // Import GetX for navigation
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/models/api_response.dart';
 import 'package:vigenesia/models/user.dart';
 import 'package:vigenesia/screens/index.dart';
@@ -20,6 +24,7 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final UserController userController = Get.put(UserController());
 
   @override
   void initState() {
@@ -29,54 +34,58 @@ class _LoginState extends State<Login> {
 
   void _showFlashMessage() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final args = ModalRoute.of(context)?.settings.arguments;
+      final args = Get.arguments;
       if (args is String) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(args), backgroundColor: AppColors.primary),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(args),
+          backgroundColor: AppColors.primary, // warna untuk berhasil
+        ));
       }
     });
   }
 
   Future<void> _login() async {
     setState(() => _isLoading = true);
-    final response =
-        await login(_usernameController.text, _passwordController.text);
+    final response = await userController.login(_usernameController.text, _passwordController.text);
 
     if (response.statusCode == 200) {
-      await _saveAndRedirect(response.data as User);
+      await _saveAndRedirect(response.data as User);  // Assuming data is of type User
     } else {
-      _showErrorMessage(response.message);
-      setState(() => _isLoading = false);
+      _showErrorMessage(response.message);  // Display the error message from the response
     }
+
+    setState(() => _isLoading = false);
   }
 
   void _showErrorMessage(String? message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(message ?? 'Login failed'),
-          backgroundColor: AppColors.danger),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('${message}'),
+      backgroundColor: AppColors.danger,
+    ));
   }
 
-  Future<void> _saveAndRedirect(User user) async {
+  Future<void> _saveAndRedirect(User user) async 
+  {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', user.token ?? '');
     await prefs.setInt('userId', user.id ?? 0);
 
     // Retrieve the arguments passed to the route
-    final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    debugPrint("INI ADALAH ARGUMENTS: ${arguments}");
+    dynamic arguments = Get.arguments;
 
-    if (arguments != null) {
-      // You can access the individual values by key
+    // Handle case where arguments might be a String
+    if (arguments is String) {
+      // Parse the String to a Map if necessary
+      arguments = jsonDecode(arguments) as Map<String, dynamic>?;
+    }
+
+    if (arguments != null && arguments is Map<String, dynamic>) {
       final currentRoute = arguments['currentRoute'] ?? '/home';
       debugPrint("Current Route: $currentRoute");
 
-      Navigator.of(context).pushReplacementNamed(currentRoute);
+      Get.offNamed(currentRoute);
     } else {
-      // Fallback route if arguments are not passed
-      Navigator.of(context).pushReplacementNamed('/home');
+      Get.offNamed('/home');
     }
   }
 
@@ -133,7 +142,7 @@ class _LoginState extends State<Login> {
         const Text('Belum punya akun? ', style: TextStyle(fontSize: 16)),
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/register');
+            Get.offNamed('/register'); // Use GetX navigation here
           },
           child: Text('Daftar',
               style: TextStyle(fontSize: 16, color: AppColors.primary)),

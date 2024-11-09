@@ -19,7 +19,7 @@ class _LoadingState extends State<Loading> {
   void _redirectToHome() async {
     await Future.delayed(const Duration(seconds: 1)); // Delay singkat
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const Index()),
+      MaterialPageRoute(builder: (context) => Index()),
       (route) => false,
     );
   }
