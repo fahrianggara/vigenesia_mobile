@@ -40,7 +40,8 @@ class _LoginState extends State<Login> {
 
   Future<void> _login() async {
     setState(() => _isLoading = true);
-    final response = await login(_usernameController.text, _passwordController.text);
+    final response =
+        await login(_usernameController.text, _passwordController.text);
 
     if (response.statusCode == 200) {
       await _saveAndRedirect(response.data as User);
@@ -52,7 +53,9 @@ class _LoginState extends State<Login> {
 
   void _showErrorMessage(String? message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message ?? 'Login failed'), backgroundColor: AppColors.danger),
+      SnackBar(
+          content: Text(message ?? 'Login failed'),
+          backgroundColor: AppColors.danger),
     );
   }
 
@@ -60,10 +63,21 @@ class _LoginState extends State<Login> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', user.token ?? '');
     await prefs.setInt('userId', user.id ?? 0);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const Home()),
-      (route) => false,
-    );
+
+    // Retrieve the arguments passed to the route
+    final Map<String, dynamic>? arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    debugPrint("INI ADALAH ARGUMENTS: ${arguments}");
+
+    if (arguments != null) {
+      // You can access the individual values by key
+      final currentRoute = arguments['currentRoute'] ?? '/home';
+      debugPrint("Current Route: $currentRoute");
+
+      Navigator.of(context).pushReplacementNamed(currentRoute);
+    } else {
+      // Fallback route if arguments are not passed
+      Navigator.of(context).pushReplacementNamed('/home');
+    }
   }
 
   Widget _buildTextField({
@@ -91,14 +105,16 @@ class _LoginState extends State<Login> {
       height: 55,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 15),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           foregroundColor: AppColors.white,
           backgroundColor: AppColors.primary,
         ),
         onPressed: _isLoading ? null : () => _attemptLogin(),
         child: _isLoading
-            ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 3)
+            ? const CircularProgressIndicator(
+                color: Colors.white, strokeWidth: 3)
             : const Text('Masuk', style: TextStyle(fontSize: 16)),
       ),
     );
@@ -117,12 +133,10 @@ class _LoginState extends State<Login> {
         const Text('Belum punya akun? ', style: TextStyle(fontSize: 16)),
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const Register()),
-              (route) => false,
-            );
+            Navigator.of(context).pushReplacementNamed('/register');
           },
-          child: Text('Daftar', style: TextStyle(fontSize: 16, color: AppColors.primary)),
+          child: Text('Daftar',
+              style: TextStyle(fontSize: 16, color: AppColors.primary)),
         ),
       ],
     );
@@ -134,7 +148,7 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             child: Form(
               key: _formKey,
               child: Column(
@@ -142,7 +156,10 @@ class _LoginState extends State<Login> {
                 children: [
                   const Text(
                     'Selamat Datang!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, fontFamily: 'Inter'),
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Inter'),
                   ),
                   const SizedBox(height: 5),
                   const Text(

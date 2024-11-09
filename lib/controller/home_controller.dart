@@ -15,16 +15,24 @@ class HomeController extends GetxController {
   var categories = <Category>[].obs; // Observable list for categories
   var isLoading = false.obs; // Loading state
 
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
+  late RefreshController refreshController;
+
+  @override
+  void onInit() {
+    refreshController = RefreshController(initialRefresh: false);
+    super.onInit();
+  }
 
   // Getter for refresh controller
   void onRefresh() async {
-    // await Future.delayed(Duration(milliseconds: 1000));
-    await getPostsCarousel();
-    await getPosts();
-    await fetchCategories();
-    refreshController.refreshCompleted();
+    try {
+      await getPostsCarousel();
+      await getPosts();
+      await fetchCategories();
+      refreshController.refreshCompleted();
+    } catch (e) {
+      refreshController.refreshFailed();
+    }
   }
 
   void onLoading() async {
@@ -52,7 +60,8 @@ class HomeController extends GetxController {
       List<dynamic> data = jsonDecode(response.body)['data'];
       carouselPosts.value = data.map((json) => Post.fromJson(json)).toList();
       apiRes.message = jsonDecode(response.body)['message'];
-      debugPrint("Carousel Posts: ${carouselPosts.length} items loaded"); // Memastikan data ada
+      debugPrint(
+          "Carousel Posts: ${carouselPosts.length} items loaded"); // Memastikan data ada
     } catch (e) {
       apiRes.message = e.toString();
       debugPrint(e.toString());
@@ -108,7 +117,8 @@ class HomeController extends GetxController {
       List<dynamic> data = jsonDecode(response.body)['data'];
       categories.value = data.map((json) => Category.fromJson(json)).toList();
       apiRes.message = jsonDecode(response.body)['message'];
-      debugPrint("Categories: ${categories.length} items loaded"); // Memastikan data ada
+      debugPrint(
+          "Categories: ${categories.length} items loaded"); // Memastikan data ada
     } catch (e) {
       apiRes.message = e.toString();
       debugPrint(e.toString());

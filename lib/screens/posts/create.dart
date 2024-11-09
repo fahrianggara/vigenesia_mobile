@@ -1,18 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/models/category.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/controller/post_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class PostCreate extends StatelessWidget {
+class PostCreate extends StatefulWidget {
+  const PostCreate({Key? key}) : super(key: key);
+
+  @override
+  _PostCreateState createState() => _PostCreateState();
+}
+
+class _PostCreateState extends State<PostCreate> {
   final _contentController = TextEditingController();
   final _titleController = TextEditingController();
   final postController = Get.put(PostController());
 
-  PostCreate({super.key});
+  bool _isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  // Check if the user is logged in
+  Future<void> _checkLoginStatus() async {
+    final token = await getToken();
+
+    // If token is null or empty, redirect to login screen
+    if (token.isEmpty) {
+      final arguments = {
+        'currentRoute': '/post/create',
+      };
+      Navigator.of(context).pushReplacementNamed('/login', arguments: arguments);
+
+      setState(() {
+        _isLoggedIn = false; // Logged in, show post create screen
+      });
+    } else {
+      setState(() {
+        _isLoggedIn = true; // Logged in, show post create screen
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    return _isLoggedIn
+        ? _buildPostCreate()
+        : Center(child: CircularProgressIndicator());
+  }
+
+  Widget _buildPostCreate() {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -36,7 +78,8 @@ class PostCreate extends StatelessWidget {
                   _buildThumbnail(),
                   _buildCategoryDropdown(),
                   _buildInputField('Judul Postingan', _titleController),
-                  _buildInputField('Tulis Postingan', _contentController, maxLines: 6),
+                  _buildInputField('Tulis Postingan', _contentController,
+                      maxLines: 6),
                   _buildPostButton(context),
                 ],
               ),
@@ -55,7 +98,6 @@ class PostCreate extends StatelessWidget {
           return InkWell(
             onTap: postController.pickAndCropImage,
             child: Container(
-              
               width: double.infinity,
               height: 170,
               decoration: BoxDecoration(
@@ -66,11 +108,11 @@ class PostCreate extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: AppColors.primary50,
               ),
-              clipBehavior: Clip.hardEdge, // Ensures image doesn't overflow
+              clipBehavior: Clip.hardEdge,
               child: postController.imageFile.value != null
                   ? Image.file(
                       postController.imageFile.value!,
-                      fit: BoxFit.contain, // Ensures image fits within the container without overflow
+                      fit: BoxFit.contain,
                     )
                   : Icon(
                       Icons.add_a_photo,
@@ -85,7 +127,6 @@ class PostCreate extends StatelessWidget {
     );
   }
 
-  // Builds the category dropdown widget
   Widget _buildCategoryDropdown() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +194,6 @@ class PostCreate extends StatelessWidget {
     );
   }
 
-  // Builds the input field for title or content
   Widget _buildInputField(String label, TextEditingController controller,
       {int maxLines = 1}) {
     return Column(
@@ -199,7 +239,6 @@ class PostCreate extends StatelessWidget {
     );
   }
 
-  // Builds the Post button
   Widget _buildPostButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),

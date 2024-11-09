@@ -69,7 +69,7 @@ class _RegisterState extends State<Register> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 20),
               child: Center(
                 child: Padding(
                   padding:
@@ -236,11 +236,7 @@ class _RegisterState extends State<Register> {
                             const SizedBox(height: 5),
                             GestureDetector(
                               onTap: () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()),
-                                  (route) => false,
-                                );
+                                Navigator.of(context).pushReplacementNamed('/login');
                               },
                               child: Text(
                                 'Login',
