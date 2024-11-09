@@ -20,6 +20,10 @@ dependencies:
   flutter_launcher_icons: ^0.14.1
   pull_to_refresh: ^2.0.0
   get: ^4.6.6
+  awesome_select: ^6.0.0
+  sticky_headers: ^0.3.0+2
+  image_cropper: ^8.0.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:
