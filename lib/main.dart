@@ -21,14 +21,14 @@ class MainApp extends StatelessWidget {
       // Define your routes here
       initialRoute: '/',  // Starting route (home or login screen)
       routes: {
-        '/': (context) => Home(),  // or your initial screen, like PostCreate
+        '/': (context) => Index(),  // or your initial screen, like PostCreate
         '/login': (context) => Login(),  // Define the login route
         '/register' : (context) => Register(),
         '/post/create' : (context) => PostCreate()
       },
       onGenerateRoute: (settings) {
         // Handle dynamic routes (if any)
-        return MaterialPageRoute(builder: (context) => Home());
+        return MaterialPageRoute(builder: (context) => Index());
       },
       theme: ThemeData(
         fontFamily: GoogleFonts.inter().fontFamily,

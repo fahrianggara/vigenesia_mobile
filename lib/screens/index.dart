@@ -1,108 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:vigenesia/components/categories/fetch.dart';
-import 'package:vigenesia/components/posts/carousel.dart';
-import 'package:vigenesia/components/posts/fetch.dart';
-import 'package:vigenesia/controller/home_controller.dart';
-import 'package:vigenesia/screens/posts/create.dart';
+import 'package:vigenesia/screens/home.dart';
+import 'package:vigenesia/screens/profile.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
-import 'package:get/get.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Index extends StatefulWidget {
+  const Index({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Index> createState() => _IndexState();
 }
 
-class _HomeState extends State<Home> {
-  final HomeController homeController = Get.put(HomeController());
+class _IndexState extends State<Index> 
+{
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.white,
-          title: Text(
-            appName,
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        body: GetBuilder<HomeController>(
-          init: homeController,
-          builder: (controller) => SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: controller.onRefresh,
-            onLoading: controller.onLoading,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  FetchCategories(),
-                  PostsCarousel(),
-                  Posts(),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+        appBar: _selectedIndex == 0 || _selectedIndex == 1 ? appBar() : null,
+        body: _selectedIndex == 2 ? Profile() : Home(),
+        bottomNavigationBar: bottomBar(),
+      ),
+    );
+  }
 
-            if (index == 1) {
-              // Navigasi ke layar `PostCreate` dan kembali ke indeks utama setelahnya
-              Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PostCreate()),
-              ).then((_) {
-                // Kembali ke Home setelah PostCreate ditutup
-                setState(() {
-                  _selectedIndex = 0;
-                });
-              });
-            } else if (index == 2) {
-              // Misal navigasi ke layar profile
-              // Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
-            }
-          },
-          backgroundColor: HexColor('#FFFFFF'),
-          indicatorColor: AppColors.primary100,
-          destinations: <NavigationDestination>[
-            NavigationDestination(
-              icon: Icon(Icons.home,
-                  color: _selectedIndex == 0
-                      ? AppColors.primary
-                      : HexColor('#B0B0B0')),
-              label: 'Beranda',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.add,
-                  color: _selectedIndex == 1
-                      ? AppColors.primary
-                      : HexColor('#B0B0B0')),
-              label: 'Tambah',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.person,
-                  color: _selectedIndex == 2
-                      ? AppColors.primary
-                      : HexColor('#B0B0B0')),
-              label: 'Profile',
-            ),
-          ],
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      backgroundColor: AppColors.white,
+      title: Text(
+        appName,
+        style: TextStyle(
+          color: AppColors.primary,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
+
+  Widget bottomBar() {
+    return NavigationBar(
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: (int index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+
+        if (index == 1) {
+          // Navigasi ke layar `PostCreate` dan kembali ke indeks utama setelahnya
+          Navigator.pushNamed(context,'/post/create').then((_) {
+            // Kembali ke Home setelah PostCreate ditutup
+            setState(() {
+              _selectedIndex = 0;
+            });
+          });
+        }
+      },
+      backgroundColor: HexColor('#FFFFFF'),
+      indicatorColor: AppColors.primary100,
+      destinations: <NavigationDestination>[
+        NavigationDestination(
+          icon: Icon(Icons.home, color: _selectedIndex == 0 ? AppColors.primary : HexColor('#B0B0B0')),
+          label: 'Beranda',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.add, color: _selectedIndex == 1 ? AppColors.primary : HexColor('#B0B0B0')),
+          label: 'Tambah',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.person, color: _selectedIndex == 2 ? AppColors.primary : HexColor('#B0B0B0')),
+          label: 'Profile',
+        ),
+      ],
+    );
+  }
 }
+
