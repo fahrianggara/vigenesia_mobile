@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:get/get.dart';
+import 'package:vigenesia/routes/mobile_route.dart';
+import 'package:vigenesia/screen/index_screen.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 void main() {
@@ -18,6 +20,8 @@ class MainApp extends StatelessWidget {
         fontFamily: GoogleFonts.inter().fontFamily,
         scaffoldBackgroundColor: VColors.background,
       ),
+      home: const IndexScreen(),
+      getPages: MobileRoute.pages,
     );
   }
 }
