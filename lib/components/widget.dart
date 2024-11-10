@@ -2,6 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
+/// custom input decoration
+InputDecoration authInputDecoration(String label,
+    {String? errorText, Icon? prefixIcon}) {
+  return InputDecoration(
+    prefixIcon: prefixIcon,
+    labelText: label,
+    floatingLabelStyle: TextStyle(
+      color: errorText == null ? VColors.primary : VColors.danger
+    ),
+    labelStyle: TextStyle(
+      color: errorText == null ? VColors.primary : VColors.danger,
+      letterSpacing: 0.2
+    ),
+    errorText: errorText,
+    errorStyle: TextStyle(color: VColors.danger),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: VColors.border),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: VColors.primary, width: 2),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: VColors.danger, width: 2),
+      borderRadius: BorderRadius.circular(10),
+    ),
+    focusedErrorBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: VColors.danger, width: 2),
+      borderRadius: BorderRadius.circular(10),
+    ),
+  );
+}
+
 Widget postItem({
   required int index,
   required int id,
