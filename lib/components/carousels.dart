@@ -40,7 +40,7 @@ class Carousels extends StatelessWidget {
     return CarouselSlider(
       items: List.generate(4, (index) => Skeletonizer(
           child: Image.asset(
-            'assets/images/background.png', // Replace with your network image URL
+            Images.background, // Replace with your network image URL
             fit: BoxFit.cover,
             width: double.infinity,
             height: 200,

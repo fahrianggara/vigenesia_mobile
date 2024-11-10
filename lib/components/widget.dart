@@ -18,7 +18,7 @@ Widget postItem({
   // Assign the appropriate image based on the imageUrl
   if (imageUrl.isEmpty) {
     image = Image.asset(
-      'assets/images/background.png',
+      Images.background,
       fit: BoxFit.cover,
       width: double.infinity,
     );
