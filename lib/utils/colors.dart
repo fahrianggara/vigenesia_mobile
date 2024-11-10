@@ -2,6 +2,7 @@ part of 'utilities.dart';
 
 class VColors {
   static var border     = HexColor('#DDDDDD');
+  static var border500  = HexColor('#B0B0B0');
   static var white      = HexColor('#FFFFFF');
   static var text       = HexColor('#00331e');  
   static var danger     = HexColor('#C91432');
