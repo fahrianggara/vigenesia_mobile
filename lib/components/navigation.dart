@@ -4,36 +4,74 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:auto_route/auto_route.dart';
 
 Widget bottomNavigationBar(TabsRouter tabsRouter) {
-  return SizedBox(
-    height: 70.0, // Set the desired height here
-    child: BottomNavigationBar(
-      currentIndex: tabsRouter.activeIndex,
-      backgroundColor: HexColor('#FFFFFF'),
-      onTap: tabsRouter.setActiveIndex,
-      selectedItemColor: VColors.primary,
-      selectedFontSize: 12,
-      elevation: 2,
-      items: [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.home,
-            color: tabsRouter.activeIndex == 0 ? VColors.primary : VColors.border500,
-          ),
-          label: 'Beranda',
+  return Container(
+    height: 80.0, // Tentukan tinggi bar
+    decoration: BoxDecoration(
+      color: HexColor('#FFFFFF'),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        // Home Icon
+        bottomNavIcon(
+          icon: Icons.home,
+          isActive: tabsRouter.activeIndex == 0,
+          onTap: () => tabsRouter.setActiveIndex(0),
+          label: 'Beranda', // Menambahkan label
         ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.search_sharp,
-            color: tabsRouter.activeIndex == 1 ? VColors.primary : VColors.border500,
-          ),
-          label: 'Pencarian',
+        // Search Icon
+        bottomNavIcon(
+          icon: Icons.search_sharp,
+          isActive: tabsRouter.activeIndex == 1,
+          onTap: () => tabsRouter.setActiveIndex(1),
+          label: 'Pencarian', // Menambahkan label
         ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.person,
-            color: tabsRouter.activeIndex == 2 ? VColors.primary : VColors.border500,
+        // Profile Icon
+        bottomNavIcon(
+          icon: Icons.person,
+          isActive: tabsRouter.activeIndex == 2,
+          onTap: () => tabsRouter.setActiveIndex(2),
+          label: 'Profile', // Menambahkan label
+        ),
+      ],
+    ),
+  );
+}
+
+Widget bottomNavIcon({
+  required IconData icon,
+  required bool isActive,
+  required VoidCallback onTap,
+  required String label, // Tambahkan parameter untuk label
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+          decoration: BoxDecoration(
+            color: isActive ? VColors.primary.withOpacity(0.2) : Colors.transparent,
+            borderRadius: BorderRadius.circular(20), // Border radius persegi panjang
           ),
-          label: 'Profile',
+          child: Icon(
+            icon,
+            color: isActive ? VColors.primary : VColors.border500,
+            size: 24, // Ukuran ikon
+          ),
+        ),
+        SizedBox(height: 3), // Menambahkan jarak antara ikon dan teks
+        Text(
+          label, // Menampilkan label di bawah ikon
+          style: TextStyle(
+            color: isActive ? VColors.primary : VColors.border500,
+            fontSize: 12, // Ukuran font label
+          ),
         ),
       ],
     ),
