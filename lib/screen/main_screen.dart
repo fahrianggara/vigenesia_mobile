@@ -13,7 +13,7 @@ class MainScreen extends StatelessWidget {
     return AutoTabsRouter.pageView(
       routes: const [
         HomeRoute(),
-        PostCreateRoute(),
+        SearchRoute(),
         ProfileRoute(),
       ],
       builder: (context, child, _) {

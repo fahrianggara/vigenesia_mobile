@@ -23,10 +23,10 @@ Widget bottomNavigationBar(TabsRouter tabsRouter) {
         ),
         BottomNavigationBarItem(
           icon: Icon(
-            Icons.add,
+            Icons.search_sharp,
             color: tabsRouter.activeIndex == 1 ? VColors.primary : VColors.border500,
           ),
-          label: 'Tambah',
+          label: 'Pencarian',
         ),
         BottomNavigationBarItem(
           icon: Icon(
