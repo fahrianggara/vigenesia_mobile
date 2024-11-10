@@ -152,7 +152,7 @@ class Carousels extends StatelessWidget {
         Text(
           post.title ?? 'No title',
           style: TextStyle(
-            color: Colors.white,
+            color: VColors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -163,7 +163,7 @@ class Carousels extends StatelessWidget {
         Text(
           post.description ?? 'No description',
           style: TextStyle(
-            color: Colors.white,
+            color: VColors.white,
             fontSize: 14,
           ),
           maxLines: 2,
@@ -176,7 +176,7 @@ class Carousels extends StatelessWidget {
               post.category?.name ?? 'No category',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white,
+                color: VColors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -185,7 +185,7 @@ class Carousels extends StatelessWidget {
               post.createdAtDiff ?? '',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white,
+                color: VColors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
