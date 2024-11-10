@@ -10,13 +10,13 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AutoTabsRouter(
+    return AutoTabsRouter.pageView(
       routes: const [
         HomeRoute(),
         PostCreateRoute(),
         ProfileRoute(),
       ],
-      builder: (context, child) {
+      builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
         return SafeArea(
           child: Scaffold(
