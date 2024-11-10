@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/utils/utilities.dart';
@@ -25,9 +26,17 @@ class Categories extends StatelessWidget {
             children: [
               SizedBox(
                 height: 37,
-                // Gunakan Obx untuk memantau perubahan `isLoading` di controller
                 child: Obx(() {
-                  return listCategories(homeController.categories);
+                  // Buat data dummy jika `isLoading` bernilai `true`
+                  final categories = homeController.isLoading.value
+                      ? List.generate(5, (index) => Category(name: 'Loading...', postsCount:' 0'))
+                      : homeController.categories;
+
+                  // Bungkus listCategories dengan Skeletonizer saat `isLoading` aktif
+                  return Skeletonizer(
+                    enabled: homeController.isLoading.value,
+                    child: listCategories(categories),
+                  );
                 }),
               )
             ],
@@ -38,6 +47,7 @@ class Categories extends StatelessWidget {
   }
 }
 
+// Fungsi untuk menampilkan data kategori (atau skeleton placeholder saat loading)
 Widget listCategories(List<Category> categories) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,

@@ -52,6 +52,8 @@ class HomeController extends GetxController
       List<dynamic> data = jsonDecode(response.body)['data'];
       categories.value = data.map((json) => Category.fromJson(json)).toList();
 
+      isLoading.value = false;
+
       dd("Kategori berhasil di load dengan total data : ${categories.length}");
     } catch (e) {
       debugPrint("Error: $e");
