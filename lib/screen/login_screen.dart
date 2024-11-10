@@ -40,14 +40,14 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Image.asset(Images.vectorLogin, width: 280),
                   const SizedBox(height: 40),
-                  _buildTextField(
+                  buildTextField(
                     controller: _usernameController,
                     hintText: 'Username atau Email',
                     icon: Icons.person,
                     errorMessage: 'Username atau email tidak boleh kosong',
                   ),
                   const SizedBox(height: 20),
-                  _buildTextField(
+                  buildTextField(
                     controller: _passwordController,
                     hintText: 'Password',
                     icon: Icons.lock,
@@ -86,7 +86,7 @@ class LoginScreen extends StatelessWidget {
         ),
         onPressed: _isLoading ? null : () => _attemptLogin(),
         child: _isLoading
-            ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 3)
+            ? loadingIcon()
             : const Text('Masuk', style: TextStyle(fontSize: 16)),
       ),
     );
@@ -105,25 +105,6 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16, color: VColors.primary)),
         ),
       ],
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hintText,
-    required IconData icon,
-    required String errorMessage,
-    bool obscureText = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      validator: (val) => val!.isEmpty ? errorMessage : null,
-      decoration: authInputDecoration(
-        hintText,
-        prefixIcon: Icon(icon, color: VColors.primary),
-      ),
-      obscureText: obscureText,
-      cursorColor: VColors.primary,
     );
   }
 }

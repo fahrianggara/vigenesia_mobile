@@ -2,6 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
+Widget loadingIcon({
+  double? width,
+  double? heigth,
+  Color? color,
+  double? stroke
+}) {
+  return SizedBox(
+    width: width ?? 20,
+    height: heigth ?? 20,
+    child: CircularProgressIndicator(
+      color: color ?? Colors.white,
+      strokeWidth: stroke ?? 3,
+    ),
+  );
+}
+
+Widget buildTextField({
+  required TextEditingController controller,
+  required String hintText,
+  required IconData icon,
+  required String errorMessage,
+  bool obscureText = false,
+  String? Function(String?)? validator,
+  TextInputType? keyboardType
+}) {
+  return TextFormField(
+    controller: controller,
+    validator: validator ?? (val) => val!.isEmpty ? errorMessage : null,
+    keyboardType: keyboardType,
+    decoration: authInputDecoration(
+      hintText,
+      prefixIcon: Icon(icon, color: VColors.primary),
+    ),
+    obscureText: obscureText,
+    cursorColor: VColors.primary,
+  );
+}
+
 /// custom input decoration
 InputDecoration authInputDecoration(String label,
     {String? errorText, Icon? prefixIcon}) {

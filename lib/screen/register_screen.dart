@@ -1,15 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:vigenesia/routes/app_route.gr.dart';
+import 'package:vigenesia/utils/utilities.dart';
+import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
+  static const bool _isLoading = false;
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final TextEditingController 
+      _nameController = TextEditingController(),
+      _usernameController = TextEditingController(),
+      _emailController = TextEditingController(),
+      _passwordController = TextEditingController(),
+      _passwordConfirmController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('INI REGISTER SCREEN'),
+      body: Container(
+        alignment: Alignment.center,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+
+                  const SizedBox(height: 20),
+                  Text(
+                    'Daftar ke $appName',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter',
+                      color: VColors.primary
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  Text(
+                    'Ayo daftar dan buat akunmu sekarang!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  Image.asset(Images.vectorRegis, width: 260),
+
+                  const SizedBox(height: 30),
+
+                  buildTextField(
+                    controller: _nameController,
+                    hintText: 'Nama',
+                    icon: Icons.person,
+                    errorMessage: 'Nama tidak boleh kosong',
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  buildTextField(
+                    controller: _usernameController,
+                    hintText: 'Username',
+                    icon: Icons.person,
+                    errorMessage: 'Username tidak boleh kosong',
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  buildTextField(
+                    controller: _emailController,
+                    hintText: 'Email',
+                    icon: Icons.email,
+                    errorMessage: 'email tidak boleh kosong',
+                    keyboardType: TextInputType.emailAddress
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  buildTextField(
+                    controller: _passwordController,
+                    hintText: 'Password',
+                    icon: Icons.lock,
+                    errorMessage: 'Password tidak boleh kosong',
+                    obscureText: true,
+                    validator: (val) => val!.length < 6 
+                      ? "Password minimal 6 karakter"
+                      : null,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  buildTextField(
+                    controller: _passwordConfirmController,
+                    hintText: 'Konfirmasi Password',
+                    icon: Icons.lock,
+                    errorMessage: 'Konfirmasi Password tidak boleh kosong',
+                    obscureText: true,
+                    validator: (val) => val != _passwordController.text
+                      ? "Konfirmasi password tidak sama"
+                      : null,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        foregroundColor: VColors.white,
+                        backgroundColor: VColors.primary,
+                      ),
+                      onPressed: () {
+                      },
+                      child: _isLoading
+                          ? loadingIcon()
+                          : const Text('Daftar', style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Sudah punya akun? ', style: TextStyle(fontSize: 16)),
+                      const SizedBox(height: 5),
+                      GestureDetector(
+                        onTap: () {
+                          context.navigateTo(const LoginRoute());
+                        },
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: VColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
