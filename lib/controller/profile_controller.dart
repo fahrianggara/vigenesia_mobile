@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/models/api_response.dart';
 import 'package:vigenesia/models/user.dart';
 import 'package:http/http.dart' as http;

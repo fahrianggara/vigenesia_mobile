@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/controller/home_controller.dart';
-import 'package:vigenesia/utils/colors.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/utils/helpers.dart';
 

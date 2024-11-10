@@ -9,7 +9,7 @@ import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
 
 class Index extends StatefulWidget {
-  Index({super.key});
+  const Index({super.key});
 
   @override
   State<Index> createState() => _IndexState();

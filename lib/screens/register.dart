@@ -6,7 +6,6 @@ import 'package:vigenesia/screens/login.dart';
 import 'package:vigenesia/utils/colors.dart';
 import 'package:vigenesia/utils/constant.dart';
 import 'package:vigenesia/utils/helpers.dart';
-import 'package:vigenesia/controller/user_controller.dart';
 import 'package:get/get.dart';
 
 class Register extends StatefulWidget {

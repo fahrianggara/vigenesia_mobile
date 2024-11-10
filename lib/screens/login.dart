@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
 
   void _showErrorMessage(String? message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text('${message}'),
+      content: Text('$message'),
       backgroundColor: AppColors.danger,
     ));
   }

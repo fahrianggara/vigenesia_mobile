@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:vigenesia/components/categories/fetch.dart';
-import 'package:vigenesia/components/posts/carousel.dart';
-import 'package:vigenesia/components/posts/fetch.dart';
-import 'package:vigenesia/controller/home_controller.dart';
+import 'package:vigenesia/temp/components/categories/fetch.dart';
+import 'package:vigenesia/temp/components/posts/carousel.dart';
+import 'package:vigenesia/temp/components/posts/fetch.dart';
+import 'package:vigenesia/temp/controller/home_controller.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
