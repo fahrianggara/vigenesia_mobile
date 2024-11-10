@@ -1,3 +1,5 @@
+import 'package:vigenesia/model/post.dart';
+
 class Category {
   int? id;
   String? name;
@@ -5,7 +7,7 @@ class Category {
   String? description;
   String? createdAt;
   String? postsCount;
-  // posts
+  List<Post>? posts;
 
   Category({
     this.id,
@@ -14,6 +16,7 @@ class Category {
     this.description,
     this.createdAt,
     this.postsCount,
+    this.posts
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -24,6 +27,9 @@ class Category {
       description: json['description'],
       createdAt: json['created_at'],
       postsCount: json['posts_count'],
+      posts: json['posts'] != null 
+          ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
+          : null,
     );
   }
 }
