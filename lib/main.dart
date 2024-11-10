@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:get/get.dart';
-import 'package:vigenesia/routes/mobile_route.dart';
-import 'package:vigenesia/screen/home_screen.dart';
+import 'package:vigenesia/routes/app_route.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final _appRouter = AppRoute();
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: GoogleFonts.inter().fontFamily,
         scaffoldBackgroundColor: VColors.background,
       ),
-      home: const HomeScreen(),
-      getPages: MobileRoute.pages,
+      routerConfig: _appRouter.config(),
     );
   }
 }
