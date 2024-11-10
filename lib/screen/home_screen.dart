@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:vigenesia/components/carousels.dart';
 import 'package:vigenesia/components/categories.dart';
 import 'package:vigenesia/controller/home_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             children: [
               Categories(),
+              Carousels(),
               SizedBox(height: 20),
             ],
           ),
