@@ -10,6 +10,12 @@ class AuthController extends GetxController
   var isLoggedIn = false.obs;
   var isLoading = false.obs;
 
+  // Check if the token exists to determine if the user is logged in
+  Future<void> checkLoginStatus() async {
+    String token = await getToken();
+    isLoggedIn.value = token.isNotEmpty;
+  }
+
   // Get the token from session
   Future<String> getToken() async {
     SharedPreferences session = await SharedPreferences.getInstance();

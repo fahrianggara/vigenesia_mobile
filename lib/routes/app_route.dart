@@ -17,5 +17,6 @@ class AppRoute extends RootStackRouter  {
 
     AutoRoute(page: LoginRoute.page),
     AutoRoute(page: RegisterRoute.page),
+    AutoRoute(page: PostCreateRoute.page)
   ];
 }

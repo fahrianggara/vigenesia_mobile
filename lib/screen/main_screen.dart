@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vigenesia/components/navigation.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:auto_route/auto_route.dart';
@@ -7,9 +9,12 @@ import 'package:auto_route/auto_route.dart';
 @RoutePage()
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
+  static AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
+    authController.checkLoginStatus();
+
     return AutoTabsRouter.pageView(
       routes: const [
         HomeRoute(),
@@ -23,6 +28,8 @@ class MainScreen extends StatelessWidget {
             appBar: appBar(),
             body: child,  // Ensure you're using 'child' here to display the selected tab
             bottomNavigationBar: bottomNavigationBar(tabsRouter),
+            floatingActionButton: authController.isLoggedIn.value 
+              ? addButton(context) : SizedBox.shrink()
           ),
         );
       },
@@ -43,5 +50,15 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
-}
 
+  FloatingActionButton addButton(context) {
+    return FloatingActionButton(
+      onPressed: () {
+        context.navigateTo(const PostCreateRoute()); // Assuming you have an AddPostRoute
+      },
+      backgroundColor: VColors.primary, // You can customize the color
+      foregroundColor: VColors.white,
+      child: Icon(Icons.add),
+    );
+  }
+}
