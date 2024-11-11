@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:get/get.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final String? flashMessage;
+  final String? flashType;
+
+  const LoginScreen({super.key, this.flashMessage, this.flashType});
 
   static const bool _isLoading = false;
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -14,7 +18,19 @@ class LoginScreen extends StatelessWidget {
   static final TextEditingController _passwordController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
+    // Check if there is a message in the arguments
+    if (flashMessage != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notify(
+          context: context,
+          message: Text(flashMessage!),
+          type: flashType
+        );
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: VColors.white,

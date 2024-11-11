@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/home_controller.dart';
-import 'package:vigenesia/utils/utilities.dart';
 import 'widget.dart';
 
 class Posts extends StatelessWidget {

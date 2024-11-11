@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:get/get.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
@@ -8,8 +10,8 @@ import 'package:vigenesia/components/widget.dart';
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
-  static const bool _isLoading = false;
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final AuthController authController = Get.put(AuthController());
   static final TextEditingController 
       _nameController = TextEditingController(),
       _usernameController = TextEditingController(),
@@ -37,7 +39,7 @@ class RegisterScreen extends StatelessWidget {
                     'Daftar ke $appName',
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                       fontFamily: 'Inter',
                       color: VColors.primary
                     ),
@@ -49,7 +51,7 @@ class RegisterScreen extends StatelessWidget {
                     'Ayo daftar dan buat akunmu sekarang!',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: VColors.border500,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -94,8 +96,8 @@ class RegisterScreen extends StatelessWidget {
                     icon: Icons.lock,
                     errorMessage: 'Password tidak boleh kosong',
                     obscureText: true,
-                    validator: (val) => val!.length < 6 
-                      ? "Password minimal 6 karakter"
+                    validator: (val) => val!.length < 8 
+                      ? "Password minimal 8 karakter"
                       : null,
                   ),
 
@@ -127,10 +129,20 @@ class RegisterScreen extends StatelessWidget {
                         backgroundColor: VColors.primary,
                       ),
                       onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          authController.register(
+                            context,
+                            _nameController,
+                            _usernameController,
+                            _emailController,
+                            _passwordController,
+                            _passwordConfirmController
+                          );
+                        }
                       },
-                      child: _isLoading
-                          ? loadingIcon()
-                          : const Text('Daftar', style: TextStyle(fontSize: 16)),
+                      child: Obx(() => authController.isLoading.value
+                        ? loadingIcon()
+                        : const Text('Daftar', style: TextStyle(fontSize: 16))),
                     ),
                   ),
 
@@ -143,7 +155,7 @@ class RegisterScreen extends StatelessWidget {
                       const SizedBox(height: 5),
                       GestureDetector(
                         onTap: () {
-                          context.navigateTo(const LoginRoute());
+                          context.navigateTo(LoginRoute());
                         },
                         child: Text(
                           'Login',

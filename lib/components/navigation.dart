@@ -5,7 +5,7 @@ import 'package:auto_route/auto_route.dart';
 
 Widget bottomNavigationBar(TabsRouter tabsRouter) {
   return Container(
-    height: 70.0, // Tentukan tinggi bar
+    height: 60.0, // Tentukan tinggi bar
     decoration: BoxDecoration(
       color: HexColor('#FFFFFF'),
       borderRadius: BorderRadius.only(
@@ -58,7 +58,7 @@ Widget bottomNavIcon({
           child: Icon(
             icon,
             color: isActive ? VColors.primary : VColors.border500,
-            size: 24, // Ukuran ikon
+            size: 28, // Ukuran ikon
           ),
         ),// Menambahkan jarak antara ikon dan teks jika aktif
       ],

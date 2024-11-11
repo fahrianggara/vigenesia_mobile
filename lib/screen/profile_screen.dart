@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
-              context.pushRoute(const LoginRoute()); // Navigate to login
+              context.pushRoute(LoginRoute()); // Navigate to login
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),

@@ -9,16 +9,36 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i8;
-import 'package:vigenesia/screen/home_screen.dart' as _i1;
-import 'package:vigenesia/screen/login_screen.dart' as _i2;
-import 'package:vigenesia/screen/main_screen.dart' as _i3;
-import 'package:vigenesia/screen/post_create_screen.dart' as _i4;
+import 'package:flutter/material.dart' as _i9;
+import 'package:vigenesia/screen/addpost_screen.dart' as _i1;
+import 'package:vigenesia/screen/home_screen.dart' as _i2;
+import 'package:vigenesia/screen/login_screen.dart' as _i3;
+import 'package:vigenesia/screen/main_screen.dart' as _i4;
 import 'package:vigenesia/screen/profile_screen.dart' as _i5;
 import 'package:vigenesia/screen/register_screen.dart' as _i6;
 import 'package:vigenesia/screen/search_screen.dart' as _i7;
 
 /// generated route for
-/// [_i1.HomeScreen]
+/// [_i1.AddpostScreen]
+class AddpostRoute extends _i8.PageRouteInfo<void> {
+  const AddpostRoute({List<_i8.PageRouteInfo>? children})
+      : super(
+          AddpostRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AddpostRoute';
+
+  static _i8.PageInfo page = _i8.PageInfo(
+    name,
+    builder: (data) {
+      return const _i1.AddpostScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i2.HomeScreen]
 class HomeRoute extends _i8.PageRouteInfo<void> {
   const HomeRoute({List<_i8.PageRouteInfo>? children})
       : super(
@@ -31,17 +51,26 @@ class HomeRoute extends _i8.PageRouteInfo<void> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i1.HomeScreen();
+      return const _i2.HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i2.LoginScreen]
-class LoginRoute extends _i8.PageRouteInfo<void> {
-  const LoginRoute({List<_i8.PageRouteInfo>? children})
-      : super(
+/// [_i3.LoginScreen]
+class LoginRoute extends _i8.PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({
+    _i9.Key? key,
+    String? flashMessage,
+    String? flashType,
+    List<_i8.PageRouteInfo>? children,
+  }) : super(
           LoginRoute.name,
+          args: LoginRouteArgs(
+            key: key,
+            flashMessage: flashMessage,
+            flashType: flashType,
+          ),
           initialChildren: children,
         );
 
@@ -50,13 +79,38 @@ class LoginRoute extends _i8.PageRouteInfo<void> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i2.LoginScreen();
+      final args =
+          data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
+      return _i3.LoginScreen(
+        key: args.key,
+        flashMessage: args.flashMessage,
+        flashType: args.flashType,
+      );
     },
   );
 }
 
+class LoginRouteArgs {
+  const LoginRouteArgs({
+    this.key,
+    this.flashMessage,
+    this.flashType,
+  });
+
+  final _i9.Key? key;
+
+  final String? flashMessage;
+
+  final String? flashType;
+
+  @override
+  String toString() {
+    return 'LoginRouteArgs{key: $key, flashMessage: $flashMessage, flashType: $flashType}';
+  }
+}
+
 /// generated route for
-/// [_i3.MainScreen]
+/// [_i4.MainScreen]
 class MainRoute extends _i8.PageRouteInfo<void> {
   const MainRoute({List<_i8.PageRouteInfo>? children})
       : super(
@@ -69,26 +123,7 @@ class MainRoute extends _i8.PageRouteInfo<void> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i3.MainScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [_i4.PostCreateScreen]
-class PostCreateRoute extends _i8.PageRouteInfo<void> {
-  const PostCreateRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          PostCreateRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'PostCreateRoute';
-
-  static _i8.PageInfo page = _i8.PageInfo(
-    name,
-    builder: (data) {
-      return const _i4.PostCreateScreen();
+      return const _i4.MainScreen();
     },
   );
 }

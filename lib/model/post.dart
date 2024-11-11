@@ -1,5 +1,4 @@
 import 'package:vigenesia/model/category.dart';
-import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/model/user.dart';
 
 class Post {
