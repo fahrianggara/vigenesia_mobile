@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:flutter_svg/flutter_svg.dart';  // Import the flutter_svg package
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:auto_route/auto_route.dart';
 
@@ -18,19 +19,19 @@ Widget bottomNavigationBar(TabsRouter tabsRouter) {
       children: [
         // Home Icon
         bottomNavIcon(
-          icon: Icons.home,
+          asset: Images.svgHome,  // Specify the SVG file path
           isActive: tabsRouter.activeIndex == 0,
           onTap: () => tabsRouter.setActiveIndex(0),
         ),
         // Search Icon
         bottomNavIcon(
-          icon: Icons.search_sharp,
+          asset: Images.svgSearch,  // Specify the SVG file path
           isActive: tabsRouter.activeIndex == 1,
           onTap: () => tabsRouter.setActiveIndex(1),
         ),
         // Profile Icon
         bottomNavIcon(
-          icon: Icons.person,
+          asset: Images.svgProfile,  // Specify the SVG file path
           isActive: tabsRouter.activeIndex == 2,
           onTap: () => tabsRouter.setActiveIndex(2),
         ),
@@ -40,7 +41,7 @@ Widget bottomNavigationBar(TabsRouter tabsRouter) {
 }
 
 Widget bottomNavIcon({
-  required IconData icon,
+  required String asset,  // Changed to accept an SVG asset path
   required bool isActive,
   required VoidCallback onTap,
 }) {
@@ -55,12 +56,15 @@ Widget bottomNavIcon({
             color: isActive ? VColors.primary.withOpacity(0.2) : Colors.transparent,
             borderRadius: BorderRadius.circular(10), // Border radius persegi panjang
           ),
-          child: Icon(
-            icon,
-            color: isActive ? VColors.primary : VColors.border500,
-            size: 28, // Ukuran ikon
+          child: SvgPicture.string(
+            asset,  // Load the SVG asset
+            colorFilter: ColorFilter.mode(
+              isActive ? VColors.primary : VColors.border500,  // Apply different color based on active state
+              BlendMode.srcIn,
+            ),
+            height: 22, // Set the height for the SVG
           ),
-        ),// Menambahkan jarak antara ikon dan teks jika aktif
+        ),
       ],
     ),
   );
