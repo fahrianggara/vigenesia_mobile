@@ -26,18 +26,17 @@ class HomeController extends GetxController {
     isLoading.value = false;
   }
 
-  // Refresh controller
-  void onRefresh() async {
+  // This method will be triggered when the user pulls to refresh
+  Future<void> onRefresh() async {
     try {
-      isLoading.value = true;  // Set loading state
+      isLoading.value = true;
       await getCarouselPosts();
       await getCategories();
       await getPosts();
-      refreshController.refreshCompleted();
     } catch (e) {
-      refreshController.refreshFailed();
+      dd("Terjadi Kesalahan: $e");
     } finally {
-      isLoading.value = false;  // Reset loading state after refresh
+      isLoading.value = false;
     }
   }
 

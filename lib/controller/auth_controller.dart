@@ -125,7 +125,7 @@ class AuthController extends GetxController
     }
   }
 
-  // Logout user and redirect
+  // In AuthController
   Future<void> logout(BuildContext context) async {
     try {
       // Clear the token from SharedPreferences
@@ -133,7 +133,10 @@ class AuthController extends GetxController
       await prefs.remove('token');
 
       // Mark the user as logged out
-      isLoggedIn.value = false;
+      isLoggedIn.value = false;  // This should trigger a rebuild
+
+      // Optionally, notify GetX to update the UI
+      update();
 
       // Redirect to the login screen and clear the navigation stack
       context.replaceRoute(ProfileRoute());

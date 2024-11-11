@@ -6,18 +6,70 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 @RoutePage()
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-  static AuthController authController = Get.put(AuthController());
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> 
+{
+  final AuthController authController = Get.put(AuthController());
+
+  @override
+  void initState() {
+    super.initState();
+    authController.onInit();  // Ensure onInit is called
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      body: !authController.isLoggedIn.value ? _screenNoAuth(context) :
-        Center(child: Text("KAMU SUDAH LOGIN"))
+      body: Obx(() { // Wrap with Obx to listen for changes to isLoggedIn
+        return !authController.isLoggedIn.value
+            ? _screenNoAuth(context)
+            : _screenAuth(context);
+      }),
     );
   }
 
+  // Screen for logged-in users
+  Widget _screenAuth(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Add your profile content here, for example:
+          Text(
+            'Welcome, User!',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              // Call the logout function from the controller
+              authController.logout(context);
+            },
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+              backgroundColor: VColors.primary,
+              foregroundColor: VColors.primary50,
+            ),
+            child: Text(
+              'Logout',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Screen for users who are not logged in
   Widget _screenNoAuth(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20.0),
@@ -50,9 +102,12 @@ class ProfileScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               backgroundColor: VColors.primary,
-              foregroundColor: VColors.primary50
+              foregroundColor: VColors.primary50,
             ),
-            child: Text('Login', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+            child: Text(
+              'Login',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
           ),
         ],
       ),

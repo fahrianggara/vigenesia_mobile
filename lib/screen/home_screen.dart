@@ -4,23 +4,25 @@ import 'package:vigenesia/components/carousels.dart';
 import 'package:vigenesia/components/categories.dart';
 import 'package:vigenesia/components/posts.dart';
 import 'package:vigenesia/controller/home_controller.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:get/get.dart';
 
 @RoutePage()
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  static HomeController homeController = Get.put(HomeController());
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
 
     return GetBuilder<HomeController>(
       init: homeController,
-      builder: (controller) => SmartRefresher(
-        controller: controller.refreshController,
-        onRefresh: controller.onRefresh,
-        onLoading: controller.onLoading,
+      builder: (controller) => RefreshIndicator(
+        onRefresh: controller.onRefresh,  // The refresh logic
         child: SingleChildScrollView(
           child: Column(
             children: [
