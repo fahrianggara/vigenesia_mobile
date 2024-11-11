@@ -51,7 +51,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  FloatingActionButton addButton(context) {
+  FloatingActionButton addButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
         context.navigateTo(const AddpostRoute()); // Assuming you have an AddPostRoute

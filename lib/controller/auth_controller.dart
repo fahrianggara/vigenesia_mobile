@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -7,16 +9,25 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/service/api_service.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
-class AuthController extends GetxController
+class AuthController extends GetxController 
 {
   var isLoggedIn = false.obs;
   var isLoading = false.obs;
 
+  // Helper method to show notifications
+  void showNotification(BuildContext context, String message, String type) {
+    notify(
+      context: context,
+      message: Text(message),
+      type: type,
+    );
+  }
+
   Future<void> register(
     BuildContext context,
-    TextEditingController name, 
-    TextEditingController username, 
-    TextEditingController email, 
+    TextEditingController name,
+    TextEditingController username,
+    TextEditingController email,
     TextEditingController password,
     TextEditingController confirm,
   ) async {
@@ -35,10 +46,8 @@ class AuthController extends GetxController
         }
       );
 
-      isLoading.value = false;
-
       switch (response.statusCode) {
-        case 201: // sudah dibuat
+        case 201:
           context.navigateTo(LoginRoute(
             flashMessage: jsonDecode(response.body)['message'],
             flashType: "info",
@@ -50,28 +59,90 @@ class AuthController extends GetxController
           password.clear();
           confirm.clear();
           break;
-        case 422: // Validasi
-            final errors = jsonDecode(response.body)['errors'];
-            notify(
-              context: context,
-              message: Text("${errors[errors.keys.elementAt(0)][0]}"),
-              type: 'danger',
-            );
+
+        case 422:
+          final errors = jsonDecode(response.body)['errors'];
+          var message = errors[errors.keys.elementAt(0)][0];
+          showNotification(context, "${message}", 'danger');
           break;
+
         default:
-          notify(
-            context: context,
-            message: const Text("An unexpected error occurred."),
-            type: 'danger',
-          );
+          showNotification( context, "An unexpected error occurred.", 'danger');
           break;
       }
     } catch (e) {
-      notify(
-        context: context,
-        message: Text("Error: $e"),
-        type: 'danger',
+      showNotification( context, "Error: $e", 'danger');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> login(
+    BuildContext context,
+    TextEditingController username,
+    TextEditingController password,
+  ) async {
+    isLoading.value = true;
+
+    try {
+      final response = await ApiService.api(
+        endpoint: loginURL,
+        method: ApiMethod.post,
+        body: {
+          'username': username.text,
+          'password': password.text,
+        },
       );
+
+      switch (response.statusCode) {
+        case 200:
+          final responseBody = jsonDecode(response.body)['data'];
+          final token = responseBody['access_token'];
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', token);
+
+          isLoggedIn.value = true;
+          context.replaceRoute(ProfileRoute());
+
+          username.clear();
+          password.clear();
+          break;
+
+        case 422:
+          final errors = jsonDecode(response.body)['errors'];
+          showNotification( context, "${errors[errors.keys.elementAt(0)][0]}", 'danger');
+          break;
+
+        default:
+          showNotification( context, "${jsonDecode(response.body)['message']}", 'danger');
+          break;
+      }
+    } catch (e) {
+      showNotification(context, "Error: $e", 'danger');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Logout user and redirect
+  Future<void> logout(BuildContext context) async {
+    try {
+      // Clear the token from SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('token');
+
+      // Mark the user as logged out
+      isLoggedIn.value = false;
+
+      // Redirect to the login screen and clear the navigation stack
+      context.replaceRoute(ProfileRoute());
+
+      // Optionally show a notification
+      showNotification(context, "Kamu berhasil keluar.", 'info');
+    } catch (e) {
+      // Handle logout failure (optional)
+      showNotification(context, "Error logging out: $e", 'danger');
     }
   }
 

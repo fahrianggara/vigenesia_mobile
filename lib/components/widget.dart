@@ -41,8 +41,10 @@ Widget buildTextField({
 }
 
 /// custom input decoration
-InputDecoration authInputDecoration(String label,
-    {String? errorText, Icon? prefixIcon}) {
+InputDecoration authInputDecoration(String label,{
+    String? errorText, 
+    Icon? prefixIcon
+  }) {
   return InputDecoration(
     prefixIcon: prefixIcon,
     labelText: label,
@@ -54,7 +56,12 @@ InputDecoration authInputDecoration(String label,
       letterSpacing: 0.2
     ),
     errorText: errorText,
-    errorStyle: TextStyle(color: VColors.danger),
+    errorStyle: TextStyle(
+      color: VColors.danger,
+      fontSize: 13.5,
+      letterSpacing: 0.4,
+      fontWeight: FontWeight.w500
+    ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
     ),

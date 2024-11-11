@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:get/get.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
@@ -11,21 +13,20 @@ class LoginScreen extends StatelessWidget {
 
   const LoginScreen({super.key, this.flashMessage, this.flashType});
 
-  static const bool _isLoading = false;
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static final TextEditingController _usernameController = TextEditingController();
   static final TextEditingController _passwordController = TextEditingController();
+  static final AuthController authController = Get.put(AuthController());
 
   @override
-  Widget build(BuildContext context) 
-  {
-    // Check if there is a message in the arguments
+  Widget build(BuildContext context) {
+    // Show flash message if available
     if (flashMessage != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         notify(
           context: context,
           message: Text(flashMessage!),
-          type: flashType
+          type: flashType,
         );
       });
     }
@@ -70,10 +71,10 @@ class LoginScreen extends StatelessWidget {
                     obscureText: true,
                   ),
                   const SizedBox(height: 20),
-                  _buildLoginButton(),
+                  _buildLoginButton(context),
                   const SizedBox(height: 30),
-                  _buildRegisterLink(context)
-                ]
+                  _buildRegisterLink(context),
+                ],
               ),
             ),
           ),
@@ -82,13 +83,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _attemptLogin() {
-    if (_formKey.currentState!.validate()) {
-      
-    }
-  }
-
-  Widget _buildLoginButton() {
+  Widget _buildLoginButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 55,
@@ -99,10 +94,19 @@ class LoginScreen extends StatelessWidget {
           foregroundColor: VColors.white,
           backgroundColor: VColors.primary,
         ),
-        onPressed: _isLoading ? null : () => _attemptLogin(),
-        child: _isLoading
-            ? loadingIcon()
-            : const Text('Masuk', style: TextStyle(fontSize: 16)),
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            authController.login(
+              context,
+              _usernameController,
+              _passwordController,
+            );
+          }
+        },
+        // Observes isLoading to toggle button content
+        child: Obx(() => authController.isLoading.value
+          ? loadingIcon()
+          : const Text('Masuk', style: TextStyle(fontSize: 16))),
       ),
     );
   }
@@ -116,8 +120,10 @@ class LoginScreen extends StatelessWidget {
           onTap: () {
             context.pushRoute(const RegisterRoute());
           },
-          child: Text('Daftar',
-              style: TextStyle(fontSize: 16, color: VColors.primary)),
+          child: Text(
+            'Daftar',
+            style: TextStyle(fontSize: 16, color: VColors.primary),
+          ),
         ),
       ],
     );

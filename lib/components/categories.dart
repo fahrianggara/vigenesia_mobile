@@ -13,8 +13,6 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    homeController.getCategories();
-
     return Stack(
       children: [
         Container(
@@ -27,12 +25,12 @@ class Categories extends StatelessWidget {
               SizedBox(
                 height: 37,
                 child: Obx(() {
-                  // Buat data dummy jika `isLoading` bernilai `true`
+                  // Dummy data when `isLoading` is true
                   final categories = homeController.isLoading.value
-                      ? List.generate(5, (index) => Category(name: 'Loading...', postsCount:' 0'))
+                      ? List.generate(5, (index) => Category(name: 'Loading...', postsCount: '0'))
                       : homeController.categories;
 
-                  // Bungkus listCategories dengan Skeletonizer saat `isLoading` aktif
+                  // Wrap `listCategories` with `Skeletonizer` when `isLoading` is true
                   return Skeletonizer(
                     enabled: homeController.isLoading.value,
                     child: listCategories(categories),
@@ -47,7 +45,7 @@ class Categories extends StatelessWidget {
   }
 }
 
-// Fungsi untuk menampilkan data kategori (atau skeleton placeholder saat loading)
+// Function to display categories list (or skeleton placeholder when loading)
 Widget listCategories(List<Category> categories) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,

@@ -34,6 +34,7 @@ Widget bottomNavigationBar(TabsRouter tabsRouter) {
           asset: Images.svgProfile,  // Specify the SVG file path
           isActive: tabsRouter.activeIndex == 2,
           onTap: () => tabsRouter.setActiveIndex(2),
+          size: 23
         ),
       ],
     ),
@@ -44,6 +45,7 @@ Widget bottomNavIcon({
   required String asset,  // Changed to accept an SVG asset path
   required bool isActive,
   required VoidCallback onTap,
+  double? size,
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -62,7 +64,7 @@ Widget bottomNavIcon({
               isActive ? VColors.primary : VColors.border500,  // Apply different color based on active state
               BlendMode.srcIn,
             ),
-            height: 22, // Set the height for the SVG
+            height: size ?? 22, // Set the height for the SVG
           ),
         ),
       ],
