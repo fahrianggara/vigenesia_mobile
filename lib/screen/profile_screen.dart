@@ -1,9 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
+import 'package:vigenesia/components/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
+import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/utils/utilities.dart';
+import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -16,101 +21,218 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> 
 {
   final AuthController authController = Get.put(AuthController());
+  final ProfileController profileController = Get.put(ProfileController());
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     authController.onInit();  // Ensure onInit is called
+    profileController.onInit();
+    profileController.me();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      body: Obx(() { // Wrap with Obx to listen for changes to isLoggedIn
-        return !authController.isLoggedIn.value
-            ? _screenNoAuth(context)
-            : _screenAuth(context);
-      }),
-    );
+    return Obx(() {
+      if (authController.isLoggedIn.value) { // Jika login
+        return profileAuth(context);
+      } else { // jika engga loggin
+        return profileNoAuth(context);
+      }
+    });
   }
 
   // Screen for logged-in users
-  Widget _screenAuth(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      alignment: Alignment.center,
+  Widget profileAuth(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          slivers: [
+            AnimatedBuilder(
+              animation: _scrollController,
+              builder: (context, child) {
+                bool showTitle = _scrollController.offset > 100;
+                return SliverAppBar(
+                  expandedHeight: 160,
+                  pinned: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    collapseMode: CollapseMode.pin,
+                    background: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(Images.background),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                      child: userProfile(profileController),
+                    ),
+                  ),
+                  title: showTitle ? userInAppBar(profileController) : null,
+                  backgroundColor: VColors.primary,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 2.0),
+                      child: IconButton(
+                        icon: Icon(Icons.settings, color: Colors.white, size: 26),
+                        onPressed: () {
+                          print('Settings button pressed');
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: IconButton(
+                          icon: Icon(Icons.logout, color: Colors.white, size: 26),
+                          onPressed: () {
+                            authController.logout(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ]
+                );
+              },
+            ),
+            CupertinoSliverRefreshControl(
+              onRefresh: profileController.onRefresh,
+            ),
+            profileContent()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget profileContent() {
+    Text text = Text('');  // Nilai default
+    double height = 40;
+
+    if (profileController.posts.isNotEmpty) {
+      text = Text(
+        'Postingan Kamu',
+        style: TextStyle(
+          color: VColors.primary,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      );
+
+      height = 0;
+    }
+
+    return SliverToBoxAdapter(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Add your profile content here, for example:
-          Text(
-            'Welcome, User!',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 18, right: 20, bottom: 10),
+            child: text,
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              // Call the logout function from the controller
-              authController.logout(context);
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              backgroundColor: VColors.primary,
-              foregroundColor: VColors.primary50,
-            ),
-            child: Text(
-              'Logout',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-            ),
-          ),
+          SizedBox(height: height),
+          Posts(
+            controller: profileController,
+            emptySub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok.",
+          )
         ],
       ),
     );
   }
 
-  // Screen for users who are not logged in
-  Widget _screenNoAuth(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget userProfile(ProfileController profileController) {
+    return Obx(() {
+      final user = profileController.user.value;
+      final isLoading = user == null; // Treat as loading if `user` is null
+
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Image.asset(
-            Images.vectorAuth,
-            width: double.infinity,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(height: 20),
-          Text(
-            'Hmm.. belum login?',
-            style: TextStyle(fontSize: 18, color: VColors.primary, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12),
-          Text(
-            'Sepertinya kamu belum login nih.. Silahkan login terlebih dahulu ya.',
-            style: TextStyle(fontSize: 16, color: VColors.gray),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              context.pushRoute(LoginRoute()); // Navigate to login
-            },
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              backgroundColor: VColors.primary,
-              foregroundColor: VColors.primary50,
+          // Avatar Skeleton
+          Skeletonizer(
+            enabled: isLoading,
+            child: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(user?.photoUrl ?? 'https://via.placeholder.com/150'),
             ),
-            child: Text(
-              'Login',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+          const SizedBox(width: 18),
+          
+          // User Info Skeleton
+          Skeletonizer(
+            enabled: isLoading,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user?.name ?? 'User Name',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '@${user?.username ?? 'username'}',
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
-      ),
-    );
+      );
+    });
+  }
+
+  Widget userInAppBar(ProfileController profileController) {
+    return Obx(() {
+      final user = profileController.user.value;
+      final isLoading = user == null; // Treat as loading if `user` is null
+
+      return Row(
+        children: [
+          // Avatar Skeleton
+          Skeletonizer(
+            enabled: isLoading,
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(
+                user?.photoUrl ?? 'https://via.placeholder.com/150',
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+
+          // Name Skeleton
+          Skeletonizer(
+            enabled: isLoading,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  user?.name ?? 'User Name',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    });
   }
 }

@@ -1,6 +1,54 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
+import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
+
+// Screen for users who are not logged in
+Widget profileNoAuth(BuildContext context) {
+  return Container(
+    padding: EdgeInsets.all(20.0),
+    alignment: Alignment.center,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          Images.vectorAuth,
+          width: double.infinity,
+          fit: BoxFit.contain,
+        ),
+        SizedBox(height: 30),
+        Text(
+          'Hmm.. belum login?',
+          style: TextStyle(fontSize: 18, color: VColors.primary, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 8),
+        Text(
+          'Sepertinya kamu belum login nih.. Silahkan login terlebih dahulu ya.',
+          style: TextStyle(fontSize: 16, color: VColors.gray),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () {
+            context.pushRoute(LoginRoute()); // Navigate to login
+          },
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+            backgroundColor: VColors.primary,
+            foregroundColor: VColors.primary50,
+          ),
+          child: Text(
+            'Login',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
 Widget loadingIcon({
   double? width,

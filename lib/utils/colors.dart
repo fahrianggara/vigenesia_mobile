@@ -7,7 +7,7 @@ class VColors {
   static var text       = HexColor('#00331e');  
   static var danger     = HexColor('#C91432');
   static var warning    = HexColor('#FFCC00');
-  static var blue       = HexColor('#0d6efd');
+  static var blue       = HexColor('#0275DB');
   static var gray       = HexColor('#6c757d');
   static var primary    = HexColor('#05B465');
   static var primary50  = HexColor('#F1FFF8');

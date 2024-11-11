@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/service/api_service.dart';
 import 'package:vigenesia/utils/utilities.dart';
@@ -13,6 +15,8 @@ class AuthController extends GetxController
 {
   var isLoggedIn = false.obs;
   var isLoading = false.obs;
+
+  final ProfileController profileController = Get.put(ProfileController());
 
   // Helper method to show notifications
   void showNotification(BuildContext context, String message, String type) {
@@ -98,15 +102,23 @@ class AuthController extends GetxController
         case 200:
           final responseBody = jsonDecode(response.body)['data'];
           final token = responseBody['access_token'];
+          final name = responseBody['name'];
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
 
           isLoggedIn.value = true;
-          context.replaceRoute(ProfileRoute());
+          context.router.pushAndPopUntil(
+            ProfileRoute(), // The route to push
+            predicate: (route) => false, // The condition to pop all routes
+          );
 
           username.clear();
           password.clear();
+
+          profileController.me();
+
+          showNotification( context, "Selamat datang, $name!", 'info');
           break;
 
         case 422:
@@ -135,11 +147,8 @@ class AuthController extends GetxController
       // Mark the user as logged out
       isLoggedIn.value = false;  // This should trigger a rebuild
 
-      // Optionally, notify GetX to update the UI
-      update();
-
-      // Redirect to the login screen and clear the navigation stack
-      context.replaceRoute(ProfileRoute());
+      // set null
+      profileController.user.value = null;
 
       // Optionally show a notification
       showNotification(context, "Kamu berhasil keluar.", 'info');

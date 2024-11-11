@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Categories(),
               Carousels(),
-              Posts(),
+              Posts(controller: homeController),
               SizedBox(height: 20),
             ],
           ),
