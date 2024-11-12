@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:vigenesia/utils/utilities.dart';
 
 @RoutePage()
 class SearchScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('HALAMAN PENCARIAN'),
+        child: Text('Halaman Pencarian', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: VColors.primary),),
       ),
     );
   }

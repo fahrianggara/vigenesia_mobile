@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
@@ -67,7 +66,7 @@ class AuthController extends GetxController
         case 422:
           final errors = jsonDecode(response.body)['errors'];
           var message = errors[errors.keys.elementAt(0)][0];
-          showNotification(context, "${message}", 'danger');
+          showNotification(context, "$message", 'danger');
           break;
 
         default:
@@ -117,6 +116,7 @@ class AuthController extends GetxController
           password.clear();
 
           profileController.me();
+          profileController.getPosts();
 
           showNotification( context, "Selamat datang, $name!", 'info');
           break;
@@ -149,6 +149,9 @@ class AuthController extends GetxController
 
       // set null
       profileController.user.value = null;
+      profileController.posts.value = [];
+
+      update();
 
       // Optionally show a notification
       showNotification(context, "Kamu berhasil keluar.", 'info');

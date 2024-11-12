@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/model/user.dart';
 import 'package:vigenesia/service/api_service.dart';

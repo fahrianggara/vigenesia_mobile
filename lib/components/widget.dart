@@ -1,9 +1,43 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
+
+Widget emptyPosts({
+  String title = "Postingan Kosong??",
+  String sub = "Waduh.. postingan kamu kosong nih, ayo buat.. gratis kok!"
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+    child: Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(
+            Images.vectorEmpty,
+            width: 220,
+            fit: BoxFit.cover,
+          ),
+          SizedBox(height: 30),
+          Text(
+            title,
+            style: TextStyle(fontSize: 18, color: VColors.primary, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8),
+          Text(
+            sub,
+            style: TextStyle(fontSize: 16, color: VColors.gray),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 // Screen for users who are not logged in
 Widget profileNoAuth(BuildContext context) {

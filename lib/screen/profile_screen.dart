@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:vigenesia/components/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
-import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
@@ -134,10 +133,13 @@ class _ProfileScreenState extends State<ProfileScreen>
             child: text,
           ),
           SizedBox(height: height),
-          Posts(
-            controller: profileController,
-            emptySub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok.",
-          )
+          Obx(() {
+            return profileController.posts.isNotEmpty
+              ? Posts(controller: profileController)
+              : emptyPosts(
+                sub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok."
+              );
+          })
         ],
       ),
     );

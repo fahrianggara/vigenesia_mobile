@@ -28,8 +28,11 @@ class MainScreen extends StatelessWidget {
             appBar: appBar(),
             body: child,  // Ensure you're using 'child' here to display the selected tab
             bottomNavigationBar: bottomNavigationBar(tabsRouter),
-            floatingActionButton: authController.isLoggedIn.value 
-              ? addButton(context) : SizedBox.shrink()
+            floatingActionButton: Obx(() => 
+              authController.isLoggedIn.value
+                ? addButton(context)
+                : SizedBox.shrink(), // If not logged in, hide the button
+            ),
           ),
         );
       },

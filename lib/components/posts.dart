@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:vigenesia/controller/home_controller.dart';
-import 'package:vigenesia/controller/profile_controller.dart'; // Import profile controller
-import 'package:vigenesia/utils/utilities.dart';
+// Import profile controller
 import 'widget.dart';
 
 class Posts extends StatelessWidget {
   // Accept a controller as a parameter
   final dynamic controller;
-  final String? emptyTitle;
-  final String? emptySub;
 
   // Constructor
-  Posts({
+  const Posts({
     super.key, 
-    required this.controller, 
-    this.emptyTitle = 'Postingan Kosong??', 
-    this.emptySub = 'Postingan kamu belum ada nih? Ayo buat, gratis ini kok!'
+    required this.controller,
   });
 
   @override
@@ -45,36 +39,6 @@ class Posts extends StatelessWidget {
                   createdAt: 'Loading...', // Placeholder for createdAt
                 );
               },
-            ),
-          );
-        } else if (controller.posts.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-            child: Container(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    Images.vectorEmpty,
-                    width: 220,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(height: 30),
-                  Text(
-                    emptyTitle ?? '',
-                    style: TextStyle(fontSize: 18, color: VColors.primary, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    emptySub ?? '',
-                    style: TextStyle(fontSize: 16, color: VColors.gray),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
             ),
           );
         }
