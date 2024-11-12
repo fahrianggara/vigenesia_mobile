@@ -93,9 +93,17 @@ class PostController extends GetxController
         throw Exception('Silakan pilih kategori postingan');
       }
 
-      // Pastikan thumbnail adalah File, jika diperlukan
-      if (thumbnail.value == null || thumbnail.value is! File) {
-        throw Exception('Silakan pilih thumbnail postingan');
+      // Prepare the body data for the API request
+      final body = {
+        'title': titleController!.text,
+        'content': contentController!.text,
+        'category_id': selectCategory.value!.id,
+        'status': 'published',
+      };
+
+      // If a thumbnail is provided, add it to the body
+      if (thumbnail.value != null && thumbnail.value is File) {
+        body['thumbnail'] = thumbnail.value;
       }
 
       // Panggil API dengan Multipart jika ada thumbnail
@@ -103,17 +111,8 @@ class PostController extends GetxController
         endpoint: storePostURL,
         method: ApiMethod.post,
         authenticated: true,
-        multipart: true,
-        body: {
-          'title': titleController!.text,
-          'content': contentController!.text,
-          'category_id': selectCategory.value!.id,
-          'thumbnail': thumbnail.value,  // Kirim file sebagai bagian dari body
-          'status': 'published',
-        },
+        body: body,
       );
-
-      dd("Response: ${response.body} - ${response.statusCode}");
 
       // Tangani respons berdasarkan status kode
       switch (response.statusCode) {
@@ -121,6 +120,7 @@ class PostController extends GetxController
           showNotification(context, json.decode(response.body)['message'], "info");
           clearForm();
 
+          // return to the previous screen
           context.maybePop();
 
           // Segarkan daftar postingan
