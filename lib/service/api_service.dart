@@ -1,12 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ApiMethod { get, post, put, delete }
 
-class ApiService 
-{
+class ApiService {
   static var client = http.Client();
 
   static Future<dynamic> api({
@@ -14,40 +14,38 @@ class ApiService
     required ApiMethod method,
     var body = const {},
     bool authenticated = false,
-    String parameters = ""
+    bool multipart = false,
+    String parameters = "",
   }) async {
     SharedPreferences session = await SharedPreferences.getInstance();
     Map<String, String> headers = {
-      "Content-Type": "application/json",
       "Accept": "application/json",
     };
 
+    // Tambahkan Authorization jika diperlukan
     if (authenticated) {
       String? token = session.getString('token');
-      debugPrint("Token kamu: $token");
       if (token != null) headers['Authorization'] = 'Bearer $token';
     }
 
     final url = Uri.parse(endpoint + parameters);
 
-    http.Response response;
     try {
-      switch (method) {
-        case ApiMethod.get:
-          response = await client.get(url, headers: headers);
-          break;
-        case ApiMethod.post:
-          response = await client.post(url, headers: headers, body: jsonEncode(body));
-          break;
-        case ApiMethod.put:
-          response = await client.put(url, headers: headers, body: jsonEncode(body));
-          break;
-        case ApiMethod.delete:
-          response = await client.delete(url, headers: headers);
-          break;
-        default:
-          throw Exception("Invalid HTTP method");
-      }
+      var request = http.MultipartRequest(method.name.toUpperCase(), url);
+      request.headers.addAll(headers);
+
+      // Tambahkan field body ke dalam request
+      body.forEach((key, value) async {
+        if (value is File) {
+          request.files.add(await http.MultipartFile.fromPath(key, value.path));
+        } else {
+          request.fields[key] = value.toString();
+        }
+      });
+
+      // Kirim request multipart dan tunggu respons
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
 
       return response;
     } catch (e) {

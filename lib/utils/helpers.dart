@@ -27,3 +27,11 @@ void notify({
     backgroundColor: background,
   ));
 }
+
+void showNotification(BuildContext context, String message, String type) {
+  notify(
+    context: context,
+    message: Text(message),
+    type: type,
+  );
+}

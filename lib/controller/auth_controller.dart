@@ -17,15 +17,6 @@ class AuthController extends GetxController
 
   final ProfileController profileController = Get.put(ProfileController());
 
-  // Helper method to show notifications
-  void showNotification(BuildContext context, String message, String type) {
-    notify(
-      context: context,
-      message: Text(message),
-      type: type,
-    );
-  }
-
   Future<void> register(
     BuildContext context,
     TextEditingController name,

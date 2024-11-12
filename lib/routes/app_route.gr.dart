@@ -10,35 +10,16 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i8;
 import 'package:flutter/material.dart' as _i9;
-import 'package:vigenesia/screen/addpost_screen.dart' as _i1;
-import 'package:vigenesia/screen/home_screen.dart' as _i2;
-import 'package:vigenesia/screen/login_screen.dart' as _i3;
-import 'package:vigenesia/screen/main_screen.dart' as _i4;
+import 'package:vigenesia/screen/home_screen.dart' as _i1;
+import 'package:vigenesia/screen/login_screen.dart' as _i2;
+import 'package:vigenesia/screen/main_screen.dart' as _i3;
+import 'package:vigenesia/screen/postadd_screen.dart' as _i4;
 import 'package:vigenesia/screen/profile_screen.dart' as _i5;
 import 'package:vigenesia/screen/register_screen.dart' as _i6;
 import 'package:vigenesia/screen/search_screen.dart' as _i7;
 
 /// generated route for
-/// [_i1.AddpostScreen]
-class AddpostRoute extends _i8.PageRouteInfo<void> {
-  const AddpostRoute({List<_i8.PageRouteInfo>? children})
-      : super(
-          AddpostRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'AddpostRoute';
-
-  static _i8.PageInfo page = _i8.PageInfo(
-    name,
-    builder: (data) {
-      return const _i1.AddpostScreen();
-    },
-  );
-}
-
-/// generated route for
-/// [_i2.HomeScreen]
+/// [_i1.HomeScreen]
 class HomeRoute extends _i8.PageRouteInfo<void> {
   const HomeRoute({List<_i8.PageRouteInfo>? children})
       : super(
@@ -51,13 +32,13 @@ class HomeRoute extends _i8.PageRouteInfo<void> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i2.HomeScreen();
+      return const _i1.HomeScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i3.LoginScreen]
+/// [_i2.LoginScreen]
 class LoginRoute extends _i8.PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
     _i9.Key? key,
@@ -81,7 +62,7 @@ class LoginRoute extends _i8.PageRouteInfo<LoginRouteArgs> {
     builder: (data) {
       final args =
           data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
-      return _i3.LoginScreen(
+      return _i2.LoginScreen(
         key: args.key,
         flashMessage: args.flashMessage,
         flashType: args.flashType,
@@ -110,7 +91,7 @@ class LoginRouteArgs {
 }
 
 /// generated route for
-/// [_i4.MainScreen]
+/// [_i3.MainScreen]
 class MainRoute extends _i8.PageRouteInfo<void> {
   const MainRoute({List<_i8.PageRouteInfo>? children})
       : super(
@@ -123,7 +104,26 @@ class MainRoute extends _i8.PageRouteInfo<void> {
   static _i8.PageInfo page = _i8.PageInfo(
     name,
     builder: (data) {
-      return const _i4.MainScreen();
+      return const _i3.MainScreen();
+    },
+  );
+}
+
+/// generated route for
+/// [_i4.PostaddScreen]
+class PostaddRoute extends _i8.PageRouteInfo<void> {
+  const PostaddRoute({List<_i8.PageRouteInfo>? children})
+      : super(
+          PostaddRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'PostaddRoute';
+
+  static _i8.PageInfo page = _i8.PageInfo(
+    name,
+    builder: (data) {
+      return const _i4.PostaddScreen();
     },
   );
 }

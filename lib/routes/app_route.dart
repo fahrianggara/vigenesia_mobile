@@ -17,6 +17,6 @@ class AppRoute extends RootStackRouter  {
 
     AutoRoute(path: '/login', page: LoginRoute.page),
     AutoRoute(path: '/register', page: RegisterRoute.page),
-    AutoRoute(path: '/posts/create', page: AddpostRoute.page),
+    AutoRoute(path: '/posts/create', page: PostaddRoute.page),
   ];
 }

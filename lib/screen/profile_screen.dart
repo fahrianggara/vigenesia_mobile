@@ -100,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             CupertinoSliverRefreshControl(
               onRefresh: profileController.onRefresh,
             ),
-            profileContent()
+            profileContent(),
           ],
         ),
       ),
@@ -139,7 +139,8 @@ class _ProfileScreenState extends State<ProfileScreen>
               : emptyPosts(
                 sub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok."
               );
-          })
+          }),
+          SizedBox(height: 20),
         ],
       ),
     );
