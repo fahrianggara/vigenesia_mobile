@@ -24,7 +24,7 @@ class MainScreen extends StatelessWidget {
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          appBar: appBar(),
+          appBar: _appBar(),
           body: child,  // Ensure you're using 'child' here to display the selected tab
           bottomNavigationBar: bottomNavigationBar(tabsRouter),
           floatingActionButton: Obx(() => 
@@ -37,7 +37,7 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget appBar() {
+  PreferredSizeWidget _appBar() {
     return AppBar(
       backgroundColor: VColors.white,
       elevation: 0,
@@ -46,7 +46,6 @@ class MainScreen extends StatelessWidget {
         style: TextStyle(
           color: VColors.primary,
           fontSize: 20,
-          fontWeight: FontWeight.bold,
         ),
       ),
     );

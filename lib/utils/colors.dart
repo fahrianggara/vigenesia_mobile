@@ -20,5 +20,5 @@ class VColors {
   static var primary800 = HexColor('#0c6f43');
   static var primary900 = HexColor('#0c5b39');
   static var primary950 = HexColor('#00331e');
-  static var background = HexColor('#FDFFFC');
+  static var background = HexColor('#F9F9F9');
 }
