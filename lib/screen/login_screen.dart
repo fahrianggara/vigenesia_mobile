@@ -14,8 +14,8 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key, this.flashMessage, this.flashType});
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static final TextEditingController _usernameController = TextEditingController();
-  static final TextEditingController _passwordController = TextEditingController();
+  static final TextEditingController _usernameController = TextEditingController(text: 'fahrianggara');
+  static final TextEditingController _passwordController = TextEditingController(text: 'password');
   static final AuthController authController = Get.put(AuthController());
 
   @override

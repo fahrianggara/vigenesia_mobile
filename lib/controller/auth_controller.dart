@@ -103,11 +103,12 @@ class AuthController extends GetxController
             predicate: (route) => false, // The condition to pop all routes
           );
 
+          update();
+
           username.clear();
           password.clear();
 
-          profileController.me();
-          profileController.getPosts();
+          await profileController.me();
 
           showNotification( context, "Selamat datang, $name!", 'info');
           break;

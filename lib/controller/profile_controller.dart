@@ -17,7 +17,6 @@ class ProfileController extends GetxController
     try {
       isLoading.value = true;
       await me();  // Assumed function to fetch user data
-      await getPosts();
     } catch (e) {
       dd("Terjadi Kesalahan: $e");
     } finally {
@@ -26,8 +25,7 @@ class ProfileController extends GetxController
   }
 
   // Get me (logined user)
-  Future<void> me() async 
-  {
+  Future<void> me() async {
     isLoading.value = true;
 
     try {
@@ -37,41 +35,22 @@ class ProfileController extends GetxController
         authenticated: true,
       );
 
-      switch (response.statusCode) {
-        case 200:
-          user.value = User.fromJson(jsonDecode(response.body)['data']);
-          break;
-        default:
-          notify(
-            message: Text(jsonDecode(response.body)['message']),
-            type: 'danger'
-          );
+      if (response.statusCode == 200) {
+        var userData = jsonDecode(response.body)['data'];
+        user.value = User.fromJson(userData);
+        
+        // Assign posts to profileController.posts if available
+        posts.assignAll(
+          (userData['posts'] as List<dynamic>).map((post) => Post.fromJson(post)).toList()
+        );
+      } else {
+        notify(
+          message: Text(jsonDecode(response.body)['message']),
+          type: 'danger'
+        );
       }
     } catch (e) {
-      dd("Terjadi Kesalahan: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> getPosts() async 
-  {
-    try {
-      var response = await ApiService.api(
-        endpoint: meURL,
-        method: ApiMethod.get,
-        authenticated: true
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception(jsonDecode(response.body)['message']);
-      }
-
-      // Map response to posts model
-      List<dynamic> data = jsonDecode(response.body)['data']['posts'];
-      posts.value = data.map((json) => Post.fromJson(json)).toList();
-    } catch (e) {
-      dd("Terjadi Kesalahan: $e");
+      dd("PROFILE/ME: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
     }

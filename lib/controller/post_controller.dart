@@ -14,7 +14,7 @@ import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/service/api_service.dart';
 import 'package:vigenesia/utils/utilities.dart';
-import 'package:image_cropper/image_cropper.dart'; // New import for cropping
+import 'package:image_cropper/image_cropper.dart';
 
 class PostController extends GetxController 
 {
@@ -37,25 +37,21 @@ class PostController extends GetxController
 
   Future<void> onRefresh() async {
     isLoading.value = true;
-    try {
-      selectCategory.value = null;
-      thumbnail.value = null;
-      formKey.currentState!.reset();
+    try {// Memastikan form di-reset saat refresh
     } catch (e) {
-      dd("Error: $e");
+      dd("Error on refresh: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Select the category option
+  // Fungsi untuk memilih kategori
   void setSelectedCategory(Category? category) {
     selectCategory.value = category;
   }
 
-  // Fetch the categories
-  Future<void> getCategories() async 
-  {
+  // Mendapatkan daftar kategori
+  Future<void> getCategories() async {
     isLoading.value = true;
 
     try {
@@ -65,21 +61,19 @@ class PostController extends GetxController
       );
 
       if (response.statusCode != 200) {
-        throw Exception('Failed to load categories: ${json.decode(response.body)['message']}');
+        throw Exception('Gagal memuat kategori: ${json.decode(response.body)['message']}');
       }
 
       final data = json.decode(response.body)['data'] as List;
       categories.assignAll(data.map((e) => Category.fromJson(e)).toList());
-
-      isLoading.value = false;
     } catch (e) {
-      dd("Error: $e");
+      dd("Error getting categories: $e");
     } finally {
       isLoading.value = false;
     }
   }
   
-  // Create post
+  // Membuat postingan
   Future<void> create(
     BuildContext context, {
     TextEditingController? titleController,
@@ -88,12 +82,12 @@ class PostController extends GetxController
     isLoading.value = true;
 
     try {
-      // Periksa apakah kategori sudah dipilih
+      // Memeriksa apakah kategori sudah dipilih
       if (selectCategory.value == null) {
         throw Exception('Silakan pilih kategori postingan');
       }
 
-      // Prepare the body data for the API request
+      // Menyiapkan data untuk API
       final body = {
         'title': titleController!.text,
         'content': contentController!.text,
@@ -101,12 +95,12 @@ class PostController extends GetxController
         'status': 'published',
       };
 
-      // If a thumbnail is provided, add it to the body
+      // Jika thumbnail disediakan, tambahkan ke body
       if (thumbnail.value != null && thumbnail.value is File) {
         body['thumbnail'] = thumbnail.value;
       }
 
-      // Panggil API dengan Multipart jika ada thumbnail
+      // Memanggil API
       final response = await ApiService.api(
         endpoint: storePostURL,
         method: ApiMethod.post,
@@ -114,21 +108,24 @@ class PostController extends GetxController
         body: body,
       );
 
-      // Tangani respons berdasarkan status kode
+      // Menangani respons
       switch (response.statusCode) {
         case 201:
           showNotification(context, json.decode(response.body)['message'], "info");
-          clearForm();
 
-          // return to the previous screen
+          // Kembali ke layar sebelumnya
           context.maybePop();
 
-          // Segarkan daftar postingan
+          // Membersihkan form
+          selectCategory.value = null;
+          thumbnail.value = null;
+          formKey.currentState?.reset();
+
+          // Memperbarui daftar postingan
           await homeController.getPosts();
           await homeController.getCategories();
           await homeController.getCarouselPosts();
           await profileController.me();
-          await profileController.getPosts();
           break;
         case 422:
           final errors = json.decode(response.body)['errors'];
@@ -141,24 +138,25 @@ class PostController extends GetxController
           break;
       }
     } catch (e) {
-      dd("Error: $e");
+      dd("Error during post creation: $e");
       showNotification(context, "$e", 'danger');
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Method to pick and crop image
+  // Fungsi untuk memilih dan memotong gambar
   Future<void> pickAndCropImage() async {
     final ImagePicker picker = ImagePicker();
 
-    // Step 1: Pick an image
+    // Langkah 1: Memilih gambar
     final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      // Step 2: Crop the image
+      // Langkah 2: Memotong gambar
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
+        aspectRatio: CropAspectRatio(ratioX: 16, ratioY: 9),
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: 'Pangkas Gambar',
@@ -168,26 +166,16 @@ class PostController extends GetxController
             initAspectRatio: CropAspectRatioPreset.ratio16x9,
             lockAspectRatio: true,
             hideBottomControls: false,
-            aspectRatioPresets: [
-              CropAspectRatioPreset.ratio16x9,
-            ],
+            aspectRatioPresets: [CropAspectRatioPreset.ratio16x9],
           ),
-          IOSUiSettings(
-            title: 'Pangkas Gambar',
-          ),
+          IOSUiSettings(title: 'Pangkas Gambar'),
         ],
       );
 
-      // Step 3: Update the imageFile if cropping was successful
+      // Langkah 3: Memperbarui thumbnail jika pemotongan berhasil
       if (croppedFile != null) {
         thumbnail.value = File(croppedFile.path);
       }
     }
-  }
-
-  void clearForm() {
-    thumbnail.value = null;
-    selectCategory.value = null;
-    formKey.currentState!.reset();
   }
 }

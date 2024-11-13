@@ -1,8 +1,66 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
+import 'package:get/get.dart';
+
+// Reusable widget for displaying user information with skeleton loading
+Widget userInfo(ProfileController profileController, {double avatarRadius = 30, bool isInAppBar = false}) {
+  return Obx(() {
+    final user = profileController.user.value;
+    final isLoading = user == null; // Treat as loading if `user` is null
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        // Avatar Skeleton
+        Skeletonizer(
+          enabled: isLoading,
+          child: CircleAvatar(
+            radius: avatarRadius,
+            backgroundImage: NetworkImage(user?.photoUrl ?? 'https://via.placeholder.com/150'),
+          ),
+        ),
+        SizedBox(width: isInAppBar ? 10 : 18),
+
+        // User Info Skeleton
+        Skeletonizer(
+          enabled: isLoading,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  user?.name ?? 'User Name',
+                  style: TextStyle(
+                    fontSize: isInAppBar ? 15 : 18,
+                    fontWeight: FontWeight.bold,
+                    color: isInAppBar ? Colors.white : Colors.white,
+                  ),
+                ),
+                if (!isInAppBar) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    '@${user?.username ?? 'username'}',
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  });
+}
 
 Widget emptyPosts({
   String title = "Postingan Kosong??",

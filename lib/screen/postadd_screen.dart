@@ -28,23 +28,20 @@ class PostaddScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: postController.onRefresh,
-        child: SingleChildScrollView(
-          child: Form(
-            key: postController.formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _inputThumbnail(),
-                  _selectCategory(),
-                  _inputField('Judul Postingan', titleController),
-                  _inputField('Tulis Postingan', contentController, maxLines: 6),
-                  _inputButton(context),
-                ],
-              ),
+      body: SingleChildScrollView(
+        child: Form(
+          key: postController.formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _inputThumbnail(),
+                _selectCategory(),
+                _inputField('Judul Postingan', titleController, minLength: 3),
+                _inputField('Tulis Postingan', contentController, maxLines: 6, minLength: 10),
+                _inputButton(context),
+              ],
             ),
           ),
         ),
@@ -106,8 +103,7 @@ class PostaddScreen extends StatelessWidget {
             ),
             child: DropdownButtonFormField<Category>(
               decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                 enabledBorder: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -125,11 +121,11 @@ class PostaddScreen extends StatelessWidget {
               value: postController.selectCategory.value,
               dropdownColor: VColors.white,
               style: TextStyle(
-                color: VColors.white,
+                color: VColors.primary,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
               ),
-              hint: Text('Pilih kategori'),
+              hint: Text('Pilih kategori', style: TextStyle(color: VColors.gray)),
               items: postController.categories.map((Category category) {
                 return DropdownMenuItem<Category>(
                   value: category,
@@ -150,7 +146,8 @@ class PostaddScreen extends StatelessWidget {
   }
 
   Widget _inputField(String label, TextEditingController controller, {
-    int maxLines = 1
+    int maxLines = 1,
+    int? minLength,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,6 +167,11 @@ class PostaddScreen extends StatelessWidget {
           maxLines: maxLines,
           cursorColor: VColors.primary,
           decoration: InputDecoration(
+            hintStyle: TextStyle(
+              color: VColors.gray,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
             hintText: label == 'Judul Postingan'
               ? 'Judul dari postingan?'
               : 'Apa yang ingin kamu bagikan?',
@@ -192,6 +194,16 @@ class PostaddScreen extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(height: 5),
+        // add text-muted for the hint min text
+        Text(
+          '* Minimal $minLength karakter',
+          style: TextStyle(
+            color: VColors.gray,
+            fontSize: 13,
+            fontWeight: FontWeight.w500
+          ),
+        )
       ],
     );
   }
@@ -203,7 +215,7 @@ class PostaddScreen extends StatelessWidget {
         height: 55,
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             postController.create(
               context,
               titleController: titleController,

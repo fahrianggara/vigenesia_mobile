@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
-import 'package:vigenesia/components/posts.dart';
+import 'package:vigenesia/components/profile/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 
@@ -42,7 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     });
   }
 
-  // Screen for logged-in users
   Widget profileAuth(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -54,47 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               animation: _scrollController,
               builder: (context, child) {
                 bool showTitle = _scrollController.offset > 100;
-                return SliverAppBar(
-                  expandedHeight: 160,
-                  pinned: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    collapseMode: CollapseMode.pin,
-                    background: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(Images.background),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                      child: userProfile(profileController),
-                    ),
-                  ),
-                  title: showTitle ? userInAppBar(profileController) : null,
-                  backgroundColor: VColors.primary,
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: IconButton(
-                        icon: Icon(Icons.settings, color: Colors.white, size: 26),
-                        onPressed: () {
-                          print('Settings button pressed');
-                        },
-                      ),
-                    ),
-                    Visibility(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: IconButton(
-                          icon: Icon(Icons.logout, color: Colors.white, size: 26),
-                          onPressed: () {
-                            authController.logout(context);
-                          },
-                        ),
-                      ),
-                    ),
-                  ]
-                );
+                return profileContainer(showTitle);
               },
             ),
             CupertinoSliverRefreshControl(
@@ -107,7 +65,52 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
-  Widget profileContent() {
+  Widget profileContainer(showTitle) {
+    return SliverAppBar(
+      expandedHeight: 160,
+      pinned: true,
+      flexibleSpace: FlexibleSpaceBar(
+        collapseMode: CollapseMode.pin,
+        background: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Images.background),
+              fit: BoxFit.cover,
+            ),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: userProfile(profileController),
+        ),
+      ),
+      title: showTitle ? userInAppBar(profileController) : null,
+      backgroundColor: VColors.primary,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 2.0),
+          child: IconButton(
+            icon: Icon(Icons.settings, color: Colors.white, size: 26),
+            onPressed: () {
+              print('Settings button pressed');
+            },
+          ),
+        ),
+        Visibility(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              icon: Icon(Icons.logout, color: Colors.white, size: 26),
+              onPressed: () {
+                authController.logout(context);
+              },
+            ),
+          ),
+        ),
+      ]
+    );
+  }
+
+  Widget profileContent() 
+  {
     Text text = Text('');  // Nilai default
     double height = 40;
 
@@ -135,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           SizedBox(height: height),
           Obx(() {
             return profileController.posts.isNotEmpty
-              ? Posts(controller: profileController)
+              ? Posts()
               : emptyPosts(
                 sub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok."
               );
@@ -146,96 +149,13 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 
+  // User profile widget
   Widget userProfile(ProfileController profileController) {
-    return Obx(() {
-      final user = profileController.user.value;
-      final isLoading = user == null; // Treat as loading if `user` is null
-
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // Avatar Skeleton
-          Skeletonizer(
-            enabled: isLoading,
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(user?.photoUrl ?? 'https://via.placeholder.com/150'),
-            ),
-          ),
-          const SizedBox(width: 18),
-          
-          // User Info Skeleton
-          Skeletonizer(
-            enabled: isLoading,
-            child: Container(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user?.name ?? 'User Name',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    '@${user?.username ?? 'username'}',
-                    style: TextStyle(
-                      color: Colors.grey[300],
-                      fontSize: 14,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      );
-    });
+    return userInfo(profileController, avatarRadius: 30, isInAppBar: false);
   }
 
+  // User profile for the app bar
   Widget userInAppBar(ProfileController profileController) {
-    return Obx(() {
-      final user = profileController.user.value;
-      final isLoading = user == null; // Treat as loading if `user` is null
-
-      return Row(
-        children: [
-          // Avatar Skeleton
-          Skeletonizer(
-            enabled: isLoading,
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(
-                user?.photoUrl ?? 'https://via.placeholder.com/150',
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-
-          // Name Skeleton
-          Skeletonizer(
-            enabled: isLoading,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  user?.name ?? 'User Name',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    });
+    return userInfo(profileController, avatarRadius: 20, isInAppBar: true);
   }
 }

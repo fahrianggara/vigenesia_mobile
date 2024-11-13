@@ -61,7 +61,7 @@ class HomeController extends GetxController {
       List<dynamic> data = jsonDecode(response.body)['data'];
       posts.value = data.map((json) => Post.fromJson(json)).toList();
     } catch (e) {
-      dd("Terjadi Kesalahan: $e");
+      dd("HOMEC/GETPOSTS: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
     }
@@ -83,7 +83,7 @@ class HomeController extends GetxController {
       List<dynamic> data = jsonDecode(response.body)['data'];
       carouselPosts.value = data.map((json) => Post.fromJson(json)).toList();
     } catch (e) {
-      dd("Terjadi Kesalahan: $e");
+      dd("HOMEC/GETCAROUSELPOSTS: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
     }
@@ -105,7 +105,7 @@ class HomeController extends GetxController {
       List<dynamic> data = jsonDecode(response.body)['data'];
       categories.value = data.map((json) => Category.fromJson(json)).toList();
     } catch (e) {
-      dd("Terjadi Kesalahan: $e");
+      dd("HOMEC/GETCATEGORIES: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
     }

@@ -41,8 +41,8 @@ class User {
       token: json['access_token'] ?? '',
       tokenType: json['token_type'] ?? '',
       posts: json['posts'] != null 
-          ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
-          : null,
+        ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
+        : null,
     );
   }
 }
