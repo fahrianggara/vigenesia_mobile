@@ -130,7 +130,7 @@ class Carousels extends StatelessWidget {
             width: double.infinity,
             height: double.maxFinite,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.4),
+              color: Colors.black.withOpacity(0.65),
               borderRadius: BorderRadius.circular(8),
             ),
           ),

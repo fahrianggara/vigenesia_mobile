@@ -18,6 +18,8 @@ AppBar appBar({
   return AppBar(
     titleSpacing: 0,
     backgroundColor: backgroundColor ?? VColors.white,
+    elevation: 0,
+    scrolledUnderElevation: 0,
     title: Text(
       title,
       style: TextStyle(
@@ -345,7 +347,7 @@ Widget postItem({
                         createdAt,
                         style: TextStyle(
                           fontSize: 12,
-                          color: VColors.primary,
+                          color: HexColor('#000000').withOpacity(0.3),
                           fontWeight: FontWeight.bold,
                         ),
                         overflow:
