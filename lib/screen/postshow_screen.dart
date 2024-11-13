@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:vigenesia/components/widget.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/model/post.dart';
+import 'package:vigenesia/utils/utilities.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:get/get.dart';
 
 @RoutePage()
 class PostshowScreen extends StatelessWidget {
@@ -10,22 +14,174 @@ class PostshowScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'Post Detail'),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    final PostController postController = Get.put(PostController());
+
+    // Ensure id is not null before fetching the post
+    if (id != null) {
+      postController.getPost(id!); // Get post by id
+    }
+
+    return Obx(() {
+      final post = postController.post.value;
+      
+      // Handle case when post is still null or loading
+      if (post == null) {
+        return Scaffold(
+          appBar: _appBar(context, postController),
+          body: Center(child: CircularProgressIndicator()), // Show loading spinner while fetching post
+        );
+      }
+
+      return Scaffold(
+        appBar: _appBar(context, postController),
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics( // Adds bounce effect when scrolling
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Skeletonizer(
+                enabled: postController.isLoading.value,
+                child: postContent(post),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  AppBar _appBar(BuildContext context, PostController postController) {
+    final post = postController.post.value;
+    if (post == null) {
+      return AppBar();
+    }
+
+    return AppBar(
+      backgroundColor: Colors.white,
+      titleSpacing: 0,
+      scrolledUnderElevation: 0,
+      shadowColor: Colors.white,
+      title: Skeletonizer(
+        enabled: postController.isLoading.value,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Post ID: $id'),
-            ElevatedButton(
-              onPressed: () {
-                context.maybePop(true);
-              },
-              child: Text('Back'),
+            CircleAvatar(
+              radius: 19,
+              backgroundImage: NetworkImage(
+                post.user!.photoUrl ?? 'https://picsum.photos/seed/$id/200/200',
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,  // Ensures the Column only takes the needed space
+              children: [
+                Text(
+                  post.user!.name!,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    fontSize: 15,
+                    color: VColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  post.user!.username!,
+                  style: TextStyle(fontSize: 12, color: VColors.border500),
+                ),
+              ],
             ),
           ],
         ),
       ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.more_vert),
+          onPressed: () {
+            dd('More button pressed');
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget postContent(Post post) {
+    return Column(
+      children: [
+        Image.network(post.thumbnailUrl ?? 'https://picsum.photos/seed/$id/600/300'),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              postInfo(post),
+              const SizedBox(height: 15),
+              Text(
+                post.title!,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: .7
+                ),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                post.content!,
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: .5,
+                  color: HexColor('#000000').withOpacity(0.6),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget postInfo(Post post) {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () {
+            dd('Category tapped');
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              post.category!.name!,
+              style: TextStyle(
+                color: VColors.primary,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        Text(
+        '  •  ',
+          style: TextStyle(
+            fontSize: 14,
+            color: HexColor('#000000').withOpacity(0.5),
+          ),
+        ),
+        Text(
+          post.createdAtDiff!,
+          style: TextStyle(
+            fontSize: 14,
+            color: VColors.gray,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.1,
+          ),
+        )
+      ],
     );
   }
 }

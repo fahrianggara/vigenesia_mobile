@@ -23,6 +23,7 @@ class Posts extends StatelessWidget {
             itemCount: 5, // Display 5 dummy items when loading
             itemBuilder: (context, index) {
               return postItem(
+                context,
                 index: index,
                 id: 0, // Placeholder for id
                 imageUrl: '', // Placeholder for image
@@ -43,6 +44,7 @@ class Posts extends StatelessWidget {
         itemCount: homeController.posts.length,
         itemBuilder: (context, index) {
           return postItem(
+            context,
             index: index,
             id: homeController.posts[index].id!,
             imageUrl: homeController.posts[index].thumbnailUrl!,

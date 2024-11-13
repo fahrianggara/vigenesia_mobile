@@ -21,6 +21,7 @@ class Posts extends StatelessWidget {
             itemCount: 5, // Menampilkan 5 item dummy saat loading
             itemBuilder: (context, index) {
               return postItem(
+                context,
                 index: index,
                 id: 0, // Placeholder untuk id
                 imageUrl: '', // Placeholder untuk gambar
@@ -41,6 +42,7 @@ class Posts extends StatelessWidget {
         itemCount: profileController.posts.length,
         itemBuilder: (context, index) {
           return postItem(
+            context,
             index: index,
             id: profileController.posts[index].id!,
             imageUrl: profileController.posts[index].thumbnailUrl!,

@@ -249,7 +249,7 @@ InputDecoration authInputDecoration(String label,{
   );
 }
 
-Widget postItem({
+Widget postItem(BuildContext context,{
   required int index,
   required int id,
   required String imageUrl,
@@ -277,7 +277,9 @@ Widget postItem({
   }
 
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      AutoRouter.of(context).push(PostshowRoute(id: id));
+    },
     child: Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: index == 0 ? 10 : 20),
       child: Row(
