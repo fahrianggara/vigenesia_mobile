@@ -32,17 +32,7 @@ class LoginScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: VColors.white,
-        title: Text(
-          'Login ke $appName',
-          style: TextStyle(
-            color: VColors.primary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: appBar(title: 'Masuk ke $appName'),
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(

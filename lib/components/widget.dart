@@ -7,6 +7,28 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:get/get.dart';
 
+AppBar appBar({
+  required String title,
+  List<Widget>? actions,
+  Color? backgroundColor,
+  Color? titleColor,
+  double? fontSize,
+  FontWeight? fontWeight,
+}) {
+  return AppBar(
+    backgroundColor: backgroundColor ?? VColors.white,
+    title: Text(
+      title,
+      style: TextStyle(
+        color: titleColor ?? VColors.primary,
+        fontSize: fontSize ?? 18,
+        fontWeight: fontWeight ??FontWeight.bold,
+      ),
+    ),
+    actions: actions,
+  );
+}
+
 // Reusable widget for displaying user information with skeleton loading
 Widget userInfo(ProfileController profileController, {double avatarRadius = 30, bool isInAppBar = false}) {
   return Obx(() {

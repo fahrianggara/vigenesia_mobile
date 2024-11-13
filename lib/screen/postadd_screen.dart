@@ -17,17 +17,7 @@ class PostaddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: VColors.white,
-        title: Text(
-          'Buat Postingan',
-          style: TextStyle(
-            color: VColors.primary,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: appBar(title: 'Buat Postingan'),
       body: SingleChildScrollView(
         child: Form(
           key: postController.formKey,
