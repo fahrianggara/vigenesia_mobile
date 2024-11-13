@@ -32,6 +32,7 @@ class LoginScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: VColors.background,
       appBar: appBar(title: 'Masuk ke $appName'),
       body: Container(
         alignment: Alignment.center,

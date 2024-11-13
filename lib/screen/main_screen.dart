@@ -23,16 +23,14 @@ class MainScreen extends StatelessWidget {
       ],
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
-        return SafeArea(
-          child: Scaffold(
-            appBar: appBar(),
-            body: child,  // Ensure you're using 'child' here to display the selected tab
-            bottomNavigationBar: bottomNavigationBar(tabsRouter),
-            floatingActionButton: Obx(() => 
-              authController.isLoggedIn.value
-                ? addButton(context)
-                : SizedBox.shrink(), // If not logged in, hide the button
-            ),
+        return Scaffold(
+          appBar: appBar(),
+          body: child,  // Ensure you're using 'child' here to display the selected tab
+          bottomNavigationBar: bottomNavigationBar(tabsRouter),
+          floatingActionButton: Obx(() => 
+            authController.isLoggedIn.value
+              ? addButton(context)
+              : SizedBox.shrink(), // If not logged in, hide the button
           ),
         );
       },

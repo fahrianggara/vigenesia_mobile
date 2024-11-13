@@ -22,6 +22,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: VColors.background,
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
