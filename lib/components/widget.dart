@@ -16,6 +16,7 @@ AppBar appBar({
   FontWeight? fontWeight,
 }) {
   return AppBar(
+    titleSpacing: 0,
     backgroundColor: backgroundColor ?? VColors.white,
     title: Text(
       title,

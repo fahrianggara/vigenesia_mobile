@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:vigenesia/components/carousels.dart';
@@ -21,18 +22,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GetBuilder<HomeController>(
       init: homeController,
-      builder: (controller) => RefreshIndicator(
-        onRefresh: controller.onRefresh,  // The refresh logic
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Categories(),
-              Carousels(),
-              Posts(),
-              SizedBox(height: 20),
-            ],
-          ),
+      builder: (controller) => CustomScrollView(
+        physics: BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
         ),
+        slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: controller.onRefresh, // The refresh logic
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Categories(),
+                Carousels(),
+                Posts(),
+                SizedBox(height: 20),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

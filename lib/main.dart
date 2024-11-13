@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: GoogleFonts.inter().fontFamily,
+        fontFamily: GoogleFonts.rubik().fontFamily,
         scaffoldBackgroundColor: VColors.background,
       ),
       routerConfig: _appRouter.config(),
