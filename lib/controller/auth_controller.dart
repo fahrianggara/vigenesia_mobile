@@ -97,20 +97,21 @@ class AuthController extends GetxController
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
 
+          showNotification(context, "Selamat datang, $name!", 'info');
+
           isLoggedIn.value = true;
           context.router.pushAndPopUntil(
             ProfileRoute(), // The route to push
             predicate: (route) => false, // The condition to pop all routes
           );
 
-          update();
-
           username.clear();
           password.clear();
 
           await profileController.me();
 
-          showNotification( context, "Selamat datang, $name!", 'info');
+          update();
+
           break;
 
         case 422:

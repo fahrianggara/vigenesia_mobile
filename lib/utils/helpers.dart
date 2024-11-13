@@ -25,6 +25,7 @@ void notify({
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: message,
     backgroundColor: background,
+    duration: Duration(seconds: 4),
   ));
 }
 
