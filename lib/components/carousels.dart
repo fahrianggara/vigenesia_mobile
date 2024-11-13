@@ -1,9 +1,12 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/home_controller.dart';
+import 'package:vigenesia/routes/app_route.gr.dart';
+import 'package:vigenesia/screen/postshow_screen.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 class Carousels extends StatelessWidget {
@@ -73,7 +76,8 @@ class Carousels extends StatelessWidget {
           builder: (BuildContext context) {
             return InkWell(
               onTap: () {
-                debugPrint('Tapped on ${post.title}');
+                AutoRouter.of(context);
+                context.pushRoute(PostshowRoute(id: post.id));
               },
               child: _buildCarouselItem(context, post),
             );
@@ -110,14 +114,14 @@ class Carousels extends StatelessWidget {
               fit: BoxFit.cover,
               loadingBuilder: (context, child, progress) {
                 return progress == null
-                    ? child
-                    : Skeletonizer(
-                        child: Container(
-                          width: double.infinity,
-                          height: double.maxFinite,
-                          color: Colors.grey[300],
-                        ),
-                      );
+                  ? child
+                  : Skeletonizer(
+                      child: Container(
+                        width: double.infinity,
+                        height: double.maxFinite,
+                        color: Colors.grey[300],
+                      ),
+                    );
               },
             ),
           ),

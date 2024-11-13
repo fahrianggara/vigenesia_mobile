@@ -8,20 +8,21 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i8;
-import 'package:flutter/material.dart' as _i9;
+import 'package:auto_route/auto_route.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
 import 'package:vigenesia/screen/home_screen.dart' as _i1;
 import 'package:vigenesia/screen/login_screen.dart' as _i2;
 import 'package:vigenesia/screen/main_screen.dart' as _i3;
 import 'package:vigenesia/screen/postadd_screen.dart' as _i4;
-import 'package:vigenesia/screen/profile_screen.dart' as _i5;
-import 'package:vigenesia/screen/register_screen.dart' as _i6;
-import 'package:vigenesia/screen/search_screen.dart' as _i7;
+import 'package:vigenesia/screen/postshow_screen.dart' as _i5;
+import 'package:vigenesia/screen/profile_screen.dart' as _i6;
+import 'package:vigenesia/screen/register_screen.dart' as _i7;
+import 'package:vigenesia/screen/search_screen.dart' as _i8;
 
 /// generated route for
 /// [_i1.HomeScreen]
-class HomeRoute extends _i8.PageRouteInfo<void> {
-  const HomeRoute({List<_i8.PageRouteInfo>? children})
+class HomeRoute extends _i9.PageRouteInfo<void> {
+  const HomeRoute({List<_i9.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -29,7 +30,7 @@ class HomeRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
       return const _i1.HomeScreen();
@@ -39,12 +40,12 @@ class HomeRoute extends _i8.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.LoginScreen]
-class LoginRoute extends _i8.PageRouteInfo<LoginRouteArgs> {
+class LoginRoute extends _i9.PageRouteInfo<LoginRouteArgs> {
   LoginRoute({
-    _i9.Key? key,
+    _i10.Key? key,
     String? flashMessage,
     String? flashType,
-    List<_i8.PageRouteInfo>? children,
+    List<_i9.PageRouteInfo>? children,
   }) : super(
           LoginRoute.name,
           args: LoginRouteArgs(
@@ -57,7 +58,7 @@ class LoginRoute extends _i8.PageRouteInfo<LoginRouteArgs> {
 
   static const String name = 'LoginRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
       final args =
@@ -78,7 +79,7 @@ class LoginRouteArgs {
     this.flashType,
   });
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
   final String? flashMessage;
 
@@ -92,8 +93,8 @@ class LoginRouteArgs {
 
 /// generated route for
 /// [_i3.MainScreen]
-class MainRoute extends _i8.PageRouteInfo<void> {
-  const MainRoute({List<_i8.PageRouteInfo>? children})
+class MainRoute extends _i9.PageRouteInfo<void> {
+  const MainRoute({List<_i9.PageRouteInfo>? children})
       : super(
           MainRoute.name,
           initialChildren: children,
@@ -101,7 +102,7 @@ class MainRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'MainRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
       return const _i3.MainScreen();
@@ -111,8 +112,8 @@ class MainRoute extends _i8.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.PostaddScreen]
-class PostaddRoute extends _i8.PageRouteInfo<void> {
-  const PostaddRoute({List<_i8.PageRouteInfo>? children})
+class PostaddRoute extends _i9.PageRouteInfo<void> {
+  const PostaddRoute({List<_i9.PageRouteInfo>? children})
       : super(
           PostaddRoute.name,
           initialChildren: children,
@@ -120,7 +121,7 @@ class PostaddRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'PostaddRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
       return const _i4.PostaddScreen();
@@ -129,9 +130,56 @@ class PostaddRoute extends _i8.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.ProfileScreen]
-class ProfileRoute extends _i8.PageRouteInfo<void> {
-  const ProfileRoute({List<_i8.PageRouteInfo>? children})
+/// [_i5.PostshowScreen]
+class PostshowRoute extends _i9.PageRouteInfo<PostshowRouteArgs> {
+  PostshowRoute({
+    _i10.Key? key,
+    int? id,
+    List<_i9.PageRouteInfo>? children,
+  }) : super(
+          PostshowRoute.name,
+          args: PostshowRouteArgs(
+            key: key,
+            id: id,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'PostshowRoute';
+
+  static _i9.PageInfo page = _i9.PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<PostshowRouteArgs>(
+          orElse: () => const PostshowRouteArgs());
+      return _i5.PostshowScreen(
+        key: args.key,
+        id: args.id,
+      );
+    },
+  );
+}
+
+class PostshowRouteArgs {
+  const PostshowRouteArgs({
+    this.key,
+    this.id,
+  });
+
+  final _i10.Key? key;
+
+  final int? id;
+
+  @override
+  String toString() {
+    return 'PostshowRouteArgs{key: $key, id: $id}';
+  }
+}
+
+/// generated route for
+/// [_i6.ProfileScreen]
+class ProfileRoute extends _i9.PageRouteInfo<void> {
+  const ProfileRoute({List<_i9.PageRouteInfo>? children})
       : super(
           ProfileRoute.name,
           initialChildren: children,
@@ -139,18 +187,18 @@ class ProfileRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'ProfileRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
-      return const _i5.ProfileScreen();
+      return const _i6.ProfileScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i6.RegisterScreen]
-class RegisterRoute extends _i8.PageRouteInfo<void> {
-  const RegisterRoute({List<_i8.PageRouteInfo>? children})
+/// [_i7.RegisterScreen]
+class RegisterRoute extends _i9.PageRouteInfo<void> {
+  const RegisterRoute({List<_i9.PageRouteInfo>? children})
       : super(
           RegisterRoute.name,
           initialChildren: children,
@@ -158,18 +206,18 @@ class RegisterRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'RegisterRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
-      return const _i6.RegisterScreen();
+      return const _i7.RegisterScreen();
     },
   );
 }
 
 /// generated route for
-/// [_i7.SearchScreen]
-class SearchRoute extends _i8.PageRouteInfo<void> {
-  const SearchRoute({List<_i8.PageRouteInfo>? children})
+/// [_i8.SearchScreen]
+class SearchRoute extends _i9.PageRouteInfo<void> {
+  const SearchRoute({List<_i9.PageRouteInfo>? children})
       : super(
           SearchRoute.name,
           initialChildren: children,
@@ -177,10 +225,10 @@ class SearchRoute extends _i8.PageRouteInfo<void> {
 
   static const String name = 'SearchRoute';
 
-  static _i8.PageInfo page = _i8.PageInfo(
+  static _i9.PageInfo page = _i9.PageInfo(
     name,
     builder: (data) {
-      return const _i7.SearchScreen();
+      return const _i8.SearchScreen();
     },
   );
 }

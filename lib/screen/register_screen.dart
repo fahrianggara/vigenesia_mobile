@@ -41,17 +41,19 @@ class RegisterScreen extends StatelessWidget {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Inter',
-                      color: VColors.primary
+                      color: VColors.primary,
+                      letterSpacing: 0.1,
                     ),
                   ),
 
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 3),
 
                   Text(
                     'Ayo daftar dan buat akunmu sekarang!',
                     style: TextStyle(
                       fontSize: 16,
                       color: VColors.border500,
+                      letterSpacing: 0.1,
                     ),
                     textAlign: TextAlign.center,
                   ),
