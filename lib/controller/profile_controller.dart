@@ -25,7 +25,8 @@ class ProfileController extends GetxController
   }
 
   // Get me (logined user)
-  Future<void> me() async {
+  Future<void> me() async 
+  {
     isLoading.value = true;
 
     try {

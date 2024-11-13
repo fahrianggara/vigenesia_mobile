@@ -111,21 +111,21 @@ class PostController extends GetxController
       // Menangani respons
       switch (response.statusCode) {
         case 201:
-          showNotification(context, json.decode(response.body)['message'], "info");
+          // Memperbarui daftar postingan
+          await homeController.getPosts();
+          await homeController.getCategories();
+          await homeController.getCarouselPosts();
+          await profileController.me();
 
-          // Kembali ke layar sebelumnya
-          context.maybePop();
+           // Kembali ke layar sebelumnya
+          context.maybePop(true);
 
           // Membersihkan form
           selectCategory.value = null;
           thumbnail.value = null;
           formKey.currentState?.reset();
 
-          // Memperbarui daftar postingan
-          await homeController.getPosts();
-          await homeController.getCategories();
-          await homeController.getCarouselPosts();
-          await profileController.me();
+          showNotification(context, json.decode(response.body)['message'], "info");
           break;
         case 422:
           final errors = json.decode(response.body)['errors'];

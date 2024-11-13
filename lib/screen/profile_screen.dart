@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/components/profile/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
@@ -114,9 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen>
     Text text = Text('');  // Nilai default
     double height = 40;
 
-    if (profileController.posts.isNotEmpty) {
+    if (profileController.posts.isNotEmpty || profileController.isLoading.value) {
       text = Text(
-        'Postingan Kamu',
+        'Postingan Kamu (${profileController.posts.length})',
         style: TextStyle(
           color: VColors.primary,
           fontWeight: FontWeight.bold,
@@ -133,11 +134,14 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 20, top: 18, right: 20, bottom: 10),
-            child: text,
+            child: Skeletonizer(
+              enabled: profileController.isLoading.value,
+              child: text,
+            ),
           ),
           SizedBox(height: height),
           Obx(() {
-            return profileController.posts.isNotEmpty
+            return profileController.posts.isNotEmpty || profileController.isLoading.value
               ? Posts()
               : emptyPosts(
                 sub: "Hei ${profileController.user.value?.name}, Postingan kamu gaada nih? Ayo buat, gratis ini kok."
