@@ -94,22 +94,28 @@ class AuthController extends GetxController
           final token = responseBody['access_token'];
           final name = responseBody['name'];
 
+          // Save the token & authId to SharedPreferences
           SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('token', token);
+          await prefs.setInt('authId', responseBody['id']);
 
           showNotification(context, "Selamat datang, $name!", 'info');
 
+          // Mark the user as logged in and redirect to the profile page
           isLoggedIn.value = true;
           context.router.pushAndPopUntil(
             ProfileRoute(), // The route to push
             predicate: (route) => false, // The condition to pop all routes
           );
 
+          // Clear the form
           username.clear();
           password.clear();
 
+          // Fetch the user profile
           await profileController.me();
 
+          // This should trigger a rebuild
           update();
 
           break;
@@ -136,6 +142,7 @@ class AuthController extends GetxController
       // Clear the token from SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('token');
+      await prefs.remove('authId');
 
       // Mark the user as logged out
       isLoggedIn.value = false;  // This should trigger a rebuild
@@ -164,5 +171,11 @@ class AuthController extends GetxController
   Future<String> getToken() async {
     SharedPreferences session = await SharedPreferences.getInstance();
     return session.getString('token') ?? '';
+  }
+
+  // Get the authId from session
+  Future<int> getAuthId() async {
+    SharedPreferences session = await SharedPreferences.getInstance();
+    return session.getInt('authId') ?? 0;
   }
 }

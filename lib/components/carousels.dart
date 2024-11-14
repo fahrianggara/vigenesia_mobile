@@ -6,7 +6,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
-import 'package:vigenesia/screen/postshow_screen.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 class Carousels extends StatelessWidget {

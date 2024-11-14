@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:vigenesia/components/carousels.dart';
 import 'package:vigenesia/components/categories.dart';

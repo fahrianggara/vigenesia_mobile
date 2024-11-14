@@ -179,6 +179,7 @@ class PostController extends GetxController
     }
   }
 
+  // Mendapatkan postingan berdasarkan ID
   Future<void> getPost(int id) async 
   {
     isLoading.value = true;

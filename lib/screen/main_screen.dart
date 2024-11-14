@@ -46,6 +46,7 @@ class MainScreen extends StatelessWidget {
         style: TextStyle(
           color: VColors.primary,
           fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
