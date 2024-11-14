@@ -28,7 +28,9 @@ class PostshowScreen extends StatelessWidget {
       if (post == null) {
         return Scaffold(
           appBar: _appBar(context, postController),
-          body: Center(child: CircularProgressIndicator()), // Show loading spinner while fetching post
+          body: Center(child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(VColors.primary),
+          )), // Show loading spinner while fetching post
         );
       }
 

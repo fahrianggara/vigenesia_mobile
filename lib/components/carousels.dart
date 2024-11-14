@@ -22,13 +22,8 @@ class Carousels extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Obx(() {
         // Check if loading
-        if (homeController.isLoading.value) {
+        if (homeController.isLoading.value || homeController.carouselPosts.isEmpty) {
           return _buildLoadingCarousel();
-        }
-
-        // Check if data is empty
-        if (homeController.carouselPosts.isEmpty) {
-          return _buildEmptyState();
         }
 
         // Display the carousel with posts
@@ -129,7 +124,7 @@ class Carousels extends StatelessWidget {
             width: double.infinity,
             height: double.maxFinite,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.65),
+              color: Colors.black.withOpacity(0.45),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
