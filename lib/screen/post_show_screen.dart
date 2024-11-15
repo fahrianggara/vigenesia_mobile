@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/show_controller.dart';
 import 'package:vigenesia/model/post.dart';
+import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
@@ -41,7 +42,7 @@ class PostShowScreen extends StatelessWidget {
             children: [
               Skeletonizer(
                 enabled: showController.isLoading.value,
-                child: postContent(post),
+                child: postContent(post, context),
               ),
             ],
           ),
@@ -108,7 +109,7 @@ class PostShowScreen extends StatelessWidget {
     );
   }
 
-  Widget postContent(Post post) {
+  Widget postContent(Post post, BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -122,7 +123,7 @@ class PostShowScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                postInfo(post),
+                postInfo(post, context),
                 const SizedBox(height: 15),
                 Text(
                   post.title!,
@@ -149,12 +150,13 @@ class PostShowScreen extends StatelessWidget {
     );
   }
 
-  Widget postInfo(Post post) {
+  Widget postInfo(Post post, BuildContext context) {
     return Row(
       children: [
         InkWell(
           onTap: () {
-            dd('Category tapped');
+            AutoRouter.of(context);
+            context.router.push(CategoryShowRoute(id: post.category!.id));
           },
           child: Container(
             decoration: BoxDecoration(
