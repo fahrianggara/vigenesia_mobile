@@ -315,7 +315,7 @@ Widget postItem(BuildContext context,{
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w100,
-                    color: HexColor('#000000').withOpacity(0.5),
+                    color: VColors.gray,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

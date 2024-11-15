@@ -137,7 +137,7 @@ class PostshowScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   letterSpacing: .5,
-                  color: HexColor('#000000').withOpacity(0.6),
+                  color: VColors.gray,
                 ),
               ),
             ],
