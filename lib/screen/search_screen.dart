@@ -73,7 +73,7 @@ class SearchScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(Images.vectorSearchNotFound, width: 300),
+          Image.asset(Images.vectorSearchNotFound, width: 400),
           SizedBox(height: 15),
           Text(
             'Maaf, postingan yang kamu cari tidak ditemukan! Silakan coba kata kunci lain.',
