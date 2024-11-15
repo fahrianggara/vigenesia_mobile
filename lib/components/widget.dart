@@ -278,7 +278,7 @@ Widget postItem(BuildContext context,{
 
   return GestureDetector(
     onTap: () {
-      AutoRouter.of(context).push(PostshowRoute(id: id));
+      AutoRouter.of(context).push(PostShowRoute(id: id));
     },
     child: Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: index == 0 ? 10 : 20),

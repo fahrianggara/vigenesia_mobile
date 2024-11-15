@@ -61,7 +61,7 @@ class MainScreen extends StatelessWidget {
   FloatingActionButton addButton(BuildContext context) {
     return FloatingActionButton(
       onPressed: () {
-        context.navigateTo(const PostaddRoute()); // Assuming you have an AddPostRoute
+        context.navigateTo(const PostAddRoute()); // Assuming you have an AddPostRoute
       },
       backgroundColor: VColors.primary, // You can customize the color
       foregroundColor: VColors.white,

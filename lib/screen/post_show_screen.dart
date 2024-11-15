@@ -8,9 +8,9 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 
 @RoutePage()
-class PostshowScreen extends StatelessWidget {
+class PostShowScreen extends StatelessWidget {
   final int? id;
-  const PostshowScreen({super.key, this.id});
+  const PostShowScreen({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {

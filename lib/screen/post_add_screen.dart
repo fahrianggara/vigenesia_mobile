@@ -7,8 +7,8 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
-class PostaddScreen extends StatelessWidget {
-  const PostaddScreen({super.key});
+class PostAddScreen extends StatelessWidget {
+  const PostAddScreen({super.key});
 
   static final TextEditingController titleController = TextEditingController();
   static final TextEditingController contentController = TextEditingController();

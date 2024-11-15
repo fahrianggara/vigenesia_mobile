@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/model/category.dart';
+import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 class Categories extends StatelessWidget {
@@ -33,7 +35,7 @@ class Categories extends StatelessWidget {
                   // Wrap `listCategories` with `Skeletonizer` when `isLoading` is true
                   return Skeletonizer(
                     enabled: homeController.isLoading.value,
-                    child: listCategories(categories),
+                    child: listCategories(categories, context),
                   );
                 }),
               )
@@ -46,7 +48,7 @@ class Categories extends StatelessWidget {
 }
 
 // Function to display categories list (or skeleton placeholder when loading)
-Widget listCategories(List<Category> categories) {
+Widget listCategories(List<Category> categories, BuildContext context) {
   return ListView.builder(
     scrollDirection: Axis.horizontal,
     itemCount: categories.length,
@@ -55,7 +57,10 @@ Widget listCategories(List<Category> categories) {
       return Container(
         margin: EdgeInsets.only(left: index == 0 ? 20 : 10, right: isLastItem ? 20 : 0),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            AutoRouter.of(context);
+            context.pushRoute(CategoryShowRoute(id: categories[index].id));
+          },
           style: TextButton.styleFrom(
             backgroundColor: HexColor('#000000').withOpacity(0.5),
             shape: RoundedRectangleBorder(
