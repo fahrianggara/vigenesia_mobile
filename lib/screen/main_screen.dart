@@ -24,7 +24,7 @@ class MainScreen extends StatelessWidget {
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          appBar: _appBar(),
+          appBar: _appBar(tabsRouter),
           body: child,  // Ensure you're using 'child' here to display the selected tab
           bottomNavigationBar: bottomNavigationBar(tabsRouter),
           floatingActionButton: Obx(() => 
@@ -38,12 +38,17 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar() {
+  PreferredSizeWidget _appBar(TabsRouter tabsRouter) {
+    final title = tabsRouter.activeIndex == 0
+      ? appName
+      : tabsRouter.activeIndex == 1
+        ? 'Pencarian'
+        : 'Profile';
     return AppBar(
       backgroundColor: VColors.white,
       elevation: 0,
       title: Text(
-        appName,
+        title,
         style: TextStyle(
           color: VColors.primary,
           fontSize: 20,

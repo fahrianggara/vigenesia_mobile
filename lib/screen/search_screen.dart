@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:vigenesia/components/widget.dart';
 import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/utils/utilities.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:auto_route/auto_route.dart';
 
