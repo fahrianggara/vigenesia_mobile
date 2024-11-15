@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:vigenesia/controller/post_controller.dart';
+import 'package:vigenesia/controller/show_controller.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -14,20 +14,20 @@ class PostshowScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PostController postController = Get.put(PostController());
+    final ShowController showController = Get.put(ShowController());
 
     // Ensure id is not null before fetching the post
     if (id != null) {
-      postController.getPost(id!); // Get post by id
+      showController.getPost(id!); // Get post by id
     }
 
     return Obx(() {
-      final post = postController.post.value;
+      final post = showController.post.value;
       
       // Handle case when post is still null or loading
       if (post == null) {
         return Scaffold(
-          appBar: _appBar(context, postController),
+          appBar: _appBar(context, showController),
           body: Center(child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(VColors.primary),
           )), // Show loading spinner while fetching post
@@ -35,7 +35,7 @@ class PostshowScreen extends StatelessWidget {
       }
 
       return Scaffold(
-        appBar: _appBar(context, postController),
+        appBar: _appBar(context, showController),
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics( // Adds bounce effect when scrolling
             parent: AlwaysScrollableScrollPhysics(),
@@ -44,7 +44,7 @@ class PostshowScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Skeletonizer(
-                enabled: postController.isLoading.value,
+                enabled: showController.isLoading.value,
                 child: postContent(post),
               ),
             ],
@@ -54,8 +54,10 @@ class PostshowScreen extends StatelessWidget {
     });
   }
 
-  AppBar _appBar(BuildContext context, PostController postController) {
-    final post = postController.post.value;
+  AppBar _appBar(BuildContext context, ShowController showController) 
+  {
+    final post = showController.post.value;
+    
     if (post == null) {
       return AppBar();
     }
@@ -66,7 +68,7 @@ class PostshowScreen extends StatelessWidget {
       scrolledUnderElevation: 0,
       shadowColor: Colors.white,
       title: Skeletonizer(
-        enabled: postController.isLoading.value,
+        enabled: showController.isLoading.value,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
