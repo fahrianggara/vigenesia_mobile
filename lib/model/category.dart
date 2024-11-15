@@ -28,8 +28,8 @@ class Category {
       createdAt: json['created_at'],
       postsCount: json['posts_count'],
       posts: json['posts'] != null 
-          ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
-          : null,
+        ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
+        : null,
     );
   }
 }

@@ -7,6 +7,132 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:get/get.dart';
 
+Widget categoryIsNull() {
+  return Scaffold(
+    appBar: AppBar(
+      title: Skeletonizer(
+        enabled: true,
+        child: Text(
+          'Kategori Post',
+          style: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: VColors.primary,
+          ),
+        ),
+      ),
+      backgroundColor: VColors.white,
+      elevation: 0,
+      titleSpacing: 0,
+    ),
+    body: SingleChildScrollView(
+      physics: BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Skeletonizer(
+            enabled: true,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Images.background2),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              width: double.infinity,
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Kategori',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Deskripsi kategori',
+                    style: TextStyle(
+                      color: VColors.primary100,
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Skeletonizer(
+            enabled: true,
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return postItem(
+                  context,
+                  index: index,
+                  id: 0,
+                  imageUrl: '',
+                  title: 'Judul Post',
+                  description: 'Deskripsi post',
+                  category: 'Kategori',
+                  createdAt: '1 jam yang lalu',
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget loadingPostItem() {
+  return Skeletonizer(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Ada 1 postingan yang ditemukan',
+            style: TextStyle(
+              color: VColors.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemCount: 5, // Menampilkan 5 item dummy saat loading
+          itemBuilder: (context, index) {
+            return postItem(
+              context,
+              index: index,
+              id: 0, // Placeholder untuk id
+              imageUrl: '', // Placeholder untuk gambar
+              title: 'Loading...', // Placeholder untuk judul
+              description: 'Loading...', // Placeholder untuk deskripsi
+              category: 'Loading...', // Placeholder untuk kategori
+              createdAt: 'Loading...', // Placeholder untuk waktu dibuat
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
 AppBar appBar({
   required String title,
   List<Widget>? actions,
