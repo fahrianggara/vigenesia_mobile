@@ -6,6 +6,7 @@ import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
+import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
 class PostShowScreen extends StatelessWidget {
@@ -25,13 +26,8 @@ class PostShowScreen extends StatelessWidget {
       final post = showController.post.value;
       
       // Handle case when post is still null or loading
-      if (post == null) {
-        return Scaffold(
-          appBar: _appBar(context, showController),
-          body: Center(child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(VColors.primary),
-          )), // Show loading spinner while fetching post
-        );
+      if (post == null || showController.isLoading.value) {
+        return postIsNull();
       }
 
       return Scaffold(
@@ -113,37 +109,43 @@ class PostShowScreen extends StatelessWidget {
   }
 
   Widget postContent(Post post) {
-    return Column(
-      children: [
-        Image.network(post.thumbnailUrl ?? 'https://picsum.photos/seed/$id/600/300'),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              postInfo(post),
-              const SizedBox(height: 15),
-              Text(
-                post.title!,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: .7
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                post.content!,
-                style: TextStyle(
-                  fontSize: 16,
-                  letterSpacing: .5,
-                  color: VColors.gray,
-                ),
-              ),
-            ],
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        children: [
+          Image.network(
+            post.thumbnailUrl ?? 'https://picsum.photos/seed/$id/600/300',
+            width: double.infinity,
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                postInfo(post),
+                const SizedBox(height: 15),
+                Text(
+                  post.title!,
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: .7
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  post.content!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    letterSpacing: .5,
+                    color: VColors.gray,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -7,6 +7,158 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:get/get.dart';
 
+Widget postIsNull() {
+  return Scaffold(
+    appBar: AppBar(
+      title: Skeletonizer(
+        enabled: true,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: 19,
+              backgroundImage: AssetImage(
+                Images.background2,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,  // Ensures the Column only takes the needed space
+              children: [
+                Text(
+                  'Nama Pengguna',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    fontSize: 15,
+                    color: VColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '@username',
+                  style: TextStyle(fontSize: 12, color: VColors.border500),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: VColors.white,
+      elevation: 0,
+      titleSpacing: 0,
+    ),
+    body: SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Skeletonizer(
+            enabled: true,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Images.background2),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              width: double.infinity,
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Judul Post',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Deskripsi post',
+                    style: TextStyle(
+                      color: VColors.primary100,
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Skeletonizer(
+              enabled: true,
+              child: Row(
+                children: [
+                  Text(
+                    'Kategori Kategori',
+                    style: TextStyle(
+                      color: VColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    ' • ',
+                    style: TextStyle(
+                      color: VColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    '1 jam yang lalu',
+                    style: TextStyle(
+                      color: VColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Skeletonizer(
+            enabled: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Ini adalah Judul',
+                style: TextStyle(
+                  color: VColors.gray,
+                  fontSize: 22,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Skeletonizer(
+            enabled: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Ini adalah deskripsi post yang panjang sekali, dan akan di potong oleh sistem agar tidak terlalu panjang. Lorem ipsum dolor sit amet, consectetur adipiscing elit\n\nIni adalah deskripsi post yang panjang sekali, dan akan di potong oleh sistem agar tidak terlalu panjang. Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+                style: TextStyle(
+                  color: VColors.gray,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 Widget categoryIsNull() {
   return Scaffold(
     appBar: AppBar(
