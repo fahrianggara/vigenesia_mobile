@@ -6,7 +6,8 @@ import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/service/api_service.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController 
+{
   var categories = <Category>[].obs;
   var carouselPosts = <Post>[].obs;
   var posts = <Post>[].obs;

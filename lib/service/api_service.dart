@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vigenesia/utils/utilities.dart';
+import 'dart:convert';
 
 enum ApiMethod { get, post, put, delete }
 
@@ -19,47 +19,60 @@ class ApiService
     SharedPreferences session = await SharedPreferences.getInstance();
     Map<String, String> headers = {
       "Accept": "application/json",
+      "Content-Type": "application/json",
     };
 
-    // Tambahkan Authorization jika diperlukan
     if (authenticated) {
       String? token = session.getString('token');
-      int? authId = session.getInt('authId');
-      dd("Token: $token, AuthId: $authId");
-
-      // Tambahkan token ke dalam header
       if (token != null) headers['Authorization'] = 'Bearer $token';
     }
 
-    // Buat URL dari endpoint dan parameter
     final url = Uri.parse(endpoint + parameters);
 
     try {
-      // Buat request berdasarkan method
-      var request = http.MultipartRequest(method.name.toUpperCase(), url);
+      http.Response response;
 
-      // Tambahkan header ke dalam request
-      request.headers.addAll(headers);
+      // Gunakan request berbeda berdasarkan method
+      if (multipart && method != ApiMethod.get) {
+        var request = http.MultipartRequest(method.name.toUpperCase(), url);
+        request.headers.addAll(headers);
 
-      // Tambahkan field body ke dalam request
-      body.forEach((key, value) async 
-      {
-        // Jika value adalah file, tambahkan sebagai multipart
-        if (value is File) {
-          request.files.add(await http.MultipartFile.fromPath(key, value.path));
-        } else { // Jika value adalah string, tambahkan sebagai field biasa
-          request.fields[key] = value.toString();
+        body.forEach((key, value) async {
+          if (value is File) {
+            request.files.add(await http.MultipartFile.fromPath(key, value.path));
+          } else {
+            request.fields[key] = value.toString();
+          }
+        });
+
+        var streamedResponse = await request.send();
+        response = await http.Response.fromStream(streamedResponse);
+      } else {
+        switch (method) {
+          case ApiMethod.get:
+            response = await http.get(url, headers: headers);
+            break;
+          case ApiMethod.post:
+            response = await http.post(url, headers: headers, body: jsonEncode(body));
+            break;
+          case ApiMethod.put:
+            response = await http.put(url, headers: headers, body: jsonEncode(body));
+            break;
+          case ApiMethod.delete:
+            response = await http.delete(url, headers: headers);
+            break;
         }
-      });
+      }
 
-      // Kirim request multipart dan tunggu respons
-      var streamedResponse = await request.send();
-      var response = await http.Response.fromStream(streamedResponse);
-
-      return response;
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response;
+      } else {
+        throw Exception("Failed with status code: ${response.statusCode}");
+      }
     } catch (e) {
       debugPrint("API Error: $e");
       throw Exception("Network error or invalid response");
     }
   }
+
 }

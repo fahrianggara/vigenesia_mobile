@@ -109,6 +109,7 @@ class PostController extends GetxController
         endpoint: storePostURL,
         method: ApiMethod.post,
         authenticated: true,
+        multipart: true,
         body: body,
       );
 
