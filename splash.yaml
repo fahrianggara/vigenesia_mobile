@@ -3,9 +3,11 @@ flutter_native_splash:
   ios: true
   web: false
 
-  image: "assets/icon/logo.png"
-  color: "#FFFFFF"
+  image: "assets/images/splash.png"
+  color: "#05B465"
+  color_dark: "#05B465"
 
-  android_12:
-    image: "assets/icon/logo.png"
-    color: "#FFFFFF"
+  android_12: # Android versi 12 Keatas
+    image: "assets/images/splash.png"
+    color: "#05B465"
+    color_dark: "#05B465"
