@@ -15,6 +15,11 @@ class CategoryShowScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Hapus instance lama (jika ada) sebelum membuat controller baru
+    if (Get.isRegistered<CategoryController>()) {
+      Get.delete<CategoryController>();
+    }
+
     final CategoryController categoryController = Get.put(CategoryController());
 
     // Ensure id is not null before fetching the post

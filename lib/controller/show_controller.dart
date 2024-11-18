@@ -4,14 +4,23 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/model/post.dart';
 import 'dart:convert';
 
-class ShowController extends GetxController 
-{
+class ShowController extends GetxController {
   var isLoading = false.obs;
   var post = Rx<Post?>(null);
+  final int? id;
+
+  ShowController({this.id});
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (id != null) {
+      getPost(id!);
+    }
+  }
 
   // Mendapatkan postingan berdasarkan ID
-  Future<void> getPost(int id) async 
-  {
+  Future<void> getPost(int id) async {
     isLoading.value = true;
 
     try {

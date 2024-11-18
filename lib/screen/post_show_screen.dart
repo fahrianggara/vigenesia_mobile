@@ -12,21 +12,23 @@ import 'package:vigenesia/components/widget.dart';
 @RoutePage()
 class PostShowScreen extends StatelessWidget {
   final int? id;
+
   const PostShowScreen({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {
-    final ShowController showController = Get.put(ShowController());
-
-    // Ensure id is not null before fetching the post
-    if (id != null) {
-      showController.getPost(id!); // Get post by id
+    // Hapus instance lama (jika ada) sebelum membuat controller baru
+    if (Get.isRegistered<ShowController>()) {
+      Get.delete<ShowController>();
     }
+
+    // Inisialisasi controller dengan ID
+    final ShowController showController = Get.put(ShowController(id: id));
 
     return Obx(() {
       final post = showController.post.value;
-      
-      // Handle case when post is still null or loading
+
+      // Tampilkan skeleton jika data masih loading
       if (post == null || showController.isLoading.value) {
         return postIsNull();
       }
@@ -34,7 +36,7 @@ class PostShowScreen extends StatelessWidget {
       return Scaffold(
         appBar: _appBar(context, showController),
         body: SingleChildScrollView(
-          physics: BouncingScrollPhysics( // Adds bounce effect when scrolling
+          physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
           child: Column(
@@ -51,10 +53,9 @@ class PostShowScreen extends StatelessWidget {
     });
   }
 
-  AppBar _appBar(BuildContext context, ShowController showController) 
-  {
+  AppBar _appBar(BuildContext context, ShowController showController) {
     final post = showController.post.value;
-    
+
     if (post == null) {
       return AppBar();
     }
@@ -78,12 +79,12 @@ class PostShowScreen extends StatelessWidget {
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,  // Ensures the Column only takes the needed space
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   post.user!.name!,
                   style: TextStyle(
-                    fontWeight: FontWeight.bold, 
+                    fontWeight: FontWeight.bold,
                     fontSize: 15,
                     color: VColors.primary,
                   ),
@@ -100,7 +101,7 @@ class PostShowScreen extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.more_vert),
+          icon: const Icon(Icons.more_vert),
           onPressed: () {
             dd('More button pressed');
           },
@@ -127,10 +128,10 @@ class PostShowScreen extends StatelessWidget {
                 const SizedBox(height: 15),
                 Text(
                   post.title!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: .7
+                    letterSpacing: .7,
                   ),
                 ),
                 const SizedBox(height: 15),
@@ -156,7 +157,7 @@ class PostShowScreen extends StatelessWidget {
         InkWell(
           onTap: () {
             AutoRouter.of(context);
-            context.router.push(CategoryShowRoute(id: post.category!.id));
+            context.router.popAndPush(CategoryShowRoute(id: post.category!.id));
           },
           child: Container(
             decoration: BoxDecoration(
@@ -174,7 +175,7 @@ class PostShowScreen extends StatelessWidget {
           ),
         ),
         Text(
-        '  •  ',
+          '  •  ',
           style: TextStyle(
             fontSize: 14,
             color: HexColor('#000000').withOpacity(0.5),
@@ -188,7 +189,7 @@ class PostShowScreen extends StatelessWidget {
             fontWeight: FontWeight.w500,
             letterSpacing: 0.1,
           ),
-        )
+        ),
       ],
     );
   }
