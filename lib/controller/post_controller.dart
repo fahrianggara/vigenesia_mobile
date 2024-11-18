@@ -113,6 +113,8 @@ class PostController extends GetxController
         body: body,
       );
 
+      dd("Response: ${response.body}");
+
       // Menangani respons
       switch (response.statusCode) {
         case 201:

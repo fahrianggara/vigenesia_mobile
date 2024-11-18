@@ -59,8 +59,8 @@ class PostAddScreen extends StatelessWidget {
               ),
               clipBehavior: Clip.hardEdge,
               child: postController.thumbnail.value != null
-                ? Image.file(postController.thumbnail.value!, fit: BoxFit.contain)
-                : Icon(Icons.add_a_photo, color: VColors.primary, size: 50),
+                  ? Image.file(postController.thumbnail.value!, fit: BoxFit.contain)
+                  : Icon(Icons.add_a_photo, color: VColors.primary, size: 50),
             ),
           );
         }),
@@ -156,44 +156,28 @@ class PostAddScreen extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           cursorColor: VColors.primary,
-          decoration: InputDecoration(
-            hintStyle: TextStyle(
-              color: VColors.gray,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-            hintText: label == 'Judul Postingan'
-              ? 'Judul dari postingan?'
-              : 'Apa yang ingin kamu bagikan?',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: VColors.primary,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: VColors.primary,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
+          decoration: _inputDecoration(label),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Input ini tidak boleh kosong';
+            }
+            if (minLength != null && value.length < minLength) {
+              return 'Minimal $minLength karakter';
+            }
+            return null;
+          },
         ),
         SizedBox(height: 5),
         // add text-muted for the hint min text
-        Text(
-          '* Minimal $minLength karakter',
-          style: TextStyle(
-            color: VColors.gray,
-            fontSize: 13,
-            fontWeight: FontWeight.w500
+        if (minLength != null)
+          Text(
+            '* Minimal $minLength karakter',
+            style: TextStyle(
+              color: VColors.gray,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        )
       ],
     );
   }
@@ -205,12 +189,17 @@ class PostAddScreen extends StatelessWidget {
         height: 55,
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () async {
-            postController.create(
-              context,
-              titleController: titleController,
-              contentController: contentController,
-            );
+          onPressed: () {
+            if (postController.formKey.currentState?.validate() ?? false) {
+              postController.create(
+                context,
+                titleController: titleController,
+                contentController: contentController,
+              );
+            } else {
+              // You can add a message to notify the user that the form is not valid.
+              Get.snackbar('Error', 'Form tidak valid. Silakan periksa kembali.');
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: VColors.primary,
@@ -221,17 +210,53 @@ class PostAddScreen extends StatelessWidget {
           ),
           child: Obx(() {
             return postController.isLoading.value
-              ? loadingIcon(color: VColors.white)
-              : Text(
-                  'Buat Postingan',
-                  style: TextStyle(
-                    color: VColors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
+                ? loadingIcon(color: VColors.white)
+                : Text(
+                    'Buat Postingan',
+                    style: TextStyle(
+                      color: VColors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
           }),
         ),
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration(label) {
+    return InputDecoration(
+      hintStyle: TextStyle(
+        color: VColors.gray,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      hintText: label == 'Judul Postingan'
+          ? 'Judul dari postingan?'
+          : 'Apa yang ingin kamu bagikan?',
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: VColors.primary,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: VColors.primary,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      errorStyle: TextStyle(
+        color: VColors.danger,
+        fontSize: 13.5,
+        letterSpacing: 0.4,
+        fontWeight: FontWeight.w500
       ),
     );
   }

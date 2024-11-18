@@ -64,11 +64,7 @@ class ApiService
         }
       }
 
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response;
-      } else {
-        throw Exception("Failed with status code: ${response.statusCode}");
-      }
+      return response;
     } catch (e) {
       debugPrint("API Error: $e");
       throw Exception("Network error or invalid response");
