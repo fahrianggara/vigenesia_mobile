@@ -70,8 +70,7 @@ class Carousels extends StatelessWidget {
           builder: (BuildContext context) {
             return InkWell(
               onTap: () {
-                AutoRouter.of(context);
-                context.pushRoute(PostShowRoute(id: post.id));
+                AutoRouter.of(context).popAndPush(PostShowRoute(id: post.id));
               },
               child: _buildCarouselItem(context, post),
             );
