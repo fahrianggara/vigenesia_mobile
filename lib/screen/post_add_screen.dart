@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/utils/utilities.dart';
@@ -51,11 +52,11 @@ class PostAddScreen extends StatelessWidget {
               height: 170,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: VColors.primary,
+                  color: Colors.transparent,
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(10),
-                color: VColors.primary50,
+                color: VColors.border50,
               ),
               clipBehavior: Clip.hardEdge,
               child: postController.thumbnail.value != null
@@ -86,10 +87,11 @@ class PostAddScreen extends StatelessWidget {
           return Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: VColors.primary,
+                color: Colors.transparent,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
+              color: VColors.border50,
             ),
             child: DropdownButtonFormField<Category>(
               decoration: InputDecoration(
@@ -97,7 +99,7 @@ class PostAddScreen extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: VColors.primary,
+                    color: Colors.transparent,
                     width: 1.0,
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -227,6 +229,8 @@ class PostAddScreen extends StatelessWidget {
 
   InputDecoration _inputDecoration(label) {
     return InputDecoration(
+      filled: true,
+      fillColor: VColors.border50,
       hintStyle: TextStyle(
         color: VColors.gray,
         fontSize: 16,
@@ -241,13 +245,13 @@ class PostAddScreen extends StatelessWidget {
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: VColors.primary,
-          width: 2.0,
+          width: 1.0,
         ),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: VColors.primary,
+          color: Colors.transparent,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(8),

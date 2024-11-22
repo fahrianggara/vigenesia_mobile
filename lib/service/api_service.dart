@@ -24,7 +24,7 @@ class ApiService
 
     if (authenticated) {
       String? token = session.getString('token');
-      if (token != null) headers['Authorization'] = 'Bearer $token';
+      headers['Authorization'] = 'Bearer $token';
     }
 
     final url = Uri.parse(endpoint + parameters);
