@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/utils/utilities.dart';

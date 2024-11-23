@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
+import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/controller/show_controller.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
@@ -8,6 +10,7 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/components/widget.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 @RoutePage()
 class PostShowScreen extends StatelessWidget {
@@ -24,6 +27,9 @@ class PostShowScreen extends StatelessWidget {
 
     // Inisialisasi controller dengan ID
     final ShowController showController = Get.put(ShowController(id: id));
+    final AuthController authController = Get.put(AuthController());
+    final PostController postController = Get.put(PostController());
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Obx(() {
       final post = showController.post.value;
@@ -33,27 +39,42 @@ class PostShowScreen extends StatelessWidget {
         return postIsNull();
       }
 
-      return Scaffold(
-        appBar: _appBar(context, showController),
-        body: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Skeletonizer(
-                enabled: showController.isLoading.value,
-                child: postContent(post, context),
-              ),
-            ],
+      // Bungkus Scaffold dalam ModalProgressHUD
+      return ModalProgressHUD(
+        inAsyncCall: postController.isLoading.value,
+        opacity: 0.5,
+        progressIndicator: CircularProgressIndicator(
+          color: VColors.primary,
+        ),
+        child: Scaffold(
+          key: scaffoldKey,
+          appBar: _appBar(context, showController, authController, postController, scaffoldKey),
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Skeletonizer(
+                  enabled: showController.isLoading.value,
+                  child: postContent(post, context),
+                ),
+              ],
+            ),
           ),
         ),
       );
     });
   }
 
-  AppBar _appBar(BuildContext context, ShowController showController) {
+  AppBar _appBar(
+    BuildContext context, 
+    ShowController showController,
+    AuthController authController,
+    PostController postController,
+    scaffoldKey
+  ) {
     final post = showController.post.value;
 
     if (post == null) {
@@ -100,13 +121,88 @@ class PostShowScreen extends StatelessWidget {
         ),
       ),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.more_vert),
-          onPressed: () {
-            dd('More button pressed');
+        FutureBuilder<int>(
+          future: authController.getAuthId(), // Panggil fungsi async
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const SizedBox.shrink(); // Placeholder saat menunggu
+            }
+            if (snapshot.hasError) {
+              return const Text("Error loading auth ID"); // Tampilkan error jika ada
+            }
+            int authId = snapshot.data ?? 0; // Ambil authId dari snapshot
+            return Visibility(
+              visible: authId == post.user!.id, // Bandingkan authId dengan post.user!.id
+              child: IconButton(
+                icon: const Icon(Icons.more_vert),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return listModalMenu(context, postController, scaffoldKey, post: post);
+                    }
+                  ).whenComplete(() {
+                    showAlertDialog(
+                      context, // Kembali ke konteks awal
+                      title: 'Hapus Postingan',
+                      message: 'Apakah Anda yakin ingin menghapus postingan ini?',
+                      onConfirm: () {
+                        postController.delete(context, post.id);
+                      },
+                    );
+                  });
+                },
+              ),
+            );
           },
-        ),
+        )
       ],
+    );
+  }
+
+  Widget listModalMenu(BuildContext context, PostController postController, scaffoldKey, {Post? post}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+                bottomLeft: Radius.circular(5),
+                bottomRight: Radius.circular(5)
+              ),
+            ),
+            tileColor: VColors.gray.withOpacity(0.1),
+            iconColor: VColors.warning,
+            leading: const Icon(Icons.edit),
+            title: const Text('Edit Postingan'),
+            onTap: () {
+            },
+          ),
+          const SizedBox(height: 5),
+          ListTile(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+                topLeft: Radius.circular(5),
+                topRight: Radius.circular(5)
+              ),
+            ),
+            tileColor: VColors.gray.withOpacity(0.1),
+            iconColor: VColors.danger,
+            leading: const Icon(Icons.delete),
+            title: const Text('Hapus Postingan'),
+            onTap: () {
+              // // Tutup modal
+              Navigator.of(context, rootNavigator: true).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 

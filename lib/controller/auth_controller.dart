@@ -14,6 +14,7 @@ class AuthController extends GetxController
 {
   var isLoggedIn = false.obs;
   var isLoading = false.obs;
+  var authId = 0.obs;
 
   final ProfileController profileController = Get.put(ProfileController());
 

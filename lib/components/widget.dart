@@ -7,6 +7,54 @@ import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:get/get.dart';
 
+Future<void> showAlertDialog(
+  BuildContext context, {
+  required String title,
+  required String message,
+  String? confirmText,
+  String? cancelText,
+  required Function onConfirm,
+  Function? onCancel,
+}) {
+  return showDialog(
+    context: context, // Always use the provided context
+    builder: (BuildContext dialogContext) { // Use dialogContext in dialog
+      return AlertDialog(
+        title: Text(title),
+        titleTextStyle: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (onCancel != null) {
+                onCancel();
+              }
+              Navigator.of(dialogContext).pop(); // Use dialogContext
+            },
+            child: Text(cancelText ?? 'Tidak', style: TextStyle(fontSize: 15)),
+          ),
+          TextButton(
+            onPressed: () {
+              onConfirm();
+              Navigator.of(dialogContext).pop(); // Use dialogContext
+            },
+            child: Text(confirmText ?? 'Ya', style: TextStyle(fontSize: 15)),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
 Widget postIsNull() {
   return Scaffold(
     appBar: AppBar(

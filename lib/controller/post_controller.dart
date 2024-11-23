@@ -250,4 +250,43 @@ class PostController extends GetxController
       hasQuery.value = false;
     }
   }
+
+  Future<dynamic> delete(BuildContext context, postId) async
+  { 
+    isLoading.value = true;
+
+    try {
+      final response = await ApiService.api(
+        endpoint: "$deletePostURL/$postId",
+        method: ApiMethod.delete,
+        authenticated: true,
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          // Refresh data
+          await homeController.getPosts();
+          await homeController.getCategories();
+          await homeController.getCarouselPosts();
+          await profileController.me();
+
+          // Navigate back if the widget is still active
+          context.router.popUntilRoot();
+
+          showNotification(context, json.decode(response.body)['message'], "info");
+          break;
+
+        default:
+          if (context.mounted) {
+            showNotification(context, json.decode(response.body)['message'], 'danger');
+            context.router.maybePop(true);
+          }
+          break;
+      }
+    } catch (e) {
+      debugPrint("Error deleting post: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 }
