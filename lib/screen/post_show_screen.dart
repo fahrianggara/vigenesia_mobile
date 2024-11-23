@@ -69,17 +69,20 @@ class PostShowScreen extends StatelessWidget {
   }
 
   AppBar _appBar(
-    BuildContext context, 
+    BuildContext context,
     ShowController showController,
     AuthController authController,
     PostController postController,
-    scaffoldKey
+    scaffoldKey,
   ) {
     final post = showController.post.value;
 
     if (post == null) {
       return AppBar();
     }
+
+    // Tambahkan flag
+    bool isDeletePressed = false;
 
     return AppBar(
       backgroundColor: Colors.white,
@@ -136,20 +139,33 @@ class PostShowScreen extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.more_vert),
                 onPressed: () {
+                  isDeletePressed = false; // Reset flag sebelum modal dibuka
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return listModalMenu(context, postController, scaffoldKey, post: post);
-                    }
+                      return listModalMenu(
+                        context,
+                        postController,
+                        scaffoldKey,
+                        post: post,
+                        onDelete: () {
+                          isDeletePressed = true; // Set flag ketika tombol hapus ditekan
+                          Navigator.of(context, rootNavigator: true).pop(); // Tutup modal
+                        },
+                      );
+                    },
                   ).whenComplete(() {
-                    showAlertDialog(
-                      context, // Kembali ke konteks awal
-                      title: 'Hapus Postingan',
-                      message: 'Apakah Anda yakin ingin menghapus postingan ini?',
-                      onConfirm: () {
-                        postController.delete(context, post.id);
-                      },
-                    );
+                    // Tampilkan dialog hanya jika flag isDeletePressed true
+                    if (isDeletePressed) {
+                      showAlertDialog(
+                        context, // Kembali ke konteks awal
+                        title: 'Hapus Postingan',
+                        message: 'Apakah Anda yakin ingin menghapus postingan ini?',
+                        onConfirm: () {
+                          postController.delete(context, post.id);
+                        },
+                      );
+                    }
                   });
                 },
               ),
@@ -160,7 +176,13 @@ class PostShowScreen extends StatelessWidget {
     );
   }
 
-  Widget listModalMenu(BuildContext context, PostController postController, scaffoldKey, {Post? post}) {
+  Widget listModalMenu(
+    BuildContext context,
+    PostController postController,
+    scaffoldKey, {
+    Post? post,
+    VoidCallback? onDelete, // Tambahkan callback
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -172,7 +194,7 @@ class PostShowScreen extends StatelessWidget {
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15),
                 bottomLeft: Radius.circular(5),
-                bottomRight: Radius.circular(5)
+                bottomRight: Radius.circular(5),
               ),
             ),
             tileColor: VColors.gray.withOpacity(0.1),
@@ -180,6 +202,8 @@ class PostShowScreen extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Edit Postingan'),
             onTap: () {
+              // Tutup modal tanpa aksi tambahan
+              Navigator.of(context, rootNavigator: true).pop();
             },
           ),
           const SizedBox(height: 5),
@@ -189,7 +213,7 @@ class PostShowScreen extends StatelessWidget {
                 bottomLeft: Radius.circular(15),
                 bottomRight: Radius.circular(15),
                 topLeft: Radius.circular(5),
-                topRight: Radius.circular(5)
+                topRight: Radius.circular(5),
               ),
             ),
             tileColor: VColors.gray.withOpacity(0.1),
@@ -197,14 +221,16 @@ class PostShowScreen extends StatelessWidget {
             leading: const Icon(Icons.delete),
             title: const Text('Hapus Postingan'),
             onTap: () {
-              // // Tutup modal
-              Navigator.of(context, rootNavigator: true).pop();
+              if (onDelete != null) {
+                onDelete(); // Panggil callback onDelete
+              }
             },
           ),
         ],
       ),
     );
   }
+
 
   Widget postContent(Post post, BuildContext context) {
     return SizedBox(
