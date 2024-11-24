@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/components/widget.dart';
-import 'package:vigenesia/controller/post_controller.dart';
+import 'package:vigenesia/controller/search_controller.dart' as search_controllers;
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:auto_route/auto_route.dart';
@@ -10,7 +10,7 @@ import 'package:auto_route/auto_route.dart';
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
-  static final PostController postController = Get.put(PostController());
+  static final searchController = Get.put(search_controllers.SearchController());
   static final TextEditingController searchInput = TextEditingController();
 
   @override
@@ -31,7 +31,7 @@ class SearchScreen extends StatelessWidget {
                   TextFormField(
                     controller: searchInput,
                     onFieldSubmitted: (query) {
-                      postController.search(query);
+                      searchController.search(query);
                     },
                     textInputAction: TextInputAction.search,
                     cursorColor: VColors.primary,
@@ -70,7 +70,7 @@ class SearchScreen extends StatelessWidget {
 
   Widget _searchContent() {
     return Obx(() {
-      if (postController.isLoading.value) {
+      if (searchController.isLoading.value) {
         return Skeletonizer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,18 +109,18 @@ class SearchScreen extends StatelessWidget {
       }
 
       // Show search not found message
-      if (postController.notFound.value) {
+      if (searchController.notFound.value) {
         return _searchNotFound();
       }
 
       // Show search placeholder when no query has been made yet
-      else if (!postController.hasQuery.value && searchInput.text.isEmpty) {
+      else if (!searchController.hasQuery.value && searchInput.text.isEmpty) {
         return _search();
       } 
       
       // Show search results
       else {
-        final data = postController.searchResults;
+        final data = searchController.searchResults;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

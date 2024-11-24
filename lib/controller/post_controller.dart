@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -22,17 +21,13 @@ class PostController extends GetxController
   var isLoading = false.obs;
   var post = Rx<Post?>(null);
   var categories = <Category>[].obs;
-  var posts = <Post>[].obs; // Daftar postingan
-  var searchResults = <Post>[].obs; // Hasil pencarian postingan
   var selectCategory = Rx<Category?>(null);
   var thumbnail = Rxn<File>();
   var formKey = GlobalKey<FormState>();
-  var notFound = false.obs;
-  var hasQuery = false.obs;
 
-  final AuthController authController = Get.find();
-  final HomeController homeController = Get.find();
-  final ProfileController profileController = Get.find();
+  final AuthController authController = Get.find<AuthController>();
+  final HomeController homeController = Get.find<HomeController>();
+  final ProfileController profileController = Get.find<ProfileController>();
 
   @override
   void onInit() {
@@ -184,48 +179,6 @@ class PostController extends GetxController
       if (croppedFile != null) {
         thumbnail.value = File(croppedFile.path);
       }
-    }
-  }
-
-  Future<void> search(String query) async {
-    isLoading.value = true;
-    notFound.value = true;
-    hasQuery.value = true;
-
-    try {
-      final response = await ApiService.api(
-        endpoint: postsURL,
-        method: ApiMethod.get,
-        parameters: "?q=$query",
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception('Failed to search posts: ${json.decode(response.body)['message']}');
-      }
-
-      if (query.isEmpty) {
-        searchResults.clear();
-        hasQuery.value = false;
-        notFound.value = false;
-        dd("Masuk ke query kosong");
-      } else {
-        final data = json.decode(response.body)['data'] as List;
-        searchResults.assignAll(data.map((e) => Post.fromJson(e)).toList());
-        hasQuery.value = false;
-        notFound.value = false;
-        dd ("Masuk ke true data");
-      }
-
-    } catch (e) {
-      dd("Error searching posts: $e");
-      if (e.toString().contains('Data Postingan Kosong!')) {
-        notFound.value = true;
-        hasQuery.value = false; 
-        dd("Masuk ke exception");
-      }
-    } finally {
-      isLoading.value = false;
-      hasQuery.value = false;
     }
   }
 
