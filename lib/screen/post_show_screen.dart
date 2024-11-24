@@ -6,6 +6,7 @@ import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/controller/show_controller.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
+import 'package:vigenesia/screen/post_edit_screen.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
@@ -204,6 +205,10 @@ class PostShowScreen extends StatelessWidget {
             onTap: () {
               // Tutup modal tanpa aksi tambahan
               Navigator.of(context, rootNavigator: true).pop();
+
+              // Navigasi ke halaman edit
+              // AutoRouter.of(context).push(PostEditRoute(post: post!));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostEditScreen(post: post!)));
             },
           ),
           const SizedBox(height: 5),
