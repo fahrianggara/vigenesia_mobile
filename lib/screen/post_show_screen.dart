@@ -207,7 +207,6 @@ class PostShowScreen extends StatelessWidget {
               Navigator.of(context, rootNavigator: true).pop();
 
               // Navigasi ke halaman edit
-              // AutoRouter.of(context).push(PostEditRoute(post: post!));
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostEditScreen(post: post!)));
             },
           ),

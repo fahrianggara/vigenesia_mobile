@@ -46,6 +46,7 @@ class MainScreen extends StatelessWidget {
         : 'Profile';
     return AppBar(
       backgroundColor: VColors.white,
+      automaticallyImplyLeading: tabsRouter.activeIndex != 2,
       elevation: 0,
       title: Text(
         title,

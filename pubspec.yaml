@@ -29,6 +29,7 @@ dependencies:
   flutter_svg: ^2.0.14
   flutter_native_splash: ^2.4.3
   modal_progress_hud_nsn: ^0.5.1
+  modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:
   flutter_test:

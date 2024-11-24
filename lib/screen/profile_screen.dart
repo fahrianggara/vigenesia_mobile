@@ -8,6 +8,7 @@ import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -82,6 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget profileContainer() {
     return SliverAppBar(
+      automaticallyImplyLeading: false,
       expandedHeight: 160,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
@@ -103,22 +105,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.only(right: 2.0),
           child: IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white, size: 26),
+            icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 26),
             onPressed: () {
-              print('Settings button pressed');
+              showMaterialModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15),
+                    topRight: Radius.circular(15),
+                  ),
+                ),
+                builder: (context) {
+                  return profileSettings(context);
+                },
+              );
             },
-          ),
-        ),
-        Visibility(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-              icon: const Icon(Icons.logout,
-                  color: Colors.white, size: 26),
-              onPressed: () {
-                authController.logout(context);
-              },
-            ),
           ),
         ),
       ],
@@ -180,4 +181,84 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget userInAppBar(ProfileController profileController) {
     return userInfo(profileController, avatarRadius: 20, isInAppBar: true);
   }
+
+  // Profile settings
+  Widget profileSettings(BuildContext context) {
+    Widget buildListTile({
+      required IconData icon,
+      required String title,
+      required VoidCallback? onTap,
+      Color? tileColor,
+      Color? iconColor,
+      TextStyle? textStyle,
+      BorderRadius? borderRadius,
+    }) {
+      return ListTile(
+        shape: RoundedRectangleBorder(borderRadius: borderRadius ?? BorderRadius.circular(5)),
+        tileColor: tileColor ?? VColors.gray.withOpacity(0.1),
+        leading: Icon(icon, color: iconColor),
+        title: Text(title, style: textStyle),
+        onTap: onTap,
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildListTile(
+            icon: Icons.camera_alt,
+            title: 'Ganti Foto Profil',
+            onTap: () {},
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+              bottomLeft: Radius.circular(5),
+              bottomRight: Radius.circular(5),
+            ),
+          ),
+          const SizedBox(height: 3),
+          buildListTile(
+            icon: Icons.person,
+            title: 'Ganti Profil',
+            onTap: () {},
+          ),
+          const SizedBox(height: 3),
+          buildListTile(
+            icon: Icons.lock,
+            title: 'Ganti Password',
+            onTap: () {},
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(5),
+              topRight: Radius.circular(5),
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+            ),
+          ),
+          const SizedBox(height: 13),
+          buildListTile(
+            icon: Icons.dark_mode,
+            title: 'Mode Gelap',
+            onTap: null,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          const SizedBox(height: 13),
+          buildListTile(
+            icon: Icons.logout,
+            title: 'Keluar',
+            onTap: () {
+              Navigator.pop(context);
+              authController.logout(context);
+            },
+            tileColor: Colors.red[100],
+            iconColor: Colors.red,
+            textStyle: const TextStyle(color: Colors.red),
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
