@@ -19,6 +19,13 @@ class ShowController extends GetxController {
     }
   }
 
+  // Update postingan dengan data baru
+  void updatePost(Post updatedPost) {
+    if (post.value?.id == updatedPost.id) {
+      post.value = updatedPost; // Update observable state
+    }
+  }
+
   // Mendapatkan postingan berdasarkan ID
   Future<dynamic> getPost(int id) async {
     isLoading.value = true;

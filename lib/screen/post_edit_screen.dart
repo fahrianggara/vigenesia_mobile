@@ -31,12 +31,12 @@ class _PostEditScreenState extends State<PostEditScreen> {
     // Validasi nilai awal category
     final initialCategory = postController.categories.firstWhere(
       (cat) => cat.id == widget.post.category?.id, // Cocokkan dengan ID atau atribut unik
-      orElse: () => postController.categories.first, // Jika tidak ditemukan, ambil nilai pertama
+      orElse: () => Category(id: -1, name: 'Pilih Kategori'), // Jika tidak ditemukan
     );
     postController.selectCategory.value = initialCategory;
 
-    titleController.text = widget.post.title!;
-    contentController.text = widget.post.content!;
+    titleController.text = widget.post.title ?? '';
+    contentController.text = widget.post.content ?? '';
   }
 
   @override
@@ -64,7 +64,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
                 const SizedBox(height: 20),
                 _inputField(post, label: 'Tulis Postingan', controller: contentController, maxLines: 6, minLength: 10),
                 const SizedBox(height: 20),
-                _inputButton(context),
+                _inputButton(context, post),
               ],
             ),
           ),
@@ -79,29 +79,35 @@ class _PostEditScreenState extends State<PostEditScreen> {
       children: [
         InkWell(
           onTap: postController.pickAndCropImage,
-          child: Container(
-            width: double.infinity,
-            height: 170,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.transparent,
-                width: 1.0,
+          child: Obx(() {
+            final thumbnail = postController.thumbnail.value;
+            final thumbnailUrl = post.thumbnailUrl;
+
+            return Container(
+              width: double.infinity,
+              height: 170,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.transparent,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(10),
+                color: VColors.border50,
               ),
-              borderRadius: BorderRadius.circular(10),
-              color: VColors.border50,
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: post.thumbnailUrl != null
-                ? Image.network(
-                    post.thumbnailUrl!,
-                    fit: BoxFit.cover,
-                  ) : postController.thumbnail.value != null
-                    ? Image.file(
-                        postController.thumbnail.value!,
-                        fit: BoxFit.cover,
-                      )
-                    : Icon(Icons.add_a_photo),
-          ),
+              clipBehavior: Clip.hardEdge,
+              child: thumbnail != null
+                  ? Image.file(
+                      thumbnail,
+                      fit: BoxFit.cover,
+                    )
+                  : (thumbnailUrl != null && !thumbnailUrl.contains('thumbnail.png'))
+                      ? Image.network(
+                          thumbnailUrl,
+                          fit: BoxFit.cover,
+                        )
+                      : Icon(Icons.add_a_photo, color: VColors.primary, size: 50),
+            );
+          }),
         ),
       ],
     );
@@ -119,43 +125,45 @@ class _PostEditScreenState extends State<PostEditScreen> {
         const SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.transparent,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-              color: VColors.border50,
-          ),
-          child: DropdownButtonFormField<Category>(
-            isExpanded: true,
-            value: postController.selectCategory.value,
-            dropdownColor: VColors.white,
-            style: TextStyle(
-              color: VColors.primary,
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
+            border: Border.all(
+              color: Colors.transparent,
+              width: 1,
             ),
-            onChanged: (Category? selected) {
-              postController.setSelectedCategory(selected);
-            },
-            items: postController.categories.map((category) {
-              return DropdownMenuItem<Category>(
-                value: category,
-                child: Text(category.name ?? ''),
-              );
-            }).toList(),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
-              enabledBorder: InputBorder.none,
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                  width: 1.0,
+            borderRadius: BorderRadius.circular(8),
+            color: VColors.border50,
+          ),
+          child: Obx(() {
+            return DropdownButtonFormField<Category>(
+              isExpanded: true,
+              value: postController.selectCategory.value,
+              dropdownColor: VColors.white,
+              style: TextStyle(
+                color: VColors.primary,
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+              onChanged: (Category? selected) {
+                postController.setSelectedCategory(selected);
+              },
+              items: postController.categories.map((category) {
+                return DropdownMenuItem<Category>(
+                  value: category,
+                  child: Text(category.name ?? ''),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                enabledBorder: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                borderRadius: BorderRadius.circular(8),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ],
     );
@@ -195,7 +203,6 @@ class _PostEditScreenState extends State<PostEditScreen> {
           },
         ),
         SizedBox(height: 5),
-        // add text-muted for the hint min text
         if (minLength != null)
           Text(
             '* Minimal $minLength karakter',
@@ -247,16 +254,20 @@ class _PostEditScreenState extends State<PostEditScreen> {
     );
   }
 
-  Widget _inputButton(BuildContext context) {
+  Widget _inputButton(BuildContext context, Post post) {
     return SizedBox(
       height: 55,
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
           if (postController.formKey.currentState?.validate() ?? false) {
-            dd('Form valid');
+            postController.edit(
+              context,
+              titleController: titleController,
+              contentController: contentController,
+              postId: post.id,
+            );
           } else {
-            // You can add a message to notify the user that the form is not valid.
             Get.snackbar('Error', 'Form tidak valid. Silakan periksa kembali.');
           }
         },

@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/home_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
+import 'package:vigenesia/controller/show_controller.dart';
 import 'package:vigenesia/model/category.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/service/api_service.dart';
@@ -186,29 +187,6 @@ class PostController extends GetxController
     }
   }
 
-  // Mendapatkan postingan berdasarkan ID
-  Future<void> getPost(int id) async 
-  {
-    isLoading.value = true;
-
-    try {
-      final response = await ApiService.api(
-        endpoint: "$postsURL/$id",
-        method: ApiMethod.get,
-      );
-
-      if (response.statusCode != 200) {
-        throw Exception('Failed to load post: ${json.decode(response.body)['message']}');
-      }
-
-      post.value = Post.fromJson(json.decode(response.body)['data']);
-    } catch (e) {
-      dd("Error getting post: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   Future<void> search(String query) async {
     isLoading.value = true;
     notFound.value = true;
@@ -289,4 +267,86 @@ class PostController extends GetxController
       isLoading.value = false;
     }
   }
+
+  Future<void> edit(
+    BuildContext context, {
+    TextEditingController? titleController,
+    TextEditingController? contentController,
+    int? postId,
+  }) async {
+    isLoading.value = true;
+
+    try {
+      if (selectCategory.value == null) {
+        throw Exception('Silakan pilih kategori postingan');
+      }
+
+      final body = {
+        'title': titleController!.text,
+        'content': contentController!.text,
+        'category_id': selectCategory.value!.id,
+        'status': 'published',
+      };
+
+      if (thumbnail.value != null && thumbnail.value is File) {
+        body['thumbnail'] = thumbnail.value;
+      }
+
+      final response = await ApiService.api(
+        endpoint: "$updatePostURL/$postId",
+        method: ApiMethod.post,
+        authenticated: true,
+        multipart: true,
+        body: body,
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          // Parsing respons
+          final responseData = json.decode(response.body)['data'];
+          final updatedPost = Post.fromJson(responseData);
+          final showController = Get.find<ShowController>();
+
+          // Perbarui data di ShowController
+          if (postId != null) {
+            showController.updatePost(updatedPost); // Memperbarui state
+          }
+
+          // Perbarui daftar dan kategori
+          await homeController.getPosts();
+          await homeController.getCategories();
+          await homeController.getCarouselPosts();
+          await profileController.me();
+          await showController.getPost(postId!);
+
+          // Kembali ke layar sebelumnya
+          context.maybePop(true);
+
+          // Membersihkan form
+          selectCategory.value = null;
+          thumbnail.value = null;
+          formKey.currentState?.reset();
+
+          showNotification(context, json.decode(response.body)['message'], "info");
+          break;
+
+        case 422:
+          final errors = json.decode(response.body)['errors'];
+          var message = errors[errors.keys.elementAt(0)][0];
+          showNotification(context, "$message", 'danger');
+          break;
+
+        default:
+          var message = json.decode(response.body)['message'];
+          showNotification(context, "$message", 'danger');
+          break;
+      }
+    } catch (e) {
+      dd("Error during post updating: $e");
+      showNotification(context, "$e", 'danger');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
 }
