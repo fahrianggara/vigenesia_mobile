@@ -43,97 +43,115 @@ Future<dynamic> editProfileBottomSheet(
 ) {
   profileController.nameController.text = profileController.user.value?.name ?? '';
   profileController.usernameController.text = profileController.user.value?.username ?? '';
-  
-  return modalBottomSheet(context, (builder) {
-    return Container(
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: SingleChildScrollView(
-        child: Form(
-          key: profileController.formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Edit Profile',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 20),
-              _inputField(
-                label: 'Nama',
-                controller: profileController.nameController,
-                minLength: 3,
-              ),
-              const SizedBox(height: 15),
-              _inputField(
-                label: 'Username',
-                controller: profileController.usernameController,
-                minLength: 3,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (profileController.formKey.currentState?.validate() ?? false) {
-                    profileController.updateProfile(context);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: VColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  minimumSize: Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+
+  return modalBottomSheet(
+    context,
+    (builder) {
+      return WillPopScope( // Menggunakan WillPopScope untuk mendeteksi pop
+        onWillPop: () async {
+          profileController.resetForm();
+          return true; // Mengizinkan modal ditutup
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: profileController.formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
                   ),
-                  foregroundColor: Colors.white,
-                ),
-                child: Obx(() {
-                  return profileController.isLoading.value
-                    ? loadingIcon(color: VColors.white)
-                    : Text(
-                        'Perbarui',
-                        style: TextStyle(
-                          color: VColors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                }),
+                  const SizedBox(height: 20),
+                  _inputField(
+                    label: 'Nama',
+                    controller: profileController.nameController,
+                    minLength: 3,
+                    error: profileController.nameError,
+                  ),
+                  const SizedBox(height: 15),
+                  _inputField(
+                    label: 'Username',
+                    controller: profileController.usernameController,
+                    minLength: 3,
+                    error: profileController.usernameError,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (profileController.formKey.currentState?.validate() ?? false) {
+                        profileController.updateProfile(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: VColors.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Obx(() {
+                      return profileController.isLoading.value
+                          ? loadingIcon(color: VColors.white)
+                          : Text(
+                              'Perbarui',
+                              style: TextStyle(
+                                color: VColors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                    }),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      )
-    );
+      );
+    },
+  ).whenComplete(() {
+    profileController.resetForm(); // Reset saat modal ditutup
   });
 }
 
+
 Widget _inputField({
-    required String label,
-    required TextEditingController controller,
-    int maxLines = 1,
-    int? minLength,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: VColors.primary,
-          ),
+  required String label,
+  required TextEditingController controller,
+  int maxLines = 1,
+  int? minLength,
+  RxString? error,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        label,
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: VColors.primary,
         ),
-        SizedBox(height: 10),
-        TextFormField(
+      ),
+      SizedBox(height: 10),
+      Obx(() {
+        return TextFormField(
           controller: controller,
           maxLines: maxLines,
           cursorColor: VColors.primary,
-          decoration: _inputDecoration(label),
+          decoration: _inputDecoration(label).copyWith(
+            errorText: error?.value.isNotEmpty == true ? error?.value : null,
+          ),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Input ini tidak boleh kosong';
@@ -143,10 +161,12 @@ Widget _inputField({
             }
             return null;
           },
-        ),
-      ],
-    );
-  }
+        );
+      }),
+    ],
+  );
+}
+
 
 InputDecoration _inputDecoration(label) {
   return InputDecoration(

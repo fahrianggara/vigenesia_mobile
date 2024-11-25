@@ -17,7 +17,17 @@ class ProfileController extends GetxController
   var nameController = TextEditingController();
   var usernameController = TextEditingController();
 
-  // Set initial value for name and username
+  // Error fields for server-side validation
+  final nameError = RxString('');
+  final usernameError = RxString('');
+
+  // Reset function
+  void resetForm() {
+    nameController.clear();
+    usernameController.clear();
+    nameError.value = '';
+    usernameError.value = '';
+  }
 
   Future<void> onRefresh() async {
     try {
@@ -91,12 +101,23 @@ class ProfileController extends GetxController
           
           await me();
 
+          // Reset error fields
+          nameError.value = '';
+          usernameError.value = '';
+
           break;
         case 400:
           Navigator.pop(context);
           Navigator.pop(context);
 
           showNotification(context, json.decode(response.body)['message'], "info");
+        case 422:
+          var errors = json.decode(response.body)['errors'];
+
+          nameError.value = errors['name'] != null ? errors['name'][0] : '';
+          usernameError.value = errors['username'] != null ? errors['username'][0] : '';
+
+          break;
         default:
           showNotification(context, json.decode(response.body)['message'], "danger");
           break;

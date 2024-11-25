@@ -362,7 +362,7 @@ AppBar appBar({
 Widget userInfo(ProfileController profileController, {double avatarRadius = 30, bool isInAppBar = false}) {
   return Obx(() {
     final user = profileController.user.value;
-    final isLoading = user == null; // Treat as loading if `user` is null
+    final isLoading = user == null || profileController.isLoading.value;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
