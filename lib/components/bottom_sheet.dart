@@ -92,6 +92,7 @@ Future<dynamic> photoProfileBottomSheet(
           return true;
         },
         child: Obx(() {
+          var photoUrl = profileController.user.value?.photoUrl;
           return Stack(
             children: [
               Container(
@@ -121,10 +122,22 @@ Future<dynamic> photoProfileBottomSheet(
                           ),
                           IconButton(
                             onPressed: () {
-                              profileController.resetForm();
-                              Navigator.pop(context);
+                              if (photoUrl.contains('photo.png') == false) {
+                                // dialog konfirmasi
+                                showAlertDialog(
+                                  context,
+                                  title: 'Hapus Foto Profil',
+                                  message: 'Apakah kamu yakin ingin menghapus foto profil?',
+                                  onConfirm: () {
+                                    profileController.deletePhoto(context);
+                                  }
+                                );
+                              }
                             },
-                            icon: Icon(Icons.delete, color: VColors.danger),
+                            icon: photoUrl!.contains('photo.png') ? const SizedBox() : Icon(
+                              Icons.delete, 
+                              color: VColors.danger,
+                            )
                           ),
                         ],
                       ),
@@ -156,7 +169,7 @@ Future<dynamic> photoProfileBottomSheet(
                 ),
               ),
               // Indikator loading
-              if (profileController.isLoading.value)
+              if (profileController.isLoadingForm.value)
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(

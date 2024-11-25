@@ -232,8 +232,7 @@ class ProfileController extends GetxController
         if (croppedFile != null) 
         {
           photo.value = File(croppedFile.path);
-
-          isLoading.value = true;
+          isLoadingForm.value = true;
 
           // Upload photo
           final response = await ApiService.api(
@@ -267,11 +266,51 @@ class ProfileController extends GetxController
               break;
           }
 
-          isLoading.value = false;
         }
       }
     } catch (e) {
       dd("PROFILE/PICK_IMAGE: Terjadi Kesalahan: $e");
+    } finally {
+      isLoadingForm.value = false;
+    }
+  }
+
+  Future<void> deletePhoto(BuildContext context) async {
+    isLoadingForm.value = true;
+
+    try {
+      final response = await ApiService.api(
+        endpoint: changePhotoURL,
+        method: ApiMethod.post,
+        authenticated: true,
+        body: {
+          'delete': true,
+        }
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          Navigator.pop(context);
+          Navigator.pop(context);
+
+          resetForm();
+
+          // Refresh user data
+          await me();
+
+          showNotification(context, json.decode(response.body)['message'], "info");
+          break;
+        default:
+          Navigator.pop(context);
+          Navigator.pop(context);
+
+          showNotification(context, json.decode(response.body)['message'], "danger");
+          break;
+      }
+    } catch (e) {
+      dd("PROFILE/DELETE_PHOTO: Terjadi Kesalahan: $e");
+    } finally {
+      isLoadingForm.value = false;
     }
   }
 }
