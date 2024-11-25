@@ -9,6 +9,7 @@ import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:vigenesia/components/bottom_sheet.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
@@ -111,12 +112,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 context: context,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
                 builder: (context) {
-                  return profileSettings(context);
+                  return profileSettings(context, profileController);
                 },
               );
             },
@@ -183,25 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // Profile settings
-  Widget profileSettings(BuildContext context) {
-    Widget buildListTile({
-      required IconData icon,
-      required String title,
-      required VoidCallback? onTap,
-      Color? tileColor,
-      Color? iconColor,
-      TextStyle? textStyle,
-      BorderRadius? borderRadius,
-    }) {
-      return ListTile(
-        shape: RoundedRectangleBorder(borderRadius: borderRadius ?? BorderRadius.circular(5)),
-        tileColor: tileColor ?? VColors.gray.withOpacity(0.1),
-        leading: Icon(icon, color: iconColor),
-        title: Text(title, style: textStyle),
-        onTap: onTap,
-      );
-    }
-
+  Widget profileSettings(BuildContext context, ProfileController profileController) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Column(
@@ -209,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           buildListTile(
             icon: Icons.camera_alt,
-            title: 'Ganti Foto Profil',
+            title: 'Ganti Foto Profile',
             onTap: () {},
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
@@ -221,8 +204,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 3),
           buildListTile(
             icon: Icons.person,
-            title: 'Ganti Profil',
-            onTap: () {},
+            title: 'Edit Profile',
+            onTap: () {
+              editProfileBottomSheet(context, profileController);
+            },
           ),
           const SizedBox(height: 3),
           buildListTile(

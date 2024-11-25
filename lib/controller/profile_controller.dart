@@ -12,6 +12,11 @@ class ProfileController extends GetxController
   var isLoading = false.obs;
   var user = Rx<User?>(null);
   var posts = <Post>[].obs;
+  var formKey = GlobalKey<FormState>();
+  var nameController = TextEditingController();
+  var usernameController = TextEditingController();
+
+  // Set initial value for name and username
 
   Future<void> onRefresh() async {
     try {
@@ -44,6 +49,10 @@ class ProfileController extends GetxController
         posts.assignAll(
           (userData['posts'] as List<dynamic>).map((post) => Post.fromJson(post)).toList()
         );
+
+        // Set initial values for controllers
+        nameController.text = userData['name'] ?? '';
+        usernameController.text = userData['username'] ?? '';
       } else {
         notify(
           message: Text(jsonDecode(response.body)['message']),
@@ -52,6 +61,44 @@ class ProfileController extends GetxController
       }
     } catch (e) {
       dd("PROFILE/ME: Terjadi Kesalahan: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> updateProfile(BuildContext context) async 
+  {
+    isLoading.value = true;
+
+    try {
+      final response = await ApiService.api(
+        endpoint: updateProfileURL,
+        method: ApiMethod.post,
+        authenticated: true,
+        body: {
+          'name': nameController.text,
+          'username': usernameController.text,
+        },
+      );
+
+      dd("${response.statusCode}: ${response.body}");
+
+      switch (response.statusCode) {
+        case 200:
+          await me();
+
+          Navigator.pop(context);
+          Navigator.pop(context);
+          
+          showNotification(context, json.decode(response.body)['message'], "info");
+          
+          break;
+        default:
+          showNotification(context, json.decode(response.body)['message'], "danger");
+          break;
+      }
+    } catch (e) {
+      dd("PROFILE/UPDATE: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
     }
