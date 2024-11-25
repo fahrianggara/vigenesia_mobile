@@ -192,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           buildListTile(
             icon: Icons.camera_alt,
-            title: 'Ubah Foto Profile',
+            title: 'Edit Foto Profile',
             onTap: () {},
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
@@ -204,17 +204,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 3),
           buildListTile(
             icon: Icons.person,
-            title: 'Ubah Profile',
+            title: 'Edit Profile',
             onTap: () {
-              editProfileBottomSheet(context, profileController);
+              editProfileBottomSheet(context, profileController, title: 'Edit Profile');
             },
           ),
           const SizedBox(height: 3),
           buildListTile(
             icon: Icons.lock,
-            title: 'Ubah Password',
+            title: 'Edit Password',
             onTap: () {
-              editPasswordBottomSheet(context, profileController);
+              editPasswordBottomSheet(context, profileController, title: 'Edit Password');
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5),

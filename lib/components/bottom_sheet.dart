@@ -19,7 +19,7 @@ Widget buildListTile({
     tileColor: tileColor ?? VColors.gray.withOpacity(0.1),
     leading: Icon(icon, color: iconColor),
     title: Text(title, style: textStyle),
-    titleTextStyle: TextStyle(letterSpacing: 0.1, color: Colors.black),
+    titleTextStyle: TextStyle(letterSpacing: 0.1, color: Colors.black, fontSize: 15),
     onTap: onTap,
   );
 }
@@ -39,7 +39,9 @@ Future<dynamic> modalBottomSheet(BuildContext context, WidgetBuilder builder) {
 
 Future<dynamic> editPasswordBottomSheet(
   BuildContext context,
-  ProfileController profileController,
+  ProfileController profileController, {
+    required String title
+  }
 ) {
   return modalBottomSheet(
     context,
@@ -59,7 +61,7 @@ Future<dynamic> editPasswordBottomSheet(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Ubah Password',
+                    title,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -69,6 +71,7 @@ Future<dynamic> editPasswordBottomSheet(
                   const SizedBox(height: 20),
                   _inputField(
                     label: 'Password',
+                    placeholder: 'Masukkan Password Kamu',
                     controller: profileController.passwordController,
                     error: profileController.passwordError,
                     obscureText: true,
@@ -76,6 +79,7 @@ Future<dynamic> editPasswordBottomSheet(
                   const SizedBox(height: 15),
                   _inputField(
                     label: 'Password Baru',
+                    placeholder: 'Masukkan Password Baru',
                     controller: profileController.newPasswordController,
                     minLength: 8,
                     error: profileController.newPasswordError,
@@ -84,6 +88,7 @@ Future<dynamic> editPasswordBottomSheet(
                   const SizedBox(height: 15),
                   _inputField(
                     label: 'Konfirmasi Password',
+                    placeholder: 'Masukkan Ulang Password Baru',
                     controller: profileController.confirmPasswordController,
                     error: profileController.confirmPasswordError,
                     obscureText: true,
@@ -129,7 +134,9 @@ Future<dynamic> editPasswordBottomSheet(
 
 Future<dynamic> editProfileBottomSheet(
   BuildContext context, 
-  ProfileController profileController
+  ProfileController profileController, {
+    required String title
+  }
 ) {
   profileController.nameController.text = profileController.user.value?.name ?? '';
   profileController.usernameController.text = profileController.user.value?.username ?? '';
@@ -152,7 +159,7 @@ Future<dynamic> editProfileBottomSheet(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Ubah Profile',
+                    title,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -190,7 +197,7 @@ Future<dynamic> editProfileBottomSheet(
                       foregroundColor: Colors.white,
                     ),
                     child: Obx(() {
-                      return profileController.isLoading.value
+                      return profileController.isLoadingForm.value
                           ? loadingIcon(color: VColors.white)
                           : Text(
                               'Perbarui',
@@ -217,6 +224,7 @@ Future<dynamic> editProfileBottomSheet(
 Widget _inputField({
   required String label,
   required TextEditingController controller,
+  String? placeholder,
   int maxLines = 1,
   int? minLength,
   RxString? error,
@@ -240,7 +248,7 @@ Widget _inputField({
           maxLines: maxLines,
           obscureText: obscureText,
           cursorColor: VColors.primary,
-          decoration: _inputDecoration(label).copyWith(
+          decoration: _inputDecoration(label, placeholder: placeholder).copyWith(
             errorText: error?.value.isNotEmpty == true ? error?.value : null,
           ),
           validator: (value) {
@@ -259,7 +267,7 @@ Widget _inputField({
 }
 
 
-InputDecoration _inputDecoration(label) {
+InputDecoration _inputDecoration(label, {String? placeholder}) {
   return InputDecoration(
     filled: true,
     fillColor: VColors.border50,
@@ -268,7 +276,7 @@ InputDecoration _inputDecoration(label) {
       fontSize: 16,
       fontWeight: FontWeight.w500,
     ),
-    hintText: 'Masukkan $label',
+    hintText: placeholder ?? 'Masukkan $label',
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
     ),

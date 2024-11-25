@@ -92,7 +92,7 @@ class ProfileController extends GetxController
 
   Future<void> updateProfile(BuildContext context) async 
   {
-    isLoading.value = true;
+    isLoadingForm.value = true;
 
     try {
       final response = await ApiService.api(
@@ -113,8 +113,10 @@ class ProfileController extends GetxController
           showNotification(context, json.decode(response.body)['message'], "info");
 
           // Reset error fields
-          nameError.value = '';
-          usernameError.value = '';
+          resetForm();
+
+          // Refresh user data
+          await me();
 
           break;
         case 400:
@@ -136,7 +138,7 @@ class ProfileController extends GetxController
     } catch (e) {
       dd("PROFILE/UPDATE: Terjadi Kesalahan: $e");
     } finally {
-      isLoading.value = false;
+      isLoadingForm.value = false;
     }
   }
 
