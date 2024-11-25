@@ -1,5 +1,6 @@
-import 'dart:convert';
+// ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/model/post.dart';
@@ -81,18 +82,21 @@ class ProfileController extends GetxController
         },
       );
 
-      dd("${response.statusCode}: ${response.body}");
-
       switch (response.statusCode) {
         case 200:
-          await me();
+          Navigator.pop(context);
+          Navigator.pop(context);
 
-          Navigator.pop(context);
-          Navigator.pop(context);
-          
           showNotification(context, json.decode(response.body)['message'], "info");
           
+          await me();
+
           break;
+        case 400:
+          Navigator.pop(context);
+          Navigator.pop(context);
+
+          showNotification(context, json.decode(response.body)['message'], "info");
         default:
           showNotification(context, json.decode(response.body)['message'], "danger");
           break;
