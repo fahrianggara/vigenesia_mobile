@@ -11,22 +11,35 @@ import 'package:vigenesia/utils/utilities.dart';
 class ProfileController extends GetxController 
 {
   var isLoading = false.obs;
+  var isLoadingForm = false.obs;
   var user = Rx<User?>(null);
   var posts = <Post>[].obs;
   var formKey = GlobalKey<FormState>();
-  var nameController = TextEditingController();
-  var usernameController = TextEditingController();
+  var nameController = TextEditingController(),
+    usernameController = TextEditingController(),
+    passwordController = TextEditingController(),
+    newPasswordController = TextEditingController(),
+    confirmPasswordController = TextEditingController();
 
   // Error fields for server-side validation
-  final nameError = RxString('');
-  final usernameError = RxString('');
+  final nameError = RxString(''),
+    usernameError = RxString(''),
+    passwordError = RxString(''),
+    newPasswordError = RxString(''),
+    confirmPasswordError = RxString('');
 
   // Reset function
   void resetForm() {
     nameController.clear();
     usernameController.clear();
+    passwordController.clear();
+    newPasswordController.clear();
+    confirmPasswordController.clear();
     nameError.value = '';
     usernameError.value = '';
+    passwordError.value = '';
+    newPasswordError.value = '';
+    confirmPasswordError.value = '';
   }
 
   Future<void> onRefresh() async {
@@ -98,8 +111,6 @@ class ProfileController extends GetxController
           Navigator.pop(context);
 
           showNotification(context, json.decode(response.body)['message'], "info");
-          
-          await me();
 
           // Reset error fields
           nameError.value = '';
@@ -126,6 +137,56 @@ class ProfileController extends GetxController
       dd("PROFILE/UPDATE: Terjadi Kesalahan: $e");
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> updatePassword(BuildContext context) async {
+    isLoadingForm.value = true;
+
+    try {
+      final response = await ApiService.api(
+        endpoint: updateProfileURL,
+        method: ApiMethod.post,
+        authenticated: true,
+        body: {
+          'password': passwordController.text,
+          'new_password': newPasswordController.text,
+          'password_confirmation': confirmPasswordController.text,
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          Navigator.pop(context);
+          Navigator.pop(context);
+
+          showNotification(context, json.decode(response.body)['message'], "info");
+
+          // Reset form fields
+          resetForm();
+
+          break;
+        case 400:
+          Navigator.pop(context);
+          Navigator.pop(context);
+
+          showNotification(context, json.decode(response.body)['message'], "info");
+        case 422:
+          var errors = json.decode(response.body)['errors'];
+
+          passwordError.value = errors['password'] != null ? errors['password'][0] : '';
+          newPasswordError.value = errors['new_password'] != null ? errors['new_password'][0] : '';
+          confirmPasswordError.value = errors['password_confirmation'] != null ? errors['password_confirmation'][0] : '';
+
+          break;
+        default:
+          showNotification(context, json.decode(response.body)['message'], "danger");
+          break;
+      }
+    } catch (e) {
+      dd("PROFILE/UPDATE: Terjadi Kesalahan: $e");
+    } finally {
+      isLoadingForm.value = false;
     }
   }
 }

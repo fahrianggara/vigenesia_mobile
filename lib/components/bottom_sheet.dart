@@ -37,6 +37,96 @@ Future<dynamic> modalBottomSheet(BuildContext context, WidgetBuilder builder) {
   );
 }
 
+Future<dynamic> editPasswordBottomSheet(
+  BuildContext context,
+  ProfileController profileController,
+) {
+  return modalBottomSheet(
+    context,
+    (builder) {
+      return WillPopScope(
+        onWillPop: () async {
+          profileController.resetForm();
+          return true;
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: profileController.formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Ubah Password',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  _inputField(
+                    label: 'Password',
+                    controller: profileController.passwordController,
+                    error: profileController.passwordError,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 15),
+                  _inputField(
+                    label: 'Password Baru',
+                    controller: profileController.newPasswordController,
+                    minLength: 8,
+                    error: profileController.newPasswordError,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 15),
+                  _inputField(
+                    label: 'Konfirmasi Password',
+                    controller: profileController.confirmPasswordController,
+                    error: profileController.confirmPasswordError,
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (profileController.formKey.currentState?.validate() ?? false) {
+                        profileController.updatePassword(context);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: VColors.primary,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      minimumSize: Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Obx(() {
+                      return profileController.isLoadingForm.value
+                          ? loadingIcon(color: VColors.white)
+                          : Text(
+                              'Perbarui',
+                              style: TextStyle(
+                                color: VColors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  );
+}
+
 Future<dynamic> editProfileBottomSheet(
   BuildContext context, 
   ProfileController profileController
@@ -62,7 +152,7 @@ Future<dynamic> editProfileBottomSheet(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Edit Profile',
+                    'Ubah Profile',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -124,13 +214,13 @@ Future<dynamic> editProfileBottomSheet(
   });
 }
 
-
 Widget _inputField({
   required String label,
   required TextEditingController controller,
   int maxLines = 1,
   int? minLength,
   RxString? error,
+  bool obscureText = false,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,6 +238,7 @@ Widget _inputField({
         return TextFormField(
           controller: controller,
           maxLines: maxLines,
+          obscureText: obscureText,
           cursorColor: VColors.primary,
           decoration: _inputDecoration(label).copyWith(
             errorText: error?.value.isNotEmpty == true ? error?.value : null,
