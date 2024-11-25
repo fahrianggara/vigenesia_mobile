@@ -1,8 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/model/user.dart';
 import 'package:vigenesia/service/api_service.dart';
@@ -14,6 +17,7 @@ class ProfileController extends GetxController
   var isLoadingForm = false.obs;
   var user = Rx<User?>(null);
   var posts = <Post>[].obs;
+  var photo = Rxn<File>();
   var formKey = GlobalKey<FormState>();
   var nameController = TextEditingController(),
     usernameController = TextEditingController(),
@@ -35,6 +39,7 @@ class ProfileController extends GetxController
     passwordController.clear();
     newPasswordController.clear();
     confirmPasswordController.clear();
+    photo.value = null;
     nameError.value = '';
     usernameError.value = '';
     passwordError.value = '';
@@ -189,6 +194,84 @@ class ProfileController extends GetxController
       dd("PROFILE/UPDATE: Terjadi Kesalahan: $e");
     } finally {
       isLoadingForm.value = false;
+    }
+  }
+
+  Future<void> pickImage(BuildContext context, {required bool isCamera}) async {
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery,
+      );
+
+      if (pickedFile != null) {
+        final CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: 'Pangkas Foto',
+              toolbarColor: VColors.primary,
+              activeControlsWidgetColor: VColors.primary,
+              toolbarWidgetColor: VColors.white,
+              initAspectRatio: CropAspectRatioPreset.ratio16x9,
+              lockAspectRatio: true,
+              hideBottomControls: false,
+              aspectRatioPresets: [
+                CropAspectRatioPreset.ratio16x9,
+                CropAspectRatioPreset.original,
+              ],
+            ),
+            IOSUiSettings(
+              title: 'Pangkas Gambar',
+            ),
+          ],
+        );
+
+        if (croppedFile != null) 
+        {
+          photo.value = File(croppedFile.path);
+
+          isLoading.value = true;
+
+          // Upload photo
+          final response = await ApiService.api(
+            endpoint: changePhotoURL,
+            method: ApiMethod.post,
+            authenticated: true,
+            multipart: true,
+            body: {
+              'photo': photo.value,
+            },
+          );
+          
+          switch (response.statusCode) {
+            case 200:
+              // untuk remove modal bottom sheet
+              Navigator.pop(context);
+              Navigator.pop(context);
+
+              resetForm();
+
+              // Refresh user data
+              await me();
+
+              showNotification(context, json.decode(response.body)['message'], "info");
+              break;
+            default:
+              // untuk remove modal bottom sheet
+              Navigator.pop(context);
+              Navigator.pop(context);
+              showNotification(context, json.decode(response.body)['message'], "danger");
+              break;
+          }
+
+          isLoading.value = false;
+        }
+      }
+    } catch (e) {
+      dd("PROFILE/PICK_IMAGE: Terjadi Kesalahan: $e");
     }
   }
 }

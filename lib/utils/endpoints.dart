@@ -9,6 +9,7 @@ const registerURL = "$baseURL/register";
 const logoutURL   = "$baseURL/logout";
 const meURL       = "$baseURL/me";
 const updateProfileURL = "$baseURL/update-profile";
+const changePhotoURL = "$baseURL/change-photo";
 
 // POST URL
 const postsCarouselURL = "$baseURL/posts/carousel";

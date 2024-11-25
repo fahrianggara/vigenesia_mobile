@@ -193,13 +193,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           buildListTile(
             icon: Icons.camera_alt,
             title: 'Edit Foto Profile',
-            onTap: () {},
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
               topRight: Radius.circular(15),
               bottomLeft: Radius.circular(5),
               bottomRight: Radius.circular(5),
             ),
+            onTap: () {
+              photoProfileBottomSheet(context, profileController, title: 'Edit Foto Profile');
+            },
           ),
           const SizedBox(height: 3),
           buildListTile(
