@@ -106,7 +106,7 @@ class ProfileController extends GetxController
         authenticated: true,
         body: {
           'name': nameController.text,
-          'username': usernameController.text,
+          'username': usernameController.text.toLowerCase(),
         },
       );
 
