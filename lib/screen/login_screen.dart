@@ -8,10 +8,7 @@ import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
 class LoginScreen extends StatelessWidget {
-  final String? flashMessage;
-  final String? flashType;
-
-  const LoginScreen({super.key, this.flashMessage, this.flashType});
+  const LoginScreen({super.key});
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   static final TextEditingController _usernameController = TextEditingController();
@@ -20,16 +17,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Show flash message if available
-    if (flashMessage != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notify(
-          context: context,
-          message: Text(flashMessage!),
-          type: flashType,
-        );
-      });
-    }
 
     return Scaffold(
       // backgroundColor: VColors.background,

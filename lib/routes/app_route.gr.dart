@@ -90,19 +90,10 @@ class HomeRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.LoginScreen]
-class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
-  LoginRoute({
-    _i12.Key? key,
-    String? flashMessage,
-    String? flashType,
-    List<_i11.PageRouteInfo>? children,
-  }) : super(
+class LoginRoute extends _i11.PageRouteInfo<void> {
+  const LoginRoute({List<_i11.PageRouteInfo>? children})
+      : super(
           LoginRoute.name,
-          args: LoginRouteArgs(
-            key: key,
-            flashMessage: flashMessage,
-            flashType: flashType,
-          ),
           initialChildren: children,
         );
 
@@ -111,34 +102,9 @@ class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
   static _i11.PageInfo page = _i11.PageInfo(
     name,
     builder: (data) {
-      final args =
-          data.argsAs<LoginRouteArgs>(orElse: () => const LoginRouteArgs());
-      return _i3.LoginScreen(
-        key: args.key,
-        flashMessage: args.flashMessage,
-        flashType: args.flashType,
-      );
+      return const _i3.LoginScreen();
     },
   );
-}
-
-class LoginRouteArgs {
-  const LoginRouteArgs({
-    this.key,
-    this.flashMessage,
-    this.flashType,
-  });
-
-  final _i12.Key? key;
-
-  final String? flashMessage;
-
-  final String? flashType;
-
-  @override
-  String toString() {
-    return 'LoginRouteArgs{key: $key, flashMessage: $flashMessage, flashType: $flashType}';
-  }
 }
 
 /// generated route for

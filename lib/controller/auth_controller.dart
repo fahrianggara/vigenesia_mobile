@@ -43,16 +43,15 @@ class AuthController extends GetxController
 
       switch (response.statusCode) {
         case 201:
-          context.navigateTo(LoginRoute(
-            flashMessage: jsonDecode(response.body)['message'],
-            flashType: "info",
-          ));
+          context.navigateTo(LoginRoute());
 
           name.clear();
           username.clear();
           email.clear();
           password.clear();
           confirm.clear();
+
+          showNotification(context, "Akun berhasil dibuat. Silahkan masuk.", 'info');
           break;
 
         case 422:
