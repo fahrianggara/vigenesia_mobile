@@ -7,7 +7,7 @@ import 'package:vigenesia/utils/utilities.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), 
+      create: (_) => ThemeProvider(), 
       child: MainApp()
     ),
   );
@@ -23,6 +23,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).themeData,
+      themeMode: Provider.of<ThemeProvider>(context).themeMode,
       title: appName,
       routerConfig: _appRouter.config(),
     );
