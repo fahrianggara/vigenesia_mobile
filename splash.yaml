@@ -4,10 +4,10 @@ flutter_native_splash:
   web: false
 
   image: "assets/images/splash.png"
-  color: "#05B465"
-  color_dark: "#05B465"
+  color: "#F9F9F9"
+  color_dark: "#181818"
 
   android_12: # Android versi 12 Keatas
     image: "assets/images/splash.png"
-    color: "#05B465"
-    color_dark: "#05B465"
+    color: "#F9F9F9"
+    color_dark: "#181818"
