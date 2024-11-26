@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:vigenesia/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vigenesia/theme/theme.dart';
 
-class ThemeProvider with ChangeNotifier {
-  static const String _themeKey = 'theme_mode'; // Key untuk SharedPreferences
-  ThemeMode _themeMode = ThemeMode.system;
+class ThemeProvider with ChangeNotifier, WidgetsBindingObserver {
+  ThemeMode _themeMode = ThemeMode.system; // Default ke tema sistem
 
   ThemeMode get themeMode => _themeMode;
 
@@ -14,63 +13,76 @@ class ThemeProvider with ChangeNotifier {
         return lightTheme;
       case ThemeMode.dark:
         return darkTheme;
-      case ThemeMode.system:
       default:
-        return WidgetsBinding.instance.window.platformBrightness == Brightness.dark
-            ? darkTheme
-            : lightTheme;
+        return _getSystemTheme();
     }
   }
 
   ThemeProvider() {
-    _loadThemeMode();
+    WidgetsBinding.instance.addObserver(this); // Tambahkan observer
+    _loadThemeFromPreferences(); // Muat tema dari preferensi
   }
 
-  // Memuat tema dari SharedPreferences
-  Future<void> _loadThemeMode() async {
-    final prefs = await SharedPreferences.getInstance();
-    final savedTheme = prefs.getString(_themeKey);
-
-    if (savedTheme != null) {
-      _themeMode = _getThemeModeFromString(savedTheme);
-    } else {
-      _themeMode = ThemeMode.system; // Default jika tidak ada pilihan
-    }
-
-    notifyListeners();
-  }
-
-  // Menyimpan tema yang dipilih ke SharedPreferences
-  Future<void> setThemeMode(ThemeMode mode) async {
-    _themeMode = mode;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_themeKey, _getStringFromThemeMode(mode));
-    notifyListeners();
-  }
-
-  // Mengonversi enum ThemeMode ke string
-  String _getStringFromThemeMode(ThemeMode mode) {
-    switch (mode) {
-      case ThemeMode.light:
-        return 'light';
-      case ThemeMode.dark:
-        return 'dark';
-      case ThemeMode.system:
-      default:
-        return 'system';
+  @override
+  void didChangePlatformBrightness() {
+    if (_themeMode == ThemeMode.system) {
+      notifyListeners(); // Perbarui jika tema mengikuti sistem
     }
   }
 
-  // Mengonversi string kembali ke ThemeMode
-  ThemeMode _getThemeModeFromString(String theme) {
+  Future<void> _loadThemeFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final theme = prefs.getString('theme') ?? 'system';
     switch (theme) {
       case 'light':
-        return ThemeMode.light;
+        _themeMode = ThemeMode.light;
+        break;
       case 'dark':
-        return ThemeMode.dark;
-      case 'system':
+        _themeMode = ThemeMode.dark;
+        break;
       default:
-        return ThemeMode.system;
+        _themeMode = ThemeMode.system;
     }
+    notifyListeners(); // Trigger pembaruan tema
+  }
+
+  Future<void> _saveThemeToPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final theme = _themeMode == ThemeMode.light
+        ? 'light'
+        : _themeMode == ThemeMode.dark
+            ? 'dark'
+            : 'system';
+    await prefs.setString('theme', theme);
+  }
+
+  void toggleTheme() {
+    if (_themeMode == ThemeMode.light) {
+      _themeMode = ThemeMode.dark;
+    } else if (_themeMode == ThemeMode.dark) {
+      _themeMode = ThemeMode.system;
+    } else {
+      _themeMode = ThemeMode.light;
+    }
+    _saveThemeToPreferences();
+    notifyListeners();
+  }
+
+  void setThemeMode(ThemeMode mode) {
+    _themeMode = mode;
+    _saveThemeToPreferences();
+    notifyListeners();
+  }
+
+  ThemeData _getSystemTheme() {
+    return WidgetsBinding.instance.window.platformBrightness == Brightness.dark
+        ? darkTheme
+        : lightTheme;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // Hapus observer
+    super.dispose();
   }
 }
