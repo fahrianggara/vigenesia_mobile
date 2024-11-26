@@ -32,7 +32,7 @@ void notify({
 void showNotification(BuildContext context, String message, String type) {
   notify(
     context: context,
-    message: Text(message),
+    message: Text(message, style: TextStyle(color: VColors.white)),
     type: type,
   );
 }

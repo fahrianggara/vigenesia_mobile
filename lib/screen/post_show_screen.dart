@@ -8,7 +8,6 @@ import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/screen/post_edit_screen.dart';
 import 'package:vigenesia/utils/utilities.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/components/widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -86,10 +85,8 @@ class PostShowScreen extends StatelessWidget {
     bool isDeletePressed = false;
 
     return AppBar(
-      backgroundColor: Colors.white,
       titleSpacing: 0,
       scrolledUnderElevation: 0,
-      shadowColor: Colors.white,
       title: Skeletonizer(
         enabled: showController.isLoading.value,
         child: Row(
@@ -266,7 +263,7 @@ class PostShowScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     letterSpacing: .5,
-                    color: VColors.gray,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                 ),
               ],
@@ -304,14 +301,14 @@ class PostShowScreen extends StatelessWidget {
           '  •  ',
           style: TextStyle(
             fontSize: 14,
-            color: HexColor('#000000').withOpacity(0.5),
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
         Text(
           post.createdAtDiff!,
           style: TextStyle(
             fontSize: 14,
-            color: VColors.gray,
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
             fontWeight: FontWeight.w500,
             letterSpacing: 0.1,
           ),

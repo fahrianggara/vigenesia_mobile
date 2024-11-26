@@ -5,7 +5,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:get/get.dart';
 import 'package:vigenesia/components/widget.dart';
 
-Widget buildListTile({
+Widget  buildListTile(BuildContext context, {
   required IconData icon,
   required String title,
   required VoidCallback? onTap,
@@ -14,13 +14,16 @@ Widget buildListTile({
   TextStyle? textStyle,
   BorderRadius? borderRadius,
 }) {
-  return ListTile(
-    shape: RoundedRectangleBorder(borderRadius: borderRadius ?? BorderRadius.circular(5)),
-    tileColor: tileColor ?? VColors.gray.withOpacity(0.1),
-    leading: Icon(icon, color: iconColor),
-    title: Text(title, style: textStyle),
-    titleTextStyle: TextStyle(letterSpacing: 0.1, color: Colors.black, fontSize: 15),
-    onTap: onTap,
+  return Material(
+    color: Colors.transparent,
+    child: ListTile(
+      shape: RoundedRectangleBorder(borderRadius: borderRadius ?? BorderRadius.circular(5)),
+      tileColor: tileColor ?? Theme.of(context).colorScheme.primaryContainer,
+      leading: Icon(icon, color: iconColor ?? Theme.of(context).colorScheme.onSurface),
+      title: Text(title, style: textStyle),
+      titleTextStyle: TextStyle(letterSpacing: 0.1, fontSize: 15),
+      onTap: onTap,
+    ),
   );
 }
 
@@ -65,6 +68,7 @@ Future<dynamic> modalBottomSheet(BuildContext context, WidgetBuilder builder, {
   return showMaterialModalBottomSheet(
     context: context,
     builder: builder,
+    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
     isDismissible: isDismissible,
     enableDrag: enableDrag,
     shape: const RoundedRectangleBorder(
@@ -98,6 +102,13 @@ Future<dynamic> photoProfileBottomSheet(
               Container(
                 margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,13 +121,17 @@ Future<dynamic> photoProfileBottomSheet(
                               profileController.resetForm();
                               Navigator.pop(context);
                             },
-                            icon: Icon(Icons.close),
+                            icon: Icon(
+                              Icons.close, 
+                              color: Theme.of(context).colorScheme.onSurface
+                            ),
                           ),
                           Text(
                             title,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onSurface,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -136,7 +151,7 @@ Future<dynamic> photoProfileBottomSheet(
                             },
                             icon: photoUrl!.contains('photo.png') ? const SizedBox() : Icon(
                               Icons.delete, 
-                              color: VColors.danger,
+                              color: Theme.of(context).colorScheme.error,
                             )
                           ),
                         ],
@@ -173,7 +188,7 @@ Future<dynamic> photoProfileBottomSheet(
                 Positioned.fill(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8),
+                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.8),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
@@ -209,6 +224,13 @@ Future<dynamic> editPasswordBottomSheet(
       child: Container(
         margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          color: Theme.of(context).colorScheme.surface,
+        ),
         child: SingleChildScrollView(
           child: Form(
             key: profileController.formKey,
@@ -220,11 +242,13 @@ Future<dynamic> editPasswordBottomSheet(
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
                     letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: 20),
                 _inputField(
+                  context,
                   label: 'Password',
                   placeholder: 'Masukkan Password Kamu',
                   controller: profileController.passwordController,
@@ -233,6 +257,7 @@ Future<dynamic> editPasswordBottomSheet(
                 ),
                 const SizedBox(height: 15),
                 _inputField(
+                  context,
                   label: 'Password Baru',
                   placeholder: 'Masukkan Password Baru',
                   controller: profileController.newPasswordController,
@@ -242,6 +267,7 @@ Future<dynamic> editPasswordBottomSheet(
                 ),
                 const SizedBox(height: 15),
                 _inputField(
+                  context,
                   label: 'Konfirmasi Password',
                   placeholder: 'Masukkan Ulang Password Baru',
                   controller: profileController.confirmPasswordController,
@@ -304,6 +330,13 @@ Future<dynamic> editProfileBottomSheet(
       child: Container(
         margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          color: Theme.of(context).colorScheme.surface,
+        ),
         child: SingleChildScrollView(
           child: Form(
             key: profileController.formKey,
@@ -315,11 +348,13 @@ Future<dynamic> editProfileBottomSheet(
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
                     letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: 20),
                 _inputField(
+                  context,
                   label: 'Nama',
                   controller: profileController.nameController,
                   minLength: 3,
@@ -327,6 +362,7 @@ Future<dynamic> editProfileBottomSheet(
                 ),
                 const SizedBox(height: 15),
                 _inputField(
+                  context,
                   label: 'Username',
                   controller: profileController.usernameController,
                   minLength: 3,
@@ -372,7 +408,7 @@ Future<dynamic> editProfileBottomSheet(
   });
 }
 
-Widget _inputField({
+Widget _inputField(BuildContext context, {
   required String label,
   required TextEditingController controller,
   String? placeholder,
@@ -399,7 +435,7 @@ Widget _inputField({
           maxLines: maxLines,
           obscureText: obscureText,
           cursorColor: VColors.primary,
-          decoration: _inputDecoration(label, placeholder: placeholder).copyWith(
+          decoration: _inputDecoration(context, label, placeholder: placeholder).copyWith(
             errorText: error?.value.isNotEmpty == true ? error?.value : null,
           ),
           validator: (value) {
@@ -418,10 +454,10 @@ Widget _inputField({
 }
 
 
-InputDecoration _inputDecoration(label, {String? placeholder}) {
+InputDecoration _inputDecoration(BuildContext context, label, {String? placeholder}) {
   return InputDecoration(
     filled: true,
-    fillColor: VColors.border50,
+    fillColor: Theme.of(context).colorScheme.primaryContainer,
     hintStyle: TextStyle(
       color: VColors.gray,
       fontSize: 16,
@@ -446,7 +482,7 @@ InputDecoration _inputDecoration(label, {String? placeholder}) {
       borderRadius: BorderRadius.circular(8),
     ),
     errorStyle: TextStyle(
-      color: VColors.danger,
+      color: Theme.of(context).colorScheme.error,
       fontSize: 13.5,
       letterSpacing: 0.4,
       fontWeight: FontWeight.w500

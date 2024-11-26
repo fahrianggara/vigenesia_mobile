@@ -186,13 +186,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Profile settings
   Widget profileSettings(BuildContext context, ProfileController profileController) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(19),
+          topRight: Radius.circular(19),
+        ),
+        color: Theme.of(context).colorScheme.surface
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           buildListTile(
+            context,
             icon: Icons.camera_alt,
             title: 'Edit Foto Profile',
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
               topRight: Radius.circular(15),
@@ -205,16 +214,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 3),
           buildListTile(
+            context,
             icon: Icons.person,
             title: 'Edit Profile',
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             onTap: () {
               editProfileBottomSheet(context, profileController, title: 'Edit Profile');
             },
           ),
           const SizedBox(height: 3),
           buildListTile(
+            context,
             icon: Icons.lock,
             title: 'Edit Password',
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             onTap: () {
               editPasswordBottomSheet(context, profileController, title: 'Edit Password');
             },
@@ -227,20 +240,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           const SizedBox(height: 13),
           buildListTile(
+            context,
             icon: Icons.dark_mode,
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             title: 'Mode Gelap',
             onTap: null,
             borderRadius: BorderRadius.circular(15),
           ),
           const SizedBox(height: 13),
           buildListTile(
+            context,
             icon: Icons.logout,
             title: 'Keluar',
             onTap: () {
               Navigator.pop(context);
               authController.logout(context);
             },
-            tileColor: Colors.red[100],
+            tileColor: Theme.of(context).colorScheme.errorContainer,
             iconColor: Colors.red,
             textStyle: const TextStyle(color: Colors.red),
             borderRadius: BorderRadius.circular(15),

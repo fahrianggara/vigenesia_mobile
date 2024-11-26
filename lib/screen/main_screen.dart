@@ -24,9 +24,9 @@ class MainScreen extends StatelessWidget {
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
         return Scaffold(
-          appBar: _appBar(tabsRouter),
+          appBar: _appBar(tabsRouter, context),
           body: child,  // Ensure you're using 'child' here to display the selected tab
-          bottomNavigationBar: bottomNavigationBar(tabsRouter),
+          bottomNavigationBar: bottomNavigationBar(tabsRouter, context),
           floatingActionButton: Obx(() => 
             // Show addButton only if logged in and not on SearchRoute tab
             authController.isLoggedIn.value && tabsRouter.activeIndex != 1
@@ -38,14 +38,14 @@ class MainScreen extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget _appBar(TabsRouter tabsRouter) {
+  PreferredSizeWidget _appBar(TabsRouter tabsRouter, BuildContext context) {
     final title = tabsRouter.activeIndex == 0
       ? appName
       : tabsRouter.activeIndex == 1
         ? 'Pencarian'
         : 'Profile';
     return AppBar(
-      backgroundColor: VColors.white,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       automaticallyImplyLeading: tabsRouter.activeIndex != 2,
       elevation: 0,
       title: Text(

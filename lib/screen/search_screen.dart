@@ -37,7 +37,7 @@ class SearchScreen extends StatelessWidget {
                     cursorColor: VColors.primary,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.grey[200],
+                      fillColor: Theme.of(context).colorScheme.primaryContainer,
                       hintText: 'Cari postingan...',
                       prefixIconColor: VColors.primary,
                       prefixIcon: Icon(Icons.search),
@@ -59,7 +59,7 @@ class SearchScreen extends StatelessWidget {
             ),
             Expanded(
               flex: 0,
-              child: _searchContent(),
+              child: _searchContent(context),
             ),
             const SizedBox(height: 20),
           ],
@@ -68,7 +68,7 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  Widget _searchContent() {
+  Widget _searchContent(BuildContext context) {
     return Obx(() {
       if (searchController.isLoading.value) {
         return Skeletonizer(
@@ -110,12 +110,12 @@ class SearchScreen extends StatelessWidget {
 
       // Show search not found message
       if (searchController.notFound.value) {
-        return _searchNotFound();
+        return _searchNotFound(context);
       }
 
       // Show search placeholder when no query has been made yet
       else if (!searchController.hasQuery.value && searchInput.text.isEmpty) {
-        return _search();
+        return _search(context);
       } 
       
       // Show search results
@@ -160,7 +160,7 @@ class SearchScreen extends StatelessWidget {
     });
   }
 
-  Widget _searchNotFound() {
+  Widget _searchNotFound(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
       alignment: Alignment.center,
@@ -169,12 +169,22 @@ class SearchScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(Images.vectorSearchNotFound, width: 400),
-          SizedBox(height: 15),
+          SizedBox(height: 25),
+          Text(
+            'Postingan Tidak Ditemukan',
+            style: TextStyle(
+              fontSize: 18,
+              color: VColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
           Text(
             'Maaf, postingan yang kamu cari tidak ditemukan! Silakan coba kata kunci lain.',
             style: TextStyle(
-              fontSize: 16,
-              color: VColors.gray,
+              fontSize: 15,
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
             textAlign: TextAlign.center,
           ),
@@ -183,7 +193,7 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
-  Widget _search() {
+  Widget _search(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
       alignment: Alignment.center,
@@ -192,12 +202,22 @@ class SearchScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(Images.vectorSearch, width: 300),
-          SizedBox(height: 15),
+          SizedBox(height: 20),
+          Text(
+            'Apa yang kamu cari hari ini?',
+            style: TextStyle(
+              fontSize: 18,
+              color: VColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
           Text(
             'Silakan cari postingan yang kamu inginkan dengan mengetik kata kunci di kolom pencarian di atas.',
             style: TextStyle(
-              fontSize: 16,
-              color: VColors.gray,
+              fontSize: 15,
+              color: Theme.of(context).colorScheme.onPrimaryContainer
             ),
             textAlign: TextAlign.center,
           ),

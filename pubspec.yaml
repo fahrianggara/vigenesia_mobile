@@ -48,14 +48,6 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "assets/icon/icon.png"
 
 flutter:
-  fonts:
-    - family: Inter
-    - fonts:
-      - asset: fonts/Inter-Regular.ttf
-      - asset: fonts/Inter-Italic.ttf
-        style: italic
-      - asset: fonts/Inter-Bold.ttf
-        weight: 600
   assets:
     - assets/images/
   uses-material-design: true

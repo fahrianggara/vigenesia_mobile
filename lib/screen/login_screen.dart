@@ -14,8 +14,8 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key, this.flashMessage, this.flashType});
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static final TextEditingController _usernameController = TextEditingController(text: 'fahrianggara');
-  static final TextEditingController _passwordController = TextEditingController(text: 'password');
+  static final TextEditingController _usernameController = TextEditingController();
+  static final TextEditingController _passwordController = TextEditingController();
   static final AuthController authController = Get.put(AuthController());
 
   @override
@@ -32,8 +32,8 @@ class LoginScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: VColors.background,
-      appBar: appBar(title: 'Masuk ke $appName'),
+      // backgroundColor: VColors.background,
+      appBar: appBar(context, title: 'Masuk ke $appName'),
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
@@ -51,6 +51,7 @@ class LoginScreen extends StatelessWidget {
                   Image.asset(Images.vectorLogin, width: 280),
                   const SizedBox(height: 40),
                   buildTextField(
+                    context,
                     controller: _usernameController,
                     hintText: 'Username atau Email',
                     icon: Icons.person,
@@ -58,6 +59,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   buildTextField(
+                    context,
                     controller: _passwordController,
                     hintText: 'Password',
                     icon: Icons.lock,

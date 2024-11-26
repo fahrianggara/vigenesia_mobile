@@ -22,7 +22,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: VColors.background,
+      // backgroundColor: VColors.background,
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
@@ -69,6 +69,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 30),
 
                   buildTextField(
+                    context,
                     controller: _nameController,
                     hintText: 'Nama',
                     icon: Icons.person,
@@ -78,6 +79,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   buildTextField(
+                    context,
                     controller: _usernameController,
                     hintText: 'Username',
                     icon: Icons.person,
@@ -87,6 +89,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   buildTextField(
+                    context,
                     controller: _emailController,
                     hintText: 'Email',
                     icon: Icons.email,
@@ -97,6 +100,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   buildTextField(
+                    context,
                     controller: _passwordController,
                     hintText: 'Password',
                     icon: Icons.lock,
@@ -110,6 +114,7 @@ class RegisterScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   buildTextField(
+                    context,
                     controller: _passwordConfirmController,
                     hintText: 'Konfirmasi Password',
                     icon: Icons.lock,

@@ -17,7 +17,7 @@ class PostAddScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(title: 'Buat Postingan'),
+      appBar: appBar(context, title: 'Buat Postingan'),
       body: SingleChildScrollView(
         child: Form(
           key: postController.formKey,
@@ -26,10 +26,10 @@ class PostAddScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _inputThumbnail(),
-                _selectCategory(),
-                _inputField('Judul Postingan', titleController, minLength: 3),
-                _inputField('Tulis Postingan', contentController, maxLines: 6, minLength: 10),
+                _inputThumbnail(context),
+                _selectCategory(context),
+                _inputField(context, 'Judul Postingan', titleController, minLength: 3),
+                _inputField(context, 'Tulis Postingan', contentController, maxLines: 6, minLength: 10),
                 _inputButton(context),
               ],
             ),
@@ -39,7 +39,7 @@ class PostAddScreen extends StatelessWidget {
     );
   }
 
-  Widget _inputThumbnail() {
+  Widget _inputThumbnail(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,7 +55,7 @@ class PostAddScreen extends StatelessWidget {
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(10),
-                color: VColors.border50,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
               clipBehavior: Clip.hardEdge,
               child: postController.thumbnail.value != null
@@ -69,7 +69,7 @@ class PostAddScreen extends StatelessWidget {
     );
   }
 
-  Widget _selectCategory() {
+  Widget _selectCategory(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,7 +90,7 @@ class PostAddScreen extends StatelessWidget {
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
-              color: VColors.border50,
+              color: Theme.of(context).colorScheme.primaryContainer,
             ),
             child: DropdownButtonFormField<Category>(
               decoration: InputDecoration(
@@ -110,7 +110,7 @@ class PostAddScreen extends StatelessWidget {
               ),
               isExpanded: true,
               value: postController.selectCategory.value,
-              dropdownColor: VColors.white,
+              dropdownColor: Theme.of(context).colorScheme.primaryContainer,
               style: TextStyle(
                 color: VColors.primary,
                 fontSize: 16,
@@ -136,7 +136,7 @@ class PostAddScreen extends StatelessWidget {
     );
   }
 
-  Widget _inputField(String label, TextEditingController controller, {
+  Widget _inputField(BuildContext context, String label, TextEditingController controller, {
     int maxLines = 1,
     int? minLength,
   }) {
@@ -157,7 +157,7 @@ class PostAddScreen extends StatelessWidget {
           controller: controller,
           maxLines: maxLines,
           cursorColor: VColors.primary,
-          decoration: _inputDecoration(label),
+          decoration: _inputDecoration(context, label),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Input ini tidak boleh kosong';
@@ -226,10 +226,10 @@ class PostAddScreen extends StatelessWidget {
     );
   }
 
-  InputDecoration _inputDecoration(label) {
+  InputDecoration _inputDecoration(BuildContext context, label) {
     return InputDecoration(
       filled: true,
-      fillColor: VColors.border50,
+      fillColor: Theme.of(context).colorScheme.primaryContainer,
       hintStyle: TextStyle(
         color: VColors.gray,
         fontSize: 16,
@@ -255,8 +255,15 @@ class PostAddScreen extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(8),
       ),
+      errorBorder:  OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.error,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
       errorStyle: TextStyle(
-        color: VColors.danger,
+        color: Theme.of(context).colorScheme.error,
         fontSize: 13.5,
         letterSpacing: 0.4,
         fontWeight: FontWeight.w500

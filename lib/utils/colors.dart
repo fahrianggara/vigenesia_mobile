@@ -23,3 +23,39 @@ class VColors {
   static var primary950 = HexColor('#00331e');
   static var background = HexColor('#F9F9F9');
 }
+
+var lightColorScheme = ColorScheme(
+  brightness: Brightness.light,
+  primary: VColors.primary,
+  onPrimary: VColors.white,
+  primaryContainer: Colors.grey[200],
+  onPrimaryContainer: VColors.text,
+  secondary: Colors.white,
+  onSecondary: VColors.text,
+  onSecondaryContainer: VColors.gray,
+  error: Color(0xFFC91432),
+  onError: Color(0xFFFFFFFF),
+  surface: VColors.background,
+  onSurface: Color(0xFF000000),
+  errorContainer: Colors.red[100],
+  onErrorContainer: Color(0xFFFFFFFF),
+  outline: VColors.border
+);  
+
+var darkColorScheme = ColorScheme(
+  brightness: Brightness.dark,
+  primary: VColors.primary,
+  onPrimary: VColors.white,
+  primaryContainer: Color.fromARGB(255, 31, 31, 31),
+  onPrimaryContainer: Color.fromARGB(255, 187, 187, 187),
+  secondary: Color.fromARGB(255, 28, 28, 28),
+  onSecondary: Color(0xFFFFFFFF),
+  onSecondaryContainer: Color.fromARGB(255, 193, 193, 193),
+  error: Color.fromARGB(255, 236, 51, 38),
+  onError: Color(0xFFFFFFFF),
+  surface: Color.fromARGB(255, 24, 24, 24),
+  onSurface: Color(0xFFFFFFFF),
+  errorContainer: Color.fromARGB(255, 64, 29, 29),
+  onErrorContainer: Color(0xFFFFFFFF),
+  outline: Color.fromARGB(255, 49, 49, 49)
+);

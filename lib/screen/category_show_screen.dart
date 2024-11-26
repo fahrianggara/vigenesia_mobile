@@ -153,7 +153,6 @@ class CategoryShowScreen extends StatelessWidget {
         ),
       ),
       titleSpacing: 0,
-      backgroundColor: VColors.white,
       elevation: 0,
       scrolledUnderElevation: 0,
     );

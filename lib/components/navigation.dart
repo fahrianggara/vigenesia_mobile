@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_svg/flutter_svg.dart';  // Import the flutter_svg package
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:auto_route/auto_route.dart';
 
-Widget bottomNavigationBar(TabsRouter tabsRouter) {
+Widget bottomNavigationBar(TabsRouter tabsRouter, BuildContext context) {
   return Container(
     height: 60.0, // Tentukan tinggi bar
-    decoration: BoxDecoration(
-      color: HexColor('#FFFFFF'),
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-      ),
-    ),
+    color: Theme.of(context).colorScheme.secondary, // Gunakan warna container dari colorScheme
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

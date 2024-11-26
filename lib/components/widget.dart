@@ -1,6 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
@@ -22,9 +21,9 @@ Future<void> showAlertDialog(
       return AlertDialog(
         title: Text(title),
         titleTextStyle: TextStyle(
-          color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 18,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -38,14 +37,20 @@ Future<void> showAlertDialog(
               }
               Navigator.of(dialogContext).pop(); // Use dialogContext
             },
-            child: Text(cancelText ?? 'Tidak', style: TextStyle(fontSize: 15)),
+            child: Text(
+              cancelText ?? 'Tidak', 
+              style: TextStyle(
+                fontSize: 15, 
+                color: Theme.of(context).colorScheme.error
+              )
+            ),
           ),
           TextButton(
             onPressed: () {
               onConfirm();
               Navigator.of(dialogContext).pop(); // Use dialogContext
             },
-            child: Text(confirmText ?? 'Ya', style: TextStyle(fontSize: 15)),
+            child: Text(confirmText ?? 'Ya', style: TextStyle(fontSize: 15, color: VColors.primary)),
           ),
         ],
       );
@@ -92,7 +97,6 @@ Widget postIsNull() {
           ],
         ),
       ),
-      backgroundColor: VColors.white,
       elevation: 0,
       titleSpacing: 0,
     ),
@@ -221,7 +225,6 @@ Widget categoryIsNull() {
           ),
         ),
       ),
-      backgroundColor: VColors.white,
       elevation: 0,
       titleSpacing: 0,
     ),
@@ -333,7 +336,7 @@ Widget loadingPostItem() {
   );
 }
 
-AppBar appBar({
+AppBar appBar(BuildContext context, {
   required String title,
   List<Widget>? actions,
   Color? backgroundColor,
@@ -343,7 +346,7 @@ AppBar appBar({
 }) {
   return AppBar(
     titleSpacing: 0,
-    backgroundColor: backgroundColor ?? VColors.white,
+    backgroundColor: Theme.of(context).colorScheme.secondary,
     elevation: 0,
     scrolledUnderElevation: 0,
     title: Text(
@@ -470,7 +473,7 @@ Widget profileNoAuth(BuildContext context) {
         SizedBox(height: 8),
         Text(
           'Sepertinya kamu belum login nih.. Silahkan login terlebih dahulu ya.',
-          style: TextStyle(fontSize: 16, color: VColors.gray),
+          style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimaryContainer),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 20),
@@ -509,7 +512,7 @@ Widget loadingIcon({
   );
 }
 
-Widget buildTextField({
+Widget buildTextField(BuildContext context, {
   required TextEditingController controller,
   required String hintText,
   required IconData icon,
@@ -523,6 +526,7 @@ Widget buildTextField({
     validator: validator ?? (val) => val!.isEmpty ? errorMessage : null,
     keyboardType: keyboardType,
     decoration: authInputDecoration(
+      context,
       hintText,
       prefixIcon: Icon(icon, color: VColors.primary),
     ),
@@ -532,7 +536,7 @@ Widget buildTextField({
 }
 
 /// custom input decoration
-InputDecoration authInputDecoration(String label,{
+InputDecoration authInputDecoration(BuildContext context, label,{
     String? errorText, 
     Icon? prefixIcon
   }) {
@@ -540,15 +544,15 @@ InputDecoration authInputDecoration(String label,{
     prefixIcon: prefixIcon,
     labelText: label,
     floatingLabelStyle: TextStyle(
-      color: errorText == null ? VColors.primary : VColors.danger
+      color: errorText == null ? VColors.primary : Theme.of(context).colorScheme.error
     ),
     labelStyle: TextStyle(
-      color: errorText == null ? VColors.primary : VColors.danger,
+      color: errorText == null ? VColors.primary : Theme.of(context).colorScheme.error,
       letterSpacing: 0.2
     ),
     errorText: errorText,
     errorStyle: TextStyle(
-      color: VColors.danger,
+      color: Theme.of(context).colorScheme.error,
       fontSize: 13.5,
       letterSpacing: 0.4,
       fontWeight: FontWeight.w500
@@ -557,19 +561,19 @@ InputDecoration authInputDecoration(String label,{
       borderRadius: BorderRadius.circular(10),
     ),
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: VColors.border),
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
       borderRadius: BorderRadius.circular(10),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: VColors.primary, width: 2),
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
       borderRadius: BorderRadius.circular(10),
     ),
     errorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: VColors.danger, width: 2),
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2),
       borderRadius: BorderRadius.circular(10),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: VColors.danger, width: 2),
+      borderSide: BorderSide(color: Theme.of(context).colorScheme.error, width: 2),
       borderRadius: BorderRadius.circular(10),
     ),
   );
@@ -630,7 +634,7 @@ Widget postItem(BuildContext context,{
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     fontFamily: '',
-                    letterSpacing: 0.1,
+                    letterSpacing: 0.1,                  
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -641,7 +645,7 @@ Widget postItem(BuildContext context,{
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w100,
-                    color: VColors.gray,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -658,8 +662,7 @@ Widget postItem(BuildContext context,{
                           color: VColors.primary,
                           fontWeight: FontWeight.bold,
                         ),
-                        overflow:
-                            TextOverflow.ellipsis, // Overflow dengan elipsis
+                        overflow: TextOverflow.ellipsis, // Overflow dengan elipsis
                         maxLines: 1, // Membatasi teks menjadi satu baris
                       ),
                     ),
@@ -667,7 +670,6 @@ Widget postItem(BuildContext context,{
                       ' • ',
                       style: TextStyle(
                         fontSize: 12,
-                        color: HexColor('#000000').withOpacity(0.5),
                       ),
                     ),
                     Expanded(
@@ -675,11 +677,10 @@ Widget postItem(BuildContext context,{
                         createdAt,
                         style: TextStyle(
                           fontSize: 12,
-                          color: HexColor('#000000').withOpacity(0.3),
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSecondaryContainer,
                         ),
-                        overflow:
-                            TextOverflow.ellipsis, // Overflow dengan elipsis
+                        overflow: TextOverflow.ellipsis, // Overflow dengan elipsis
                         maxLines: 1, // Membatasi teks menjadi satu baris
                       ),
                     ),

@@ -44,7 +44,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
     final post = widget.post;
 
     return Scaffold(
-      appBar: appBar(title: 'Edit Postingan'),
+      appBar: appBar(context, title: 'Edit Postingan'),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
@@ -56,13 +56,22 @@ class _PostEditScreenState extends State<PostEditScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _inputThumbnail(post),
+                _inputThumbnail(context, post),
                 const SizedBox(height: 20),
-                _selectCategory(post.category),
+                _selectCategory(context, post.category),
                 const SizedBox(height: 20),
-                _inputField(post, label: 'Judul Postingan', controller: titleController, minLength: 3),
+                _inputField(context, post, 
+                  label: 'Judul Postingan', 
+                  controller: titleController, 
+                  minLength: 3
+                ),
                 const SizedBox(height: 20),
-                _inputField(post, label: 'Tulis Postingan', controller: contentController, maxLines: 6, minLength: 10),
+                _inputField(context, post, 
+                  label: 'Tulis Postingan', 
+                  controller: contentController, 
+                  maxLines: 6, 
+                  minLength: 10
+                ),
                 const SizedBox(height: 20),
                 _inputButton(context, post),
               ],
@@ -73,7 +82,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
     );
   }
 
-  Widget _inputThumbnail(Post post) {
+  Widget _inputThumbnail(BuildContext context, Post post) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,7 +101,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
                   width: 1.0,
                 ),
                 borderRadius: BorderRadius.circular(10),
-                color: VColors.border50,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
               clipBehavior: Clip.hardEdge,
               child: thumbnail != null
@@ -113,7 +122,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
     );
   }
 
-  Widget _selectCategory(Category? category) {
+  Widget _selectCategory(BuildContext context, Category? category) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,13 +139,13 @@ class _PostEditScreenState extends State<PostEditScreen> {
               width: 1,
             ),
             borderRadius: BorderRadius.circular(8),
-            color: VColors.border50,
+            color: Theme.of(context).colorScheme.primaryContainer,
           ),
           child: Obx(() {
             return DropdownButtonFormField<Category>(
               isExpanded: true,
               value: postController.selectCategory.value,
-              dropdownColor: VColors.white,
+              dropdownColor: Theme.of(context).colorScheme.primaryContainer,
               style: TextStyle(
                 color: VColors.primary,
                 fontSize: 16,
@@ -169,7 +178,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
     );
   }
 
-  Widget _inputField(Post post, {
+  Widget _inputField(BuildContext context, Post post, {
     required String label,
     required TextEditingController controller,
     int maxLines = 1,
@@ -191,7 +200,7 @@ class _PostEditScreenState extends State<PostEditScreen> {
           controller: controller,
           maxLines: maxLines,
           cursorColor: VColors.primary,
-          decoration: _inputDecoration(label),
+          decoration: _inputDecoration(context, label),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Input ini tidak boleh kosong';
@@ -216,10 +225,10 @@ class _PostEditScreenState extends State<PostEditScreen> {
     );
   }
 
-  InputDecoration _inputDecoration(label) {
+  InputDecoration _inputDecoration(BuildContext context, label) {
     return InputDecoration(
       filled: true,
-      fillColor: VColors.border50,
+      fillColor: Theme.of(context).colorScheme.primaryContainer,
       hintStyle: TextStyle(
         color: VColors.gray,
         fontSize: 16,
@@ -245,8 +254,15 @@ class _PostEditScreenState extends State<PostEditScreen> {
         ),
         borderRadius: BorderRadius.circular(8),
       ),
+      errorBorder:  OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Theme.of(context).colorScheme.error,
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
       errorStyle: TextStyle(
-        color: VColors.danger,
+        color: Theme.of(context).colorScheme.error,
         fontSize: 13.5,
         letterSpacing: 0.4,
         fontWeight: FontWeight.w500
