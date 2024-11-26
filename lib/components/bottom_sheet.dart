@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
+import 'package:vigenesia/theme/theme_provider.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:get/get.dart';
@@ -78,6 +80,51 @@ Future<dynamic> modalBottomSheet(BuildContext context, WidgetBuilder builder, {
       ),
     ),
   );
+}
+
+Future<dynamic> themeBottomSheet(BuildContext context) {
+  return modalBottomSheet(context, (builder) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildListTile(
+          context,
+          icon: Icons.light_mode,
+          iconColor: Theme.of(context).colorScheme.onSurface,
+          textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          title: 'Tema Terang',
+          onTap: () {
+            Provider.of<ThemeProvider>(context, listen: false).setThemeMode(ThemeMode.light);
+            Navigator.pop(context);
+          },
+        ),
+        const SizedBox(height: 10),
+        buildListTile(
+          context,
+          icon: Icons.dark_mode,
+          iconColor: Theme.of(context).colorScheme.onSurface,
+          textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          title: 'Tema Gelap',
+          onTap: () {
+            Provider.of<ThemeProvider>(context, listen: false).setThemeMode(ThemeMode.dark);
+            Navigator.pop(context);
+          },
+        ),
+        const SizedBox(height: 10),
+        buildListTile(
+          context,
+          icon: Icons.contrast,
+          iconColor: Theme.of(context).colorScheme.onSurface,
+          textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+          title: 'Tema Sistem',
+          onTap: () {
+            Provider.of<ThemeProvider>(context, listen: false).setThemeMode(ThemeMode.system);
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
+  });
 }
 
 Future<dynamic> photoProfileBottomSheet(

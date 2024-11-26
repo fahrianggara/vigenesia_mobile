@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/components/profile/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
+import 'package:vigenesia/theme/theme_provider.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -241,10 +243,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 13),
           buildListTile(
             context,
-            icon: Icons.dark_mode,
+            icon: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.light
+                ? Icons.light_mode
+                : Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+                    ? Icons.dark_mode
+                    : Icons.contrast, // Ikon untuk tema sistem
             textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            title: 'Mode Gelap',
-            onTap: null,
+            title: Provider.of<ThemeProvider>(context).themeMode == ThemeMode.light
+                ? 'Tema Terang'
+                : Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark
+                    ? 'Tema Gelap'
+                    : 'Tema Sistem', // Teks untuk tema sistem
+            onTap: () {
+              themeBottomSheet(context);
+            },
             borderRadius: BorderRadius.circular(15),
           ),
           const SizedBox(height: 13),

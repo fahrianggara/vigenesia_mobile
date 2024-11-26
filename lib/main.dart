@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:vigenesia/routes/app_route.dart';
+import 'package:vigenesia/theme/theme_provider.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), 
+      child: MainApp()
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -16,22 +22,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: GoogleFonts.rubik().fontFamily,
-        colorScheme: lightColorScheme,
-        textTheme: TextTheme(
-          bodySmall: TextStyle(color: VColors.text),
-        )
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        fontFamily: GoogleFonts.rubik().fontFamily,
-        colorScheme: darkColorScheme,
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(color: VColors.white),
-        )
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       title: appName,
       routerConfig: _appRouter.config(),
     );
