@@ -6,8 +6,12 @@ flutter_native_splash:
   image: "assets/images/splash.png"
   color: "#F9F9F9"
   color_dark: "#181818"
+  branding: "assets/images/branding_light.png"
+  branding_dark: "assets/images/branding_dark.png"
 
   android_12: # Android versi 12 Keatas
     image: "assets/images/splash.png"
     color: "#F9F9F9"
     color_dark: "#181818"
+    branding: "assets/images/branding_light.png"
+    branding_dark: "assets/images/branding_dark.png"
