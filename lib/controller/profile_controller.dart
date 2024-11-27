@@ -234,6 +234,9 @@ class ProfileController extends GetxController
           photo.value = File(croppedFile.path);
           isLoadingForm.value = true;
 
+          // untuk remove modal bottom sheet
+          Navigator.pop(context);
+
           // Upload photo
           final response = await ApiService.api(
             endpoint: changePhotoURL,
@@ -247,14 +250,14 @@ class ProfileController extends GetxController
           
           switch (response.statusCode) {
             case 200:
-              // untuk remove modal bottom sheet
-              Navigator.pop(context);
-              Navigator.pop(context);
-
-              resetForm();
-
               // Refresh user data
               await me();
+
+              // Reset form
+              resetForm();
+
+              // Update photo
+              updatePhoto(json.decode(response.body)['data']['photo_url']);
 
               showNotification(context, json.decode(response.body)['message'], "info");
               break;
@@ -278,6 +281,9 @@ class ProfileController extends GetxController
   Future<void> deletePhoto(BuildContext context) async {
     isLoadingForm.value = true;
 
+    Navigator.pop(context);
+    Navigator.pop(context);
+
     try {
       final response = await ApiService.api(
         endpoint: changePhotoURL,
@@ -290,13 +296,13 @@ class ProfileController extends GetxController
 
       switch (response.statusCode) {
         case 200:
-          Navigator.pop(context);
-          Navigator.pop(context);
+          // Refresh user data
+          await me();
 
           resetForm();
 
-          // Refresh user data
-          await me();
+          // Update photo
+          updatePhoto(json.decode(response.body)['data']['photo_url']);
 
           showNotification(context, json.decode(response.body)['message'], "info");
           break;
@@ -312,5 +318,11 @@ class ProfileController extends GetxController
     } finally {
       isLoadingForm.value = false;
     }
+  }
+
+  void updatePhoto(String newPhotoUrl) {
+    user.update((val) {
+      val?.photoUrl = newPhotoUrl;
+    });
   }
 }

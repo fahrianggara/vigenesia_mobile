@@ -29,7 +29,7 @@ Widget  buildListTile(BuildContext context, {
   );
 }
 
-Widget _photoProfileItem({
+Widget _photoProfileItem(BuildContext context, {
   required IconData icon,
   required String title,
   required VoidCallback onTap,
@@ -56,7 +56,7 @@ Widget _photoProfileItem({
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: VColors.gray,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
     ],
@@ -134,8 +134,6 @@ Future<dynamic> photoProfileBottomSheet(
 }) {
   return modalBottomSheet(
     context, 
-    enableDrag: false,
-    isDismissible: false,
     (builder) {
       return WillPopScope(
         onWillPop: () async {
@@ -209,6 +207,7 @@ Future<dynamic> photoProfileBottomSheet(
                         child: Row(
                           children: [
                             _photoProfileItem(
+                              context,
                               icon: Icons.camera_alt,
                               title: 'Kamera',
                               onTap: () {
@@ -217,6 +216,7 @@ Future<dynamic> photoProfileBottomSheet(
                             ),
                             const SizedBox(width: 20),
                             _photoProfileItem(
+                              context,
                               icon: Icons.photo,
                               title: 'Galeri',
                               onTap: () {

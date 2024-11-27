@@ -42,6 +42,7 @@ class PostShowScreen extends StatelessWidget {
       // Bungkus Scaffold dalam ModalProgressHUD
       return ModalProgressHUD(
         inAsyncCall: postController.isLoading.value,
+        color: Theme.of(context).colorScheme.surface,
         opacity: 0.5,
         progressIndicator: CircularProgressIndicator(
           color: VColors.primary,

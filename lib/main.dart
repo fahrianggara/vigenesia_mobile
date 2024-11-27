@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vigenesia/routes/app_route.dart';
 import 'package:vigenesia/theme/theme.dart';
 import 'package:vigenesia/theme/theme_provider.dart';
 import 'package:vigenesia/utils/utilities.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp],
+  );
+  
   runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(), 

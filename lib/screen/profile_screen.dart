@@ -7,6 +7,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vigenesia/components/profile/posts.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/profile_controller.dart';
+import 'package:vigenesia/screen/profile_photo_screen.dart';
 import 'package:vigenesia/theme/theme_provider.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
@@ -99,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: userProfile(profileController),
+          child: userProfile(context, profileController),
         ),
       ),
       title: showTitle ? userInAppBar(profileController) : null,
@@ -176,8 +177,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   // User profile widget
-  Widget userProfile(ProfileController profileController) {
-    return userInfo(profileController, avatarRadius: 30, isInAppBar: false);
+  Widget userProfile(BuildContext context, ProfileController profileController) {
+    return userInfo(profileController, avatarRadius: 30, onTapImage: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ProfilePhotoScreen(user: profileController.user.value!),
+        ),
+      );
+    });
   }
 
   // User profile for the app bar
@@ -201,8 +208,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           buildListTile(
             context,
-            icon: Icons.camera_alt,
-            title: 'Edit Foto Profile',
+            icon: Icons.person,
+            title: 'Edit Profile',
             textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(15),
@@ -211,16 +218,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               bottomRight: Radius.circular(5),
             ),
             onTap: () {
-              photoProfileBottomSheet(context, profileController, title: 'Edit Foto Profile');
-            },
-          ),
-          const SizedBox(height: 3),
-          buildListTile(
-            context,
-            icon: Icons.person,
-            title: 'Edit Profile',
-            textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            onTap: () {
               editProfileBottomSheet(context, profileController, title: 'Edit Profile');
             },
           ),
@@ -228,10 +225,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           buildListTile(
             context,
             icon: Icons.lock,
-            title: 'Edit Password',
+            title: 'Ubah Password',
             textStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             onTap: () {
-              editPasswordBottomSheet(context, profileController, title: 'Edit Password');
+              editPasswordBottomSheet(context, profileController, title: 'Ubah Password');
             },
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5),

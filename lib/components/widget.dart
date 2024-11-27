@@ -361,8 +361,12 @@ AppBar appBar(BuildContext context, {
   );
 }
 
-// Reusable widget for displaying user information with skeleton loading
-Widget userInfo(ProfileController profileController, {double avatarRadius = 30, bool isInAppBar = false}) {
+Widget userInfo(
+  ProfileController profileController, {
+  double avatarRadius = 30,
+  bool isInAppBar = false,
+  VoidCallback? onTapImage, // Parameter baru untuk aksi klik gambar
+}) {
   return Obx(() {
     final user = profileController.user.value;
     final isLoading = user == null || profileController.isLoading.value;
@@ -373,9 +377,14 @@ Widget userInfo(ProfileController profileController, {double avatarRadius = 30, 
         // Avatar Skeleton
         Skeletonizer(
           enabled: isLoading,
-          child: CircleAvatar(
-            radius: avatarRadius,
-            backgroundImage: NetworkImage(user?.photoUrl ?? 'https://via.placeholder.com/150'),
+          child: GestureDetector(
+            onTap: isInAppBar
+                ? null // Tidak ada aksi jika isInAppBar true
+                : onTapImage, // Gunakan parameter onTapImage
+            child: CircleAvatar(
+              radius: avatarRadius,
+              backgroundImage: NetworkImage(user?.photoUrl ?? 'https://via.placeholder.com/150'),
+            ),
           ),
         ),
         SizedBox(width: isInAppBar ? 10 : 18),
@@ -415,6 +424,7 @@ Widget userInfo(ProfileController profileController, {double avatarRadius = 30, 
     );
   });
 }
+
 
 Widget emptyPosts({
   String title = "Postingan Kosong??",
