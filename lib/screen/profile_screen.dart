@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return userInfo(profileController, avatarRadius: 30, onTapImage: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => ProfilePhotoScreen(user: profileController.user.value!),
+          builder: (context) => ProfilePhotoScreen(user: profileController.user.value!, isProfilePage: true),
         ),
       );
     });

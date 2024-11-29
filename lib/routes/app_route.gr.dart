@@ -246,12 +246,14 @@ class ProfilePhotoRoute extends _i12.PageRouteInfo<ProfilePhotoRouteArgs> {
   ProfilePhotoRoute({
     _i13.Key? key,
     required _i15.User user,
+    bool isProfilePage = false,
     List<_i12.PageRouteInfo>? children,
   }) : super(
           ProfilePhotoRoute.name,
           args: ProfilePhotoRouteArgs(
             key: key,
             user: user,
+            isProfilePage: isProfilePage,
           ),
           initialChildren: children,
         );
@@ -265,6 +267,7 @@ class ProfilePhotoRoute extends _i12.PageRouteInfo<ProfilePhotoRouteArgs> {
       return _i8.ProfilePhotoScreen(
         key: args.key,
         user: args.user,
+        isProfilePage: args.isProfilePage,
       );
     },
   );
@@ -274,15 +277,18 @@ class ProfilePhotoRouteArgs {
   const ProfilePhotoRouteArgs({
     this.key,
     required this.user,
+    this.isProfilePage = false,
   });
 
   final _i13.Key? key;
 
   final _i15.User user;
 
+  final bool isProfilePage;
+
   @override
   String toString() {
-    return 'ProfilePhotoRouteArgs{key: $key, user: $user}';
+    return 'ProfilePhotoRouteArgs{key: $key, user: $user, isProfilePage: $isProfilePage}';
   }
 }
 

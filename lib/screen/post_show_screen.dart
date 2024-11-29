@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:vigenesia/components/user_show.dart';
 import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/controller/post_controller.dart';
 import 'package:vigenesia/controller/show_controller.dart';
+import 'package:vigenesia/controller/user_controller.dart';
 import 'package:vigenesia/model/post.dart';
 import 'package:vigenesia/routes/app_route.gr.dart';
 import 'package:vigenesia/screen/post_edit_screen.dart';
@@ -29,6 +31,7 @@ class PostShowScreen extends StatelessWidget {
     final ShowController showController = Get.put(ShowController(id: id));
     final AuthController authController = Get.put(AuthController());
     final PostController postController = Get.put(PostController());
+    final UserController userController = Get.put(UserController());
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Obx(() {
@@ -49,7 +52,7 @@ class PostShowScreen extends StatelessWidget {
         ),
         child: Scaffold(
           key: scaffoldKey,
-          appBar: _appBar(context, showController, authController, postController, scaffoldKey),
+          appBar: _appBar(context, showController, authController, postController, userController, scaffoldKey),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
@@ -74,6 +77,7 @@ class PostShowScreen extends StatelessWidget {
     ShowController showController,
     AuthController authController,
     PostController postController,
+    UserController userController,
     scaffoldKey,
   ) {
     final post = showController.post.value;
@@ -90,36 +94,41 @@ class PostShowScreen extends StatelessWidget {
       scrolledUnderElevation: 0,
       title: Skeletonizer(
         enabled: showController.isLoading.value,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 19,
-              backgroundImage: NetworkImage(
-                post.user!.photoUrl ?? 'https://picsum.photos/seed/$id/200/200',
+        child: InkWell(
+          onTap: () {
+            userShowBottomSheet(context, post, userController);
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 19,
+                backgroundImage: NetworkImage(
+                  post.user!.photoUrl ?? 'https://picsum.photos/seed/$id/200/200',
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  post.user!.name!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: VColors.primary,
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    post.user!.name!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: VColors.primary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  post.user!.username!,
-                  style: TextStyle(fontSize: 12, color: VColors.border500),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(height: 2),
+                  Text(
+                    post.user!.username!,
+                    style: TextStyle(fontSize: 12, color: VColors.border500),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
