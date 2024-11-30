@@ -602,10 +602,12 @@ Widget postItem(BuildContext context, {
   required String category,
   required String createdAt,
   required int stack, // Tambahkan parameter stack untuk navigasi
+  Color? titleColor,
 }) {
 
   // Declare the image variable here
   Widget image;
+  final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
   // Assign the appropriate image based on the imageUrl
   if (imageUrl.isEmpty) {
@@ -650,7 +652,7 @@ Widget postItem(BuildContext context, {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.1,      
-                    color: Theme.of(context).colorScheme.onSurface,            
+                    color: titleColor ?? colorScheme.onSurface,            
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -661,7 +663,7 @@ Widget postItem(BuildContext context, {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w100,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    color: colorScheme.onSecondaryContainer,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -686,7 +688,7 @@ Widget postItem(BuildContext context, {
                       ' • ',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Theme.of(context).colorScheme.onSecondaryContainer,
+                        color: colorScheme.onSecondaryContainer,
                       ),
                     ),
                     Expanded(
@@ -695,7 +697,7 @@ Widget postItem(BuildContext context, {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onSecondaryContainer,
+                          color: colorScheme.onSecondaryContainer,
                         ),
                         overflow: TextOverflow.ellipsis, // Overflow dengan elipsis
                         maxLines: 1, // Membatasi teks menjadi satu baris

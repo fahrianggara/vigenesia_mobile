@@ -13,6 +13,8 @@ class Posts extends StatelessWidget {
   Widget build(BuildContext context) {
     homeController.getPosts();
 
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Obx(() {
       // Check if posts are empty and show a loading skeleton while waiting for data
       if (homeController.posts.isEmpty || homeController.isLoading.value) {
@@ -44,16 +46,19 @@ class Posts extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         itemCount: homeController.posts.length,
         itemBuilder: (context, index) {
+          var post = homeController.posts[index];
+          
           return postItem(
             context,
             index: index,
-            id: homeController.posts[index].id!,
-            imageUrl: homeController.posts[index].thumbnailUrl!,
-            title: homeController.posts[index].title!,
-            description: homeController.posts[index].description!,
-            category: homeController.posts[index].category!.name!,
-            createdAt: homeController.posts[index].createdAtDiff!,
+            id: post.id!,
+            imageUrl: post.thumbnailUrl!,
+            title: post.title!,
+            description: post.description!,
+            category: post.category!.name!,
+            createdAt: post.createdAtDiff!,
             stack: 1,
+            titleColor: colorScheme.onSurface,
           );
         },
       );

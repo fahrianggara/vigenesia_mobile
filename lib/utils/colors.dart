@@ -50,7 +50,7 @@ var darkColorScheme = ColorScheme(
   onPrimaryContainer: Color.fromARGB(255, 187, 187, 187),
   secondary: Color.fromARGB(255, 28, 28, 28),
   onSecondary: Color(0xFFFFFFFF),
-  onSecondaryContainer: Color.fromARGB(255, 193, 193, 193),
+  onSecondaryContainer: Color.fromARGB(255, 221, 221, 221),
   error: Color.fromARGB(255, 236, 51, 38),
   onError: Color(0xFFFFFFFF),
   surface: Color.fromARGB(255, 24, 24, 24),

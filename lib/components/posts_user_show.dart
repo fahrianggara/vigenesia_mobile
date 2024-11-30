@@ -5,6 +5,7 @@ import 'package:vigenesia/controller/user_controller.dart';
 import 'widget.dart';
 
 class PostsUserShow extends StatelessWidget {
+
   PostsUserShow({super.key});
 
   final UserController userController = Get.put(UserController());
@@ -42,15 +43,17 @@ class PostsUserShow extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         itemCount: userController.posts.length,
         itemBuilder: (context, index) {
+          var post = userController.posts[index];
+
           return postItem(
             context,
             index: index,
-            id: userController.posts[index].id!,
-            imageUrl: userController.posts[index].thumbnailUrl!,
-            title: userController.posts[index].title!,
-            description: userController.posts[index].description!,
-            category: userController.posts[index].category!.name!,
-            createdAt: userController.posts[index].createdAtDiff!,
+            id: post.id!,
+            imageUrl: post.thumbnailUrl!,
+            title: post.title!,
+            description: post.description!,
+            category: post.category!.name!,
+            createdAt: post.createdAtDiff!,
             stack: 0,
           );
         },
