@@ -288,6 +288,7 @@ Widget categoryIsNull() {
                   description: 'Deskripsi post',
                   category: 'Kategori',
                   createdAt: '1 jam yang lalu',
+                  stack: 0,
                 );
               },
             ),
@@ -328,6 +329,7 @@ Widget loadingPostItem() {
               description: 'Loading...', // Placeholder untuk deskripsi
               category: 'Loading...', // Placeholder untuk kategori
               createdAt: 'Loading...', // Placeholder untuk waktu dibuat
+              stack: 0, // Placeholder untuk stack
             );
           },
         ),
@@ -598,7 +600,8 @@ Widget postItem(BuildContext context, {
   required String title,
   required String description,
   required String category,
-  required String createdAt
+  required String createdAt,
+  required int stack, // Tambahkan parameter stack untuk navigasi
 }) {
 
   // Declare the image variable here
@@ -620,7 +623,8 @@ Widget postItem(BuildContext context, {
 
   return GestureDetector(
     onTap: () {
-      AutoRouter.of(context).popAndPush(PostShowRoute(id: id));
+      var stacks = stack.toString();
+      AutoRouter.of(context).popAndPush(PostShowRoute(id: id, stack: stacks));
     },
     child: Container(
       margin: EdgeInsets.only(left: 20, right: 20, top: index == 0 ? 10 : 20),
@@ -645,7 +649,6 @@ Widget postItem(BuildContext context, {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    fontFamily: '',
                     letterSpacing: 0.1,      
                     color: Theme.of(context).colorScheme.onSurface,            
                   ),

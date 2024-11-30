@@ -100,6 +100,7 @@ class SearchScreen extends StatelessWidget {
                     description: 'Loading...', // Placeholder untuk deskripsi
                     category: 'Loading...', // Placeholder untuk kategori
                     createdAt: 'Loading...', // Placeholder untuk waktu dibuat
+                    stack: 0,
                   );
                 },
               ),
@@ -151,6 +152,7 @@ class SearchScreen extends StatelessWidget {
                   description: data[index].description!,
                   category: data[index].category!.name!,
                   createdAt: data[index].createdAtDiff!,
+                  stack: 1,
                 );
               },
             ),

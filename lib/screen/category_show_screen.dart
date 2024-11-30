@@ -130,6 +130,7 @@ class CategoryShowScreen extends StatelessWidget {
                 description: data[index].description!,
                 category: data[index].category!.name!,
                 createdAt: data[index].createdAtDiff!,
+                stack: 1,
               );
             },
           ),

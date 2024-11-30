@@ -199,12 +199,14 @@ class PostShowRoute extends _i12.PageRouteInfo<PostShowRouteArgs> {
   PostShowRoute({
     _i13.Key? key,
     int? id,
+    String? stack,
     List<_i12.PageRouteInfo>? children,
   }) : super(
           PostShowRoute.name,
           args: PostShowRouteArgs(
             key: key,
             id: id,
+            stack: stack,
           ),
           initialChildren: children,
         );
@@ -219,6 +221,7 @@ class PostShowRoute extends _i12.PageRouteInfo<PostShowRouteArgs> {
       return _i7.PostShowScreen(
         key: args.key,
         id: args.id,
+        stack: args.stack,
       );
     },
   );
@@ -228,15 +231,18 @@ class PostShowRouteArgs {
   const PostShowRouteArgs({
     this.key,
     this.id,
+    this.stack,
   });
 
   final _i13.Key? key;
 
   final int? id;
 
+  final String? stack;
+
   @override
   String toString() {
-    return 'PostShowRouteArgs{key: $key, id: $id}';
+    return 'PostShowRouteArgs{key: $key, id: $id, stack: $stack}';
   }
 }
 

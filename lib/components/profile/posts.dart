@@ -29,6 +29,7 @@ class Posts extends StatelessWidget {
                 description: 'Loading...', // Placeholder untuk deskripsi
                 category: 'Loading...', // Placeholder untuk kategori
                 createdAt: 'Loading...', // Placeholder untuk waktu dibuat
+                stack: 0, // Placeholder untuk stack
               );
             },
           ),
@@ -50,6 +51,7 @@ class Posts extends StatelessWidget {
             description: profileController.posts[index].description!,
             category: profileController.posts[index].category!.name!,
             createdAt: profileController.posts[index].createdAtDiff!,
+            stack: 1,
           );
         },
       );

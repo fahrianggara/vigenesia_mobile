@@ -17,8 +17,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 @RoutePage()
 class PostShowScreen extends StatelessWidget {
   final int? id;
+  final String? stack;
 
-  const PostShowScreen({super.key, this.id});
+  const PostShowScreen({super.key, this.id, this.stack});
 
   @override
   Widget build(BuildContext context) {
@@ -102,11 +103,13 @@ class PostShowScreen extends StatelessWidget {
         enabled: showController.isLoading.value,
         child: InkWell(
           onTap: () {
-            userShowBottomSheet(
-              context, 
-              int.tryParse(post.userId!) ?? 0, 
-              userController
-            );
+            if (stack == "1") {
+              userShowBottomSheet(
+                context, 
+                int.tryParse(post.userId!) ?? 0, 
+                userController
+              );
+            }
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,7 +130,7 @@ class PostShowScreen extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
-                      color: VColors.primary,
+                      color: stack == "1" ? VColors.primary : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 2),

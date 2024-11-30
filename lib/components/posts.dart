@@ -31,6 +31,7 @@ class Posts extends StatelessWidget {
                 description: 'Loading...', // Placeholder for description
                 category: 'Loading...', // Placeholder for category
                 createdAt: 'Loading...', // Placeholder for createdAt
+                stack: 0, // Placeholder for stack
               );
             },
           ),
@@ -52,6 +53,7 @@ class Posts extends StatelessWidget {
             description: homeController.posts[index].description!,
             category: homeController.posts[index].category!.name!,
             createdAt: homeController.posts[index].createdAtDiff!,
+            stack: 1,
           );
         },
       );
