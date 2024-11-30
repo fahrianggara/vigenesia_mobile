@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';  // Import the flutter_svg package
+import 'package:get/get.dart';
+import 'package:vigenesia/controller/auth_controller.dart';
 import 'package:vigenesia/utils/utilities.dart';
 import 'package:auto_route/auto_route.dart';
 
 Widget bottomNavigationBar(TabsRouter tabsRouter, BuildContext context) {
+  final AuthController authController = Get.find<AuthController>();
   return Container(
     height: 60.0, // Tentukan tinggi bar
     color: Theme.of(context).colorScheme.secondary, // Gunakan warna container dari colorScheme
@@ -23,12 +26,17 @@ Widget bottomNavigationBar(TabsRouter tabsRouter, BuildContext context) {
           onTap: () => tabsRouter.setActiveIndex(1),
         ),
         // Profile Icon
-        bottomNavIcon(
-          asset: Images.svgProfile,  // Specify the SVG file path
-          isActive: tabsRouter.activeIndex == 2,
-          onTap: () => tabsRouter.setActiveIndex(2),
-          size: 23
-        ),
+        Obx(() {
+          return bottomNavIcon(
+            asset: authController.isLoggedIn.value 
+                ? Images.svgProfile  // Use Profile SVG if logged in
+                : Images.svgSignin,  // Use Sign In SVG if not logged in
+            isActive: tabsRouter.activeIndex == 2,
+            onTap: () => tabsRouter.setActiveIndex(2),
+            size: 23,
+          );
+        }),
+        
       ],
     ),
   );
