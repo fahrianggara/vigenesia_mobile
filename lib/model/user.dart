@@ -11,7 +11,7 @@ class User {
   String? createdAt;
   String? token;
   String? tokenType;
-  List<Post>? posts; // Ubah ke List<Post> jika `posts` adalah daftar
+  List<Post>? posts;
 
   User({
     this.id,
@@ -27,10 +27,9 @@ class User {
     this.posts,
   });
 
-  // Factory method to create a new User instance from a map
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
+      id: json['id'] is String ? int.tryParse(json['id']) : json['id'], // Handling possible String to int conversion
       username: json['username'],
       name: json['name'],
       email: json['email'],
@@ -40,7 +39,7 @@ class User {
       createdAt: json['created_at'],
       token: json['access_token'] ?? '',
       tokenType: json['token_type'] ?? '',
-      posts: json['posts'] != null 
+      posts: json['posts'] != null && json['posts'] is List
         ? List<Post>.from(json['posts'].map((x) => Post.fromJson(x))) 
         : null,
     );

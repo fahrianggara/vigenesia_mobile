@@ -66,10 +66,12 @@ Widget _photoProfileItem(BuildContext context, {
 Future<dynamic> modalBottomSheet(BuildContext context, WidgetBuilder builder, {
   bool enableDrag = true,
   bool isDismissible = true,
+  bool useRootNavigator = false,
 }) {
   return showMaterialModalBottomSheet(
     context: context,
     builder: builder,
+    useRootNavigator: useRootNavigator,
     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
     isDismissible: isDismissible,
     enableDrag: enableDrag,

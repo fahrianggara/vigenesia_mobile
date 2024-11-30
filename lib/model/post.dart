@@ -34,7 +34,7 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'],
+      id: json['id'] is String ? int.tryParse(json['id']) : json['id'], // Handling possible String to int conversion
       title: json['title'],
       slug: json['slug'],
       thumbnailUrl: json['thumbnail_url'],

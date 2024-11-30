@@ -22,3 +22,6 @@ const deletePostURL    = "$postsURL/destroy";
 const fetchCategoryURL = "$baseURL/fetch-categories"; // for select input
 const categoriesURL    = "$baseURL/categories";
 const categoryURL      = "$categoriesURL/show";
+
+// USER URL
+const userURL = "$baseURL/users";

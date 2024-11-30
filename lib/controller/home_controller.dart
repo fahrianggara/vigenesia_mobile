@@ -23,14 +23,17 @@ class HomeController extends GetxController
 
     // Set loading before fetching categories
     isLoading.value = true;
-    await getCategories(); // Load categories once when controller is initialized
+    await getCarouselPosts();
+    await getCategories();
+    await getPosts(); // Load categories once when controller is initialized
     isLoading.value = false;
   }
 
   // This method will be triggered when the user pulls to refresh
   Future<void> onRefresh() async {
+    isLoading.value = true;
+    
     try {
-      isLoading.value = true;
       await getCarouselPosts();
       await getCategories();
       await getPosts();

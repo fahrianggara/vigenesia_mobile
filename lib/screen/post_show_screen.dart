@@ -90,13 +90,23 @@ class PostShowScreen extends StatelessWidget {
     bool isDeletePressed = false;
 
     return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          AutoRouter.of(context).popUntil((route) => route.isFirst);
+        },
+      ),
       titleSpacing: 0,
       scrolledUnderElevation: 0,
       title: Skeletonizer(
         enabled: showController.isLoading.value,
         child: InkWell(
           onTap: () {
-            userShowBottomSheet(context, post, userController);
+            userShowBottomSheet(
+              context, 
+              int.tryParse(post.userId!) ?? 0, 
+              userController
+            );
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

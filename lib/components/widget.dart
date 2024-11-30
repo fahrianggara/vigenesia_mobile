@@ -343,8 +343,10 @@ AppBar appBar(BuildContext context, {
   Color? titleColor,
   double? fontSize,
   FontWeight? fontWeight,
+  Widget? leading,
 }) {
   return AppBar(
+    leading: leading,
     titleSpacing: 0,
     backgroundColor: Theme.of(context).colorScheme.secondary,
     elevation: 0,
@@ -589,7 +591,7 @@ InputDecoration authInputDecoration(BuildContext context, label,{
   );
 }
 
-Widget postItem(BuildContext context,{
+Widget postItem(BuildContext context, {
   required int index,
   required int id,
   required String imageUrl,
@@ -644,7 +646,8 @@ Widget postItem(BuildContext context,{
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     fontFamily: '',
-                    letterSpacing: 0.1,                  
+                    letterSpacing: 0.1,      
+                    color: Theme.of(context).colorScheme.onSurface,            
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -680,6 +683,7 @@ Widget postItem(BuildContext context,{
                       ' • ',
                       style: TextStyle(
                         fontSize: 12,
+                        color: Theme.of(context).colorScheme.onSecondaryContainer,
                       ),
                     ),
                     Expanded(
