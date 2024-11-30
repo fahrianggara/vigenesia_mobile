@@ -71,7 +71,11 @@ class _ProfilePhotoScreenState extends State<ProfilePhotoScreen>
                     ),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(widget.user.photoUrl ?? ''),
+                        image: NetworkImage(
+                          widget.isProfilePage
+                            ? profileController.user.value?.photoUrl ?? ''
+                            : widget.user.photoUrl ?? '',
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
