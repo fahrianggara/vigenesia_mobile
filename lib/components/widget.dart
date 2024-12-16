@@ -532,8 +532,10 @@ Widget buildTextField(BuildContext context, {
   required IconData icon,
   required String errorMessage,
   bool obscureText = false,
+  IconData? suffixIcon,
+  VoidCallback? onSuffixTap,
   String? Function(String?)? validator,
-  TextInputType? keyboardType
+  TextInputType? keyboardType,
 }) {
   return TextFormField(
     controller: controller,
@@ -543,6 +545,10 @@ Widget buildTextField(BuildContext context, {
       context,
       hintText,
       prefixIcon: Icon(icon, color: VColors.primary),
+      suffixIcon: GestureDetector(
+        onTap: onSuffixTap,
+        child: Icon(suffixIcon, color: VColors.primary),
+      ),
     ),
     obscureText: obscureText,
     cursorColor: VColors.primary,
@@ -550,26 +556,28 @@ Widget buildTextField(BuildContext context, {
 }
 
 /// custom input decoration
-InputDecoration authInputDecoration(BuildContext context, label,{
-    String? errorText, 
-    Icon? prefixIcon
-  }) {
+InputDecoration authInputDecoration(BuildContext context, label, {
+  String? errorText,
+  Icon? prefixIcon,
+  Widget? suffixIcon,
+}) {
   return InputDecoration(
     prefixIcon: prefixIcon,
+    suffixIcon: suffixIcon,
     labelText: label,
     floatingLabelStyle: TextStyle(
-      color: errorText == null ? VColors.primary : Theme.of(context).colorScheme.error
+      color: errorText == null ? VColors.primary : Theme.of(context).colorScheme.error,
     ),
     labelStyle: TextStyle(
       color: errorText == null ? VColors.primary : Theme.of(context).colorScheme.error,
-      letterSpacing: 0.2
+      letterSpacing: 0.2,
     ),
     errorText: errorText,
     errorStyle: TextStyle(
       color: Theme.of(context).colorScheme.error,
       fontSize: 13.5,
       letterSpacing: 0.4,
-      fontWeight: FontWeight.w500
+      fontWeight: FontWeight.w500,
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),

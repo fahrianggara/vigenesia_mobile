@@ -269,6 +269,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onConfirm: () {
                     Navigator.pop(context);
                     authController.logout(context);
+                  },
+                  onCancel: () {
+                    Navigator.pop(context);
                   }
                 );
             },

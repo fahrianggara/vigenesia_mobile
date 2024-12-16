@@ -7,24 +7,29 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static final TextEditingController _usernameController = TextEditingController();
-  static final TextEditingController _passwordController = TextEditingController();
-  static final AuthController authController = Get.put(AuthController());
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
+
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      // backgroundColor: VColors.background,
       appBar: appBar(context, title: 'Masuk ke $appName'),
       body: Container(
         alignment: Alignment.center,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(
+          physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
           child: Padding(
@@ -51,7 +56,13 @@ class LoginScreen extends StatelessWidget {
                     hintText: 'Password',
                     icon: Icons.lock,
                     errorMessage: 'Password tidak boleh kosong',
-                    obscureText: true,
+                    obscureText: _obscureText,
+                    suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,
+                    onSuffixTap: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
                   ),
                   const SizedBox(height: 20),
                   _buildLoginButton(context),
@@ -86,10 +97,11 @@ class LoginScreen extends StatelessWidget {
             );
           }
         },
-        // Observes isLoading to toggle button content
-        child: Obx(() => authController.isLoading.value
-          ? loadingIcon()
-          : const Text('Masuk', style: TextStyle(fontSize: 16))),
+        child: Obx(() {
+          return authController.isLoading.value
+            ? loadingIcon()
+            : const Text('Masuk', style: TextStyle(fontSize: 16));
+        }),
       ),
     );
   }
@@ -110,5 +122,12 @@ class LoginScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }
