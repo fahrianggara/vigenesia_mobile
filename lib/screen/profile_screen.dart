@@ -262,8 +262,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Icons.logout,
             title: 'Keluar',
             onTap: () {
-              Navigator.pop(context);
-              authController.logout(context);
+              showAlertDialog(
+                  context,
+                  title: 'Ingin Keluar?',
+                  message: 'Apakah kamu yakin ingin keluar dari $appName?',
+                  onConfirm: () {
+                    Navigator.pop(context);
+                    authController.logout(context);
+                  }
+                );
             },
             tileColor: Theme.of(context).colorScheme.errorContainer,
             iconColor: Colors.red,
