@@ -7,17 +7,24 @@ import 'package:vigenesia/utils/utilities.dart';
 import 'package:vigenesia/components/widget.dart';
 
 @RoutePage()
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  static final AuthController authController = Get.put(AuthController());
-  static final TextEditingController 
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.put(AuthController());
+  final TextEditingController 
       _nameController = TextEditingController(),
       _usernameController = TextEditingController(),
       _emailController = TextEditingController(),
       _passwordController = TextEditingController(),
       _passwordConfirmController = TextEditingController();
+
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +100,7 @@ class RegisterScreen extends StatelessWidget {
                     controller: _emailController,
                     hintText: 'Email',
                     icon: Icons.email,
-                    errorMessage: 'email tidak boleh kosong',
+                    errorMessage: 'Email tidak boleh kosong',
                     keyboardType: TextInputType.emailAddress
                   ),
 
@@ -105,10 +112,16 @@ class RegisterScreen extends StatelessWidget {
                     hintText: 'Password',
                     icon: Icons.lock,
                     errorMessage: 'Password tidak boleh kosong',
-                    obscureText: true,
+                    obscureText: _obscureText,
                     validator: (val) => val!.length < 8 
                       ? "Password minimal 8 karakter"
                       : null,
+                    suffixIcon: _obscureText ? Icons.visibility : Icons.visibility_off,
+                    onSuffixTap: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
                   ),
 
                   const SizedBox(height: 20),
@@ -119,7 +132,7 @@ class RegisterScreen extends StatelessWidget {
                     hintText: 'Konfirmasi Password',
                     icon: Icons.lock,
                     errorMessage: 'Konfirmasi Password tidak boleh kosong',
-                    obscureText: true,
+                    obscureText: _obscureText,
                     validator: (val) => val != _passwordController.text
                       ? "Konfirmasi password tidak sama"
                       : null,
@@ -153,7 +166,8 @@ class RegisterScreen extends StatelessWidget {
                       },
                       child: Obx(() => authController.isLoading.value
                         ? loadingIcon()
-                        : const Text('Daftar', style: TextStyle(fontSize: 16))),
+                        : const Text('Daftar', style: TextStyle(fontSize: 16))
+                      ),
                     ),
                   ),
 
@@ -185,5 +199,15 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordConfirmController.dispose();
+    super.dispose();
   }
 }
