@@ -30,6 +30,9 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   TextFormField(
                     controller: searchInput,
+                    onTapOutside: (event) {
+                      FocusScope.of(context).requestFocus(FocusNode()); //remove focus
+                    },
                     onFieldSubmitted: (query) {
                       searchController.search(query);
                     },
